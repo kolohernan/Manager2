@@ -40,6 +40,7 @@ function App() {
             </thead>
             <tbody>
               {/* el && es como un if, donde solo se ejectuta el verdadero*/}
+              {/* el && es como un if, donde solo se ejectuta el verdadero*/}
               {error && <td>Error:..</td>}
               {loading && <td>Cargando...</td>}
               {/* Recorremos el array con map*/}
