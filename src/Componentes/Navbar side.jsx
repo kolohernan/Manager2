@@ -1,5 +1,4 @@
 function Navbarside({ cliente }) {
-  console.log("holaa", cliente);
   return (
     <div className="container-fluid">
       <div
