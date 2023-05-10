@@ -1,5 +1,5 @@
 import { useFetch } from "../funciones/useFetch";
-import Navbar from "../Componentes/Navbar";
+
 import Navbarside from "../Componentes/Navbar side";
 import Header from "../Componentes/Header";
 import { useState } from "react";
@@ -24,7 +24,6 @@ function Home() {
 
   return (
     <>
-      <Navbar />
       <Navbarside cliente={cliente} />
       <div id="container-principal" className="container">
         <Header busqueda={busqueda} setBusqueda={setBusqueda} />

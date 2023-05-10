@@ -1,4 +1,4 @@
-function Articulos() {
+const Articulos = () => {
   return "articulos";
-}
+};
 export default Articulos;
