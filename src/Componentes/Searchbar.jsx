@@ -7,8 +7,8 @@ function Searchbar({ busqueda, setBusqueda }) {
       <input
         type="text"
         className="form-control barra-Manager"
-        placeholder="Ingrese el Artiuclo"
-        aria-label="Ingrese el Artiuclo"
+        placeholder="Ingrese el Articulo"
+        aria-label="Ingrese el Articulo"
         aria-describedby="button-busqueda-clientes"
         value={busqueda}
         onChange={(e) => {

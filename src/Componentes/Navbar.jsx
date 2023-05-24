@@ -1,6 +1,9 @@
 import { NavLink } from "react-router-dom";
+import { useUserContext } from "../context/UserContext";
 
 function Navbar() {
+  const { usuario, setUsuario } = useUserContext();
+
   return (
     <nav className="navbar navbar-dark navbar-expand-lg bg-dark fixed-top">
       <div className="container-fluid">
@@ -55,6 +58,11 @@ function Navbar() {
                 Pedidos
               </NavLink>
             </li>
+            {user && (
+              <li className="nav-item">
+                <button onClick={() => setUsuario(false)}>Cerrar sesion</button>
+              </li>
+            )}
           </ul>
         </div>
       </div>

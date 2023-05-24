@@ -1,4 +1,16 @@
+import { useNavigate } from "react-router-dom";
+import { useUserContext } from "../context/UserContext";
+
 const Home = () => {
+  const { usuario, setUsuario } = useUserContext();
+
+  const navigate = useNavigate();
+
+  const handleLogin = () => {
+    setUsuario(true);
+    navigate("/Articulos");
+  };
+
   return (
     <div className="form-signin w-100 m-auto mt-5 text-center">
       <form>
@@ -15,7 +27,7 @@ const Home = () => {
             id="floatingInput"
             placeholder="name@example.com"
           />
-          <label for="floatingInput">Usuario</label>
+          <label htmlFor="floatingInput">Usuario</label>
         </div>
         <div className="form-floating">
           <input
@@ -24,7 +36,7 @@ const Home = () => {
             id="floatingPassword"
             placeholder="Password"
           />
-          <label for="floatingPassword">Contraseña</label>
+          <label htmlFor="floatingPassword">Contraseña</label>
         </div>
 
         <div className="checkbox mb-3">
@@ -32,8 +44,8 @@ const Home = () => {
             <input type="checkbox" value="remember-me" /> Recordarme
           </label>
         </div>
-        <button className="w-100 btn btn-lg btn-manager" type="submit">
-          Sign in
+        <button onClick={handleLogin} className="w-100 btn btn-lg btn-manager">
+          Iniciar sesion
         </button>
       </form>
     </div>
