@@ -9,7 +9,7 @@ function Navbarside({ cliente }) {
       >
         <div className="offcanvas-header">
           <h5 className="offcanvas-title" id="offcanvasDarkNavbarLabel">
-            Mas Datos
+            Precios
           </h5>
           <button
             type="button"
@@ -21,15 +21,12 @@ function Navbarside({ cliente }) {
         <div className="offcanvas-body">
           <ul className="navbar-nav justify-content-end flex-grow-1 pe-3">
             <li className="nav-item">
-              <a className="nav-link active" aria-current="page" href="#">
-                {cliente?.name}
-              </a>
+              Precio de compra - {cliente?.Precio_Compra}
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="#">
-                Link
-              </a>
+              Precio de costo - {cliente?.Precio_Costo}
             </li>
+            <li className="nav-item">Precio final - {cliente?.Precio_Lp1}</li>
           </ul>
         </div>
       </div>

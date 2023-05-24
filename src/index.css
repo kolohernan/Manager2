@@ -1,34 +1,41 @@
-#container-principal{
-    padding-top:6rem!important;
+#container-principal {
+  padding-top: 6rem !important;
 }
-.nav-link{
-    color:#fff;
+.nav-link {
+  color: #fff;
 }
-.nav-link:hover{
-    color: #ffc107!important;
+.nav-link:hover {
+  color: #ffc107 !important;
 }
-.nav-link.active{
-    color: #ffc107!important;
+.nav-link.active {
+  color: #ffc107 !important;
 }
 
-.btn-manager{
-    padding: 13px 29px;
-    line-height: 17px;
-    font-size: 14px;
-    border-radius:0;
-    background-color:#ffc107;
-    color:#444444;
+.btn-manager {
+  padding: 13px 29px;
+  line-height: 17px;
+  font-size: 14px;
+  border-radius: 0;
+  background-color: #ffc107;
+  color: #444444;
 }
 .btn-manager:focus,
-.btn-manager:hover{
-    background-color:#444444;
-    color:#fff;
+.btn-manager:hover {
+  background-color: #444444;
+  color: #fff;
 }
-#barra-clientes{
-    border-radius:0;
+.barra-Manager {
+  border-radius: 0;
 }
 
-#barra-clientes:focus{
-    box-shadow:none;
-    border-color: #ffc107;
+.barra-Manager:focus {
+  box-shadow: none;
+  border-color: #ffc107;
+}
+
+/*Login de usuarios*/
+
+.form-signin {
+  max-width: 330px;
+  padding: 15px;
 }

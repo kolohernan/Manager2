@@ -5,11 +5,10 @@ function Searchbar({ busqueda, setBusqueda }) {
   return (
     <div className="input-group mb-3">
       <input
-        id="barra-clientes"
         type="text"
-        className="form-control"
-        placeholder="Ingrese el cliente"
-        aria-label="Ingrese el cliente"
+        className="form-control barra-Manager"
+        placeholder="Ingrese el Artiuclo"
+        aria-label="Ingrese el Artiuclo"
         aria-describedby="button-busqueda-clientes"
         value={busqueda}
         onChange={(e) => {
