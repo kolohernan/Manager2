@@ -1,8 +1,10 @@
 import { NavLink } from "react-router-dom";
 import { useUserContext } from "../context/UserContext";
+import { useNavigate } from "react-router-dom";
 
 function Navbar() {
   const { usuario, setUsuario } = useUserContext();
+  const navigate = useNavigate();
 
   return (
     <nav className="navbar navbar-dark navbar-expand-lg bg-dark fixed-top">
@@ -27,10 +29,10 @@ function Navbar() {
           <span className="navbar-toggler-icon"></span>
         </button>
         <div className="collapse navbar-collapse" id="navbarNav">
-          <ul className="navbar-nav">
+          <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             <li className="nav-item">
               <NavLink
-                to="/Articulos"
+                to="/Dashboard/Articulos"
                 className="nav-link"
                 aria-current="page"
                 href="#"
@@ -40,7 +42,7 @@ function Navbar() {
             </li>
             <li className="nav-item">
               <NavLink
-                to="/Clientes"
+                to="/Dashboard/Clientes"
                 className="nav-link"
                 aria-current="page"
                 href="#"
@@ -58,12 +60,20 @@ function Navbar() {
                 Pedidos
               </NavLink>
             </li>
-            {user && (
-              <li className="nav-item">
-                <button onClick={() => setUsuario(false)}>Cerrar sesion</button>
-              </li>
-            )}
           </ul>
+          {usuario && (
+            <li className="nav-item">
+              <button
+                className="nav-link"
+                onClick={() => {
+                  setUsuario(false);
+                  navigate("/");
+                }}
+              >
+                Cerrar sesion
+              </button>
+            </li>
+          )}
         </div>
       </div>
     </nav>

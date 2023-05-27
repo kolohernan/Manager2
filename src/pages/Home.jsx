@@ -8,7 +8,7 @@ const Home = () => {
 
   const handleLogin = () => {
     setUsuario(true);
-    navigate("/Articulos");
+    navigate("/Dashboard");
   };
 
   return (

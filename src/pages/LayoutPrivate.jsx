@@ -11,7 +11,7 @@ const LayoutPrivate = () => {
 
   useEffect(() => {
     if (!usuario) {
-      navigate("/");
+      navigate("/Home");
     }
   }, []);
 

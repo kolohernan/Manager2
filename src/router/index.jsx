@@ -18,11 +18,6 @@ export const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: "/Articulos",
-        element: <Articulos />,
-      },
-      /*
-      {
         path: "/Dashboard",
         element: <LayoutPrivate />,
         errorElement: <NotFound />,
@@ -36,9 +31,12 @@ export const router = createBrowserRouter([
             path: "/Dashboard/Clientes",
             element: <Clientes />,
           },
+          {
+            path: "/Dashboard/Articulos",
+            element: <Articulos />,
+          },
         ],
       },
-      */
     ],
   },
 ]);
