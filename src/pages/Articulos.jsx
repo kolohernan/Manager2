@@ -1,10 +1,14 @@
 import { useFetch } from "../funciones/useFetch";
-
 import Navbarside from "../Componentes/Navbar side";
 import Header from "../Componentes/Header";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function Articulos() {
+  //Seteo el titulo de la pagina
+  useEffect(() => {
+    document.title = "Busqueda de Articulos";
+  }, []);
+
   const { data, loading, error } = useFetch(
     "http://chiarottotal.ddns.net:3381/v300/api/Api_Articulos/Consulta?key=ChatBotManager&campo=OTRO&valor=*"
   );

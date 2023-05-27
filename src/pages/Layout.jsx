@@ -6,12 +6,10 @@ const Layout = () => {
 
   return (
     <Fragment>
-      <div id="container-principal" className="container">
-        {navigation.state === "loading" && (
-          <div className="alert alert-info my-5">Cargando...</div>
-        )}
-        <Outlet />
-      </div>
+      {navigation.state === "loading" && (
+        <div className="alert alert-info my-5">Cargando...</div>
+      )}
+      <Outlet />
     </Fragment>
   );
 };

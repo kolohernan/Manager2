@@ -1,6 +1,12 @@
 import { Link, useRouteError } from "react-router-dom";
+import { useEffect } from "react";
 
 const NotFound = () => {
+  //Seteo el titulo de la pagina
+  useEffect(() => {
+    document.title = "Página Inexistente";
+  }, []);
+
   const error = useRouteError();
   console.log(error);
 

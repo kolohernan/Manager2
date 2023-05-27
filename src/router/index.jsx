@@ -5,6 +5,7 @@ import Home from "../pages/Home";
 import Dashboard from "../pages/Dashboard";
 import Articulos from "../pages/Articulos";
 import Clientes from "../pages/Clientes";
+import Pedidos from "../pages/Pedidos";
 import NotFound from "../pages/NotFound";
 
 export const router = createBrowserRouter([
@@ -34,6 +35,10 @@ export const router = createBrowserRouter([
           {
             path: "/Dashboard/Articulos",
             element: <Articulos />,
+          },
+          {
+            path: "/Dashboard/Pedidos",
+            element: <Pedidos />,
           },
         ],
       },

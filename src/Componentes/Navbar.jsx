@@ -29,7 +29,7 @@ function Navbar() {
           <span className="navbar-toggler-icon"></span>
         </button>
         <div className="collapse navbar-collapse" id="navbarNav">
-          <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+          <ul className="navbar-nav mb-2 mb-lg-0 me-auto">
             <li className="nav-item">
               <NavLink
                 to="/Dashboard/Articulos"
@@ -52,7 +52,7 @@ function Navbar() {
             </li>
             <li className="nav-item">
               <NavLink
-                to="/Pedidos"
+                to="/Dashboard/Pedidos"
                 className="nav-link"
                 aria-current="page"
                 href="#"
@@ -61,19 +61,21 @@ function Navbar() {
               </NavLink>
             </li>
           </ul>
-          {usuario && (
-            <li className="nav-item">
-              <button
-                className="nav-link"
-                onClick={() => {
-                  setUsuario(false);
-                  navigate("/");
-                }}
-              >
-                Cerrar sesion
-              </button>
-            </li>
-          )}
+          <ul className="navbar-nav mb-2 mb-lg-0 ms-auto">
+            {usuario && (
+              <li className="nav-item">
+                <button
+                  className="nav-link"
+                  onClick={() => {
+                    setUsuario(false);
+                    navigate("/");
+                  }}
+                >
+                  Cerrar sesion
+                </button>
+              </li>
+            )}
+          </ul>
         </div>
       </div>
     </nav>

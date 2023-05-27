@@ -9,20 +9,23 @@ const LayoutPrivate = () => {
   const navigation = useNavigation();
   const navigate = useNavigate();
 
+  //si el usuario es falso, lo vuelvo a la pagina de inicio
   useEffect(() => {
     if (!usuario) {
-      navigate("/Home");
+      navigate("/NotFound");
     }
   }, []);
 
   return (
     <Fragment>
       <Navbar />
-      <div id="container-principal" className="container">
-        {navigation.state === "loading" && (
-          <div className="alert alert-info my-5">Cargando...</div>
-        )}
-        <Outlet />
+      <div id="container-dashboard">
+        <div className="container">
+          {navigation.state === "loading" && (
+            <div className="alert alert-info my-5">Cargando...</div>
+          )}
+          <Outlet />
+        </div>
       </div>
       <Footer />
     </Fragment>
