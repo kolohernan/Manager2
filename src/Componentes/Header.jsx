@@ -6,7 +6,7 @@ function Header({ busqueda, setBusqueda }) {
 
   return (
     <div className="text-center">
-      <h2 className="pb-5">Busqueda de {location.title}</h2>
+      <h2 className="pb-5">{document.title}</h2>
       <Searchbar busqueda={busqueda} setBusqueda={setBusqueda} />
     </div>
   );

@@ -1,7 +1,8 @@
 import { useFetch } from "../funciones/useFetch";
+import { parseColumnTitles } from "../funciones/Utilidades";
 import Navbarside from "../Componentes/Navbar side";
 import Header from "../Componentes/Header";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 
 function Articulos() {
   //Seteo el titulo de la pagina
@@ -23,23 +24,31 @@ function Articulos() {
     //return elemento.Descripcion.includes(busqueda);
     return elemento.Descripcion.toLowerCase().includes(busqueda.toLowerCase());
   });
-
   // guardar en estado el elemento seleccionado después de hacer click en Ver Mas
   const [cliente, Setcliente] = useState(null);
 
+  // ejemplo de cadena que viene por el usuario
+  let ArticuloUsuario1 =
+    "<Codigo:Articulo><Descripcion:Detalle><Desc_Rubro:Rubro><Stock:Cantidad>";
+
+  //constante para mostrar
+  const titulosColumnas2 = JSON.stringify(parseColumnTitles(ArticuloUsuario1));
+
+  //separar la cadena con la funcion declarada
+  const titulosColumnas = parseColumnTitles(ArticuloUsuario1);
   return (
     <>
+      <p>{titulosColumnas2}</p>
       <Navbarside cliente={cliente} />
       <Header busqueda={busqueda} setBusqueda={setBusqueda} />
       {busqueda !== "" ? (
         <table className="table mt-5">
           <thead>
             <tr>
-              <th scope="col">Código</th>
-              <th scope="col">Descripcion</th>
-              <th scope="col">Unidad</th>
-              <th scope="col">Stock</th>
-              <th scope="col">Precios</th>
+              {titulosColumnas.map((item) => {
+                return <th key={item[0]}> {item[1]} </th>;
+              })}
+              <th scope="col">Ver mas</th>
             </tr>
           </thead>
           <tbody>
@@ -50,10 +59,9 @@ function Articulos() {
             {/* Recorremos el array con map*/}
             {resultado?.map((Clientes) => (
               <tr key={Clientes.Codigo}>
-                <td>{Clientes.Codigo} </td>
-                <td>{Clientes.Descripcion} </td>
-                <td>{Clientes.Unidad} </td>
-                <td>{Clientes.Stock} </td>
+                {titulosColumnas.map((item) => {
+                  return <td key={item[0]}> {Clientes[item[0]]}</td>;
+                })}
                 <td>
                   {/* A cada botón hay que darle un manejador de evento para que guarde en estado el elemento (Clientes en este caso del map ^^^^ ) */}
                   <button
