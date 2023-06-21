@@ -7,8 +7,8 @@ function Searchbar({ busqueda, setBusqueda }) {
       <input
         type="text"
         className="form-control barra-Manager"
-        placeholder="Ingrese el Articulo"
-        aria-label="Ingrese el Articulo"
+        placeholder="Escribe para buscar"
+        aria-label="Escribe para buscar"
         aria-describedby="button-busqueda-clientes"
         value={busqueda}
         onChange={(e) => {
@@ -19,9 +19,8 @@ function Searchbar({ busqueda, setBusqueda }) {
         }}
       />
       {/*valor + onchange para controlarlo  */}
-
       <button
-        className="btn btn-manager"
+        className="btn btn-manager d-none"
         type="button"
         id="button-busqueda-clientes"
       >

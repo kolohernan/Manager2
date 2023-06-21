@@ -2,7 +2,7 @@ import { useFetch } from "../funciones/useFetch";
 import { parseColumnTitles } from "../funciones/Utilidades";
 import Navbarside from "../Componentes/Navbar side";
 import Header from "../Componentes/Header";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 
 function Articulos() {
   //Seteo el titulo de la pagina
@@ -42,45 +42,55 @@ function Articulos() {
       <Navbarside cliente={cliente} />
       <Header busqueda={busqueda} setBusqueda={setBusqueda} />
       {busqueda !== "" ? (
-        <table className="table mt-5">
-          <thead>
-            <tr>
-              {titulosColumnas.map((item) => {
-                return <th key={item[0]}> {item[1]} </th>;
-              })}
-              <th scope="col">Ver mas</th>
-            </tr>
-          </thead>
-          <tbody>
-            {/* el && es como un if, donde solo se ejectuta el verdadero*/}
-            {/* el && es como un if, donde solo se ejectuta el verdadero*/}
-            {error && <td>Error:..</td>}
-            {loading && <td>Cargando...</td>}
-            {/* Recorremos el array con map*/}
-            {resultado?.map((Clientes) => (
-              <tr key={Clientes.Codigo}>
+        <div className="Resultado-api">
+          <table className="table table-mobile-responsive table-mobile-sided mt-5">
+            <thead>
+              <tr>
                 {titulosColumnas.map((item) => {
-                  return <td key={item[0]}> {Clientes[item[0]]}</td>;
+                  return (
+                    <th scope="col" key={item[0]}>
+                      {item[1]}
+                    </th>
+                  );
                 })}
-                <td>
-                  {/* A cada botón hay que darle un manejador de evento para que guarde en estado el elemento (Clientes en este caso del map ^^^^ ) */}
-                  <button
-                    className="btn btn-manager"
-                    type="button"
-                    data-bs-toggle="offcanvas"
-                    data-bs-target="#offcanvasDarkNavbar"
-                    aria-controls="offcanvasDarkNavbar"
-                    onClick={() => {
-                      Setcliente(Clientes);
-                    }}
-                  >
-                    Ver mas
-                  </button>
-                </td>
+                <th scope="col">Ver mas</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {/* el && es como un if, donde solo se ejectuta el verdadero*/}
+              {/* el && es como un if, donde solo se ejectuta el verdadero*/}
+              {error && <td>Error:..</td>}
+              {loading && <td>Cargando...</td>}
+              {/* Recorremos el array con map*/}
+              {resultado?.map((Clientes) => (
+                <tr key={Clientes.Codigo}>
+                  {titulosColumnas.map((item) => {
+                    return (
+                      <td data-content={item[1]} key={item[0]}>
+                        {Clientes[item[0]]}
+                      </td>
+                    );
+                  })}
+                  <td>
+                    {/* A cada botón hay que darle un manejador de evento para que guarde en estado el elemento (Clientes en este caso del map ^^^^ ) */}
+                    <button
+                      className="btn btn-manager"
+                      type="button"
+                      data-bs-toggle="offcanvas"
+                      data-bs-target="#offcanvasDarkNavbar"
+                      aria-controls="offcanvasDarkNavbar"
+                      onClick={() => {
+                        Setcliente(Clientes);
+                      }}
+                    >
+                      Ver mas
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       ) : null}
     </>
   );
