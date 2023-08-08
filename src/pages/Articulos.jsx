@@ -50,6 +50,7 @@ function Articulos() {
 
   const mapaLabelError = {
     "-1": "Hubo una excepcion",
+    "-11": "Datos no encontrados",
     //....
   };
 
@@ -99,7 +100,7 @@ function Articulos() {
 
       <header id="header-busqueda" className="text-center fixed-top">
         <div className="container">
-          <h2 className="py-5">{document.title}</h2>
+          <h2 className="py-5">Busqueda de Articulos</h2>
           <div className="input-group mb-3">
             <form className="input-group" onSubmit={handleSubmit}>
               <input
@@ -126,7 +127,7 @@ function Articulos() {
       {isLoading ? (
         <h1>Loading...</h1>
       ) : error ? (
-        error
+        <h1>error...</h1>
       ) : (
         <div className="Resultado-api">
           <table className="table table-mobile-responsive table-mobile-sided mt-5">

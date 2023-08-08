@@ -18,6 +18,12 @@ const Home = () => {
     navigate("/Dashboard");
   };
 
+  let jsonUsuario =
+    '{"user":"hernan","password":"123456*","nombre":"Hernan","apellido":"Mohadile","cadenaArticulo":"<Codigo:Articulo><Descripcion:Detalle><Desc_Rubro:Rubro><Stock:Cantidad>","cadenaArticulo":"<Codigo:Articulo><Descripcion:Detalle><Desc_Rubro:Rubro><Stock:Cantidad>","cadenaArticulo2":"<Precio_Compra:Precio de compra><Precio_Costo:Precio de costo><Precio_Lp1:Precio lista 1>","cadenaCliente":"<Codigo:Código><Razon_social:Nombre><Direccion><Cuit>","cadenaCliente2":"<telefono:Teléfono><e-mail:Correo Electrónico><Web_empresa:Sitio Web><Saldo_Cc:Saldo>","visulizaCC_sn":"SI"}';
+
+  let mostrarConsola = JSON.parse(jsonUsuario);
+  console.log(mostrarConsola);
+
   return (
     <div id="container-home" className="container-fluid">
       <p></p>
