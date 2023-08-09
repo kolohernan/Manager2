@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUserContext } from "../context/UserContext";
-
+import Form from "../Componentes/Form";
 const Home = () => {
   //Seteo el titulo de la pagina
   useEffect(() => {
@@ -24,41 +24,54 @@ const Home = () => {
   let mostrarConsola = JSON.parse(jsonUsuario);
   console.log(mostrarConsola);
 
+  const onSubmit = (values) => {
+    console.log(values);
+  };
   return (
     <div id="container-home" className="container-fluid">
       <p></p>
       <div className="form-signin w-100 m-auto mt-5 text-center">
-        <form>
-          <img
-            className="mb-4"
-            src="../src/assets/logo.png"
-            alt="Manager"
-            height="57"
-          />
-          <div className="form-floating">
-            <input
-              type="text"
-              className="form-control barra-Manager"
-              id="floatingInput"
-              placeholder="name@example.com"
-            />
-            <label htmlFor="floatingInput">Usuario</label>
-          </div>
-          <div className="form-floating">
-            <input
-              type="password"
-              className="form-control barra-Manager"
-              id="floatingPassword"
-              placeholder="Password"
-            />
-            <label htmlFor="floatingPassword">Contraseña</label>
-          </div>
+        <Form onSubmit={onSubmit} initialState={{ text: "", password: "" }}>
+          {({ values, handleChange, handleSubmit }) => (
+            <form onSubmit={handleSubmit}>
+              <img
+                className="mb-4"
+                src="../src/assets/logo.png"
+                alt="Manager"
+                height="57"
+              />
+              <div className="form-floating">
+                <input
+                  type="text"
+                  className="form-control barra-Manager"
+                  id="floatingInput"
+                  placeholder="name@example.com"
+                  value={values.text}
+                  onChange={handleChange}
+                  name="text"
+                />
+                <label htmlFor="floatingInput">Usuario</label>
+              </div>
 
-          <hr></hr>
-          <button onClick={handleLogin} className="w-100 btn btn-lg btn-login">
-            Iniciar sesion
-          </button>
-        </form>
+              <div className="form-floating">
+                <input
+                  type="password"
+                  className="form-control barra-Manager"
+                  id="floatingPassword"
+                  placeholder="Password"
+                  value={values.password}
+                  onChange={handleChange}
+                  name="password"
+                />
+                <label htmlFor="floatingPassword">Contraseña</label>
+              </div>
+              <hr></hr>
+              <button className="w-100 btn btn-lg btn-login" type="submit">
+                Iniciar sesion
+              </button>
+            </form>
+          )}
+        </Form>
       </div>
     </div>
   );
