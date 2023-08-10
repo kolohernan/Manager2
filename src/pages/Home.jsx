@@ -8,8 +8,10 @@ const Home = () => {
   useEffect(() => {
     document.title = "Iniciar sesion";
   }, []);
-  //declaro las variables para determinar si esta logueado o no
-  const { usuario, setUsuario } = useUserContext();
+  //las variables que voy a usar
+  const { usuario, setUsuario, nombres, setNombres, apellidos, setApellidos } =
+    useUserContext();
+
   const navigate = useNavigate();
 
   //defino un json
@@ -17,7 +19,7 @@ const Home = () => {
     {
       user: "kolohernan",
       password: "123456",
-      nombre: "Hernan",
+      nombre: "Hernán",
       apellido: "Mohadile",
       cadenaArticulo:
         "<Codigo:Articulo><Descripcion:Detalle><Desc_Rubro:Rubro><Stock:Cantidad>",
@@ -50,12 +52,28 @@ const Home = () => {
     },
   ];
 
+  const Cartel = () => {
+    return (
+      <>
+        <div class="alert alert-danger alert-dismissible fade show">
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="alert"
+          ></button>
+          <strong>Eror</strong> Los datos ingresados son incorrectos.
+        </div>
+      </>
+    );
+  };
+
   //let mostrarConsola = JSON.parse(jsonUsuario);
   //console.log(jsonUsuario);
 
   //aca se define lo que hace el boton
   const onSubmit = (values) => {
-    setUsuario(true);
+    //setUsuario(true);
+    //setNombre();
     //navigate("/Dashboard");
 
     /*
@@ -73,9 +91,13 @@ const Home = () => {
         e.password.toLowerCase() === values.password.toLowerCase()
       ) {
         setUsuario(true);
+        setNombres(e.nombre);
+        setApellidos(e.apellido);
+        console.log(nombres);
         navigate("/Dashboard");
       } else {
-        console.log("datos erroneos");
+        console.log("Los datos son erroneos");
+        Cartel();
       }
     });
     console.log({ resultado });

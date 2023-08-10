@@ -15,7 +15,6 @@ const LayoutPrivate = () => {
       navigate("/NotFound");
     }
   }, []);
-
   return (
     <Fragment>
       <Navbar />

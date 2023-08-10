@@ -9,7 +9,7 @@ function Navbar() {
   return (
     <nav className="navbar navbar-dark navbar-expand-lg bg-dark fixed-top">
       <div className="container-fluid">
-        <NavLink className="navbar-brand" to="/">
+        <NavLink className="navbar-brand" to="/Dashboard">
           <img
             src="./src/assets/logo.png"
             alt="Manager"
