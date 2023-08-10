@@ -2,35 +2,90 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUserContext } from "../context/UserContext";
 import Form from "../Componentes/Form";
+
 const Home = () => {
   //Seteo el titulo de la pagina
   useEffect(() => {
     document.title = "Iniciar sesion";
   }, []);
-
   //declaro las variables para determinar si esta logueado o no
   const { usuario, setUsuario } = useUserContext();
-
   const navigate = useNavigate();
 
-  const handleLogin = () => {
-    setUsuario(true);
-    navigate("/Dashboard");
-  };
+  //defino un json
+  let jsonUsuario = [
+    {
+      user: "kolohernan",
+      password: "123456",
+      nombre: "Hernan",
+      apellido: "Mohadile",
+      cadenaArticulo:
+        "<Codigo:Articulo><Descripcion:Detalle><Desc_Rubro:Rubro><Stock:Cantidad>",
+      cadenaArticulo:
+        "<Codigo:Articulo><Descripcion:Detalle><Desc_Rubro:Rubro><Stock:Cantidad>",
+      cadenaArticulo2:
+        "<Precio_Compra:Precio de compra><Precio_Costo:Precio de costo><Precio_Lp1:Precio lista 1>",
+      cadenaCliente: "<Codigo:Código><Razon_social:Nombre><Direccion><Cuit>",
+      cadenaCliente2:
+        "<telefono:Teléfono><e-mail:Correo Electrónico><Web_empresa:Sitio Web><Saldo_Cc:Saldo>",
+      visulizaCC_sn: "N",
+      visulizaCpt_sn: "S",
+    },
+    {
+      user: "gabriel",
+      password: "654321",
+      nombre: "Gabriel",
+      apellido: "Sastre",
+      cadenaArticulo:
+        "<Codigo:Articulo><Descripcion:Detalle><Desc_Rubro:Rubro><Stock:Cantidad>",
+      cadenaArticulo:
+        "<Codigo:Articulo><Descripcion:Detalle><Desc_Rubro:Rubro><Stock:Cantidad>",
+      cadenaArticulo2:
+        "<Precio_Compra:Precio de compra><Precio_Costo:Precio de costo><Precio_Lp1:Precio lista 1>",
+      cadenaCliente: "<Codigo:Código><Razon_social:Nombre><Direccion><Cuit>",
+      cadenaCliente2:
+        "<telefono:Teléfono><e-mail:Correo Electrónico><Web_empresa:Sitio Web><Saldo_Cc:Saldo>",
+      visulizaCC_sn: "S",
+      visulizaCpt_sn: "S",
+    },
+  ];
 
-  let jsonUsuario =
-    '{"user":"hernan","password":"123456*","nombre":"Hernan","apellido":"Mohadile","cadenaArticulo":"<Codigo:Articulo><Descripcion:Detalle><Desc_Rubro:Rubro><Stock:Cantidad>","cadenaArticulo":"<Codigo:Articulo><Descripcion:Detalle><Desc_Rubro:Rubro><Stock:Cantidad>","cadenaArticulo2":"<Precio_Compra:Precio de compra><Precio_Costo:Precio de costo><Precio_Lp1:Precio lista 1>","cadenaCliente":"<Codigo:Código><Razon_social:Nombre><Direccion><Cuit>","cadenaCliente2":"<telefono:Teléfono><e-mail:Correo Electrónico><Web_empresa:Sitio Web><Saldo_Cc:Saldo>","visulizaCC_sn":"SI"}';
+  //let mostrarConsola = JSON.parse(jsonUsuario);
+  //console.log(jsonUsuario);
 
-  let mostrarConsola = JSON.parse(jsonUsuario);
-  console.log(mostrarConsola);
-
+  //aca se define lo que hace el boton
   const onSubmit = (values) => {
-    console.log(values);
+    setUsuario(true);
+    //navigate("/Dashboard");
+
+    /*
+    //comparo si el nombre de usuario que ingrese esta en el json
+    const resultado = jsonUsuario?.filter((e) => {
+      return e.user.toLowerCase() === values.text.toLowerCase();
+    });
+    console.log({ resultado });
+    */
+
+    //comparo si el nombre de usuario que ingrese esta en el json
+    const resultado = jsonUsuario?.filter((e) => {
+      if (
+        e.user.toLowerCase() === values.text.toLowerCase() &&
+        e.password.toLowerCase() === values.password.toLowerCase()
+      ) {
+        setUsuario(true);
+        navigate("/Dashboard");
+      } else {
+        console.log("datos erroneos");
+      }
+    });
+    console.log({ resultado });
   };
+
   return (
     <div id="container-home" className="container-fluid">
       <p></p>
       <div className="form-signin w-100 m-auto mt-5 text-center">
+        {/* inicializo los valores en vacio */}
         <Form onSubmit={onSubmit} initialState={{ text: "", password: "" }}>
           {({ values, handleChange, handleSubmit }) => (
             <form onSubmit={handleSubmit}>
