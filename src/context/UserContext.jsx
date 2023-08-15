@@ -8,6 +8,8 @@ const UserProvider = ({ children }) => {
   const [apellidos, setApellidos] = useState("");
   const [cadenaArticulo, setCadenaArticulo] = useState("");
   const [cadenaArticulo2, setCadenaArticulo2] = useState("");
+  const [cadenaCliente, setCadenaCliente] = useState("");
+  const [cadenaCliente2, setCadenaCliente2] = useState("");
 
   return (
     <UserContext.Provider
@@ -21,7 +23,11 @@ const UserProvider = ({ children }) => {
         cadenaArticulo,
         setCadenaArticulo,
         cadenaArticulo2,
-        setCadenaArticulo2
+        setCadenaArticulo2,
+        cadenaCliente,
+        setCadenaCliente,
+        cadenaCliente2,
+        setCadenaCliente2,
       }}
     >
       {children}

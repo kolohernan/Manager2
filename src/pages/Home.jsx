@@ -9,8 +9,22 @@ const Home = () => {
     document.title = "Iniciar sesion";
   }, []);
   //las variables que voy a usar
-  const { usuario, setUsuario, nombres, setNombres, apellidos, setApellidos , cadenaArticulo, setCadenaArticulo, cadenaArticulo2 , setCadenaArticulo2} =
-    useUserContext();
+  const {
+    usuario,
+    setUsuario,
+    nombres,
+    setNombres,
+    apellidos,
+    setApellidos,
+    cadenaArticulo,
+    setCadenaArticulo,
+    cadenaArticulo2,
+    setCadenaArticulo2,
+    cadenaCliente,
+    setCadenaCliente,
+    cadenaCliente2,
+    setCadenaCliente2,
+  } = useUserContext();
 
   const navigate = useNavigate();
 
@@ -65,7 +79,6 @@ const Home = () => {
 
   //aca se define lo que hace el boton
   const onSubmit = (values) => {
-
     /*
     //comparo si el nombre de usuario que ingrese esta en el json
     const resultado = jsonUsuario?.filter((e) => {
@@ -85,6 +98,8 @@ const Home = () => {
         setApellidos(e.apellido);
         setCadenaArticulo(e.cadenaArticulo);
         setCadenaArticulo2(e.cadenaArticulo2);
+        setCadenaCliente(e.cadenaCliente);
+        setCadenaCliente2(e.cadenaCliente2);
         navigate("/Dashboard");
       } else {
         console.log("Los datos son erroneos");

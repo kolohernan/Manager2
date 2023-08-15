@@ -1,7 +1,5 @@
-import { useFetch } from "../funciones/useFetch";
 import { parseColumnTitles } from "../funciones/Utilidades";
 import Navbarside from "../Componentes/Navbar side";
-import Header from "../Componentes/Header";
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useUserContext } from "../context/UserContext";
@@ -63,14 +61,14 @@ function Articulos() {
       setIsLoading(false);
     }
   };
-    let ArticuloUsuario1 = cadenaArticulo;
+  let ArticuloUsuario1 = cadenaArticulo;
 
   //separar la cadena con la funcion declarada
   const titulosColumnas = parseColumnTitles(ArticuloUsuario1);
   return (
     <>
       {/* Le paso a la Sidebar los datos del api de articulos y de las columnas */}
-      <Navbarside datosnav={datosnav} cadenaArticulo2={cadenaArticulo2}/>
+      <Navbarside datosnav={datosnav} cadenaArticulo2={cadenaArticulo2} />
 
       <header id="header-busqueda" className="text-center fixed-top">
         <div className="container">
