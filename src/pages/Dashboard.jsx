@@ -6,13 +6,16 @@ const Dashboard = () => {
   useEffect(() => {
     document.title = "Dashboard";
   }, []);
-  const { nombres, apellidos } = useUserContext();
+  const { nombres, apellidos, cadenaArticulo, cadenaArticulo2 } = useUserContext();
 
   return (
     <>
-      <h5>
+      <h4>
         Bienvenido {nombres} {apellidos}
-      </h5>
+      </h4>
+      <br/>
+      <p><strong>Cadena para Articulos</strong> {cadenaArticulo}</p>
+      <p><strong>Cadena para Articulos NavSide</strong> {cadenaArticulo2}</p>
     </>
   );
 };

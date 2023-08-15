@@ -9,7 +9,7 @@ const Home = () => {
     document.title = "Iniciar sesion";
   }, []);
   //las variables que voy a usar
-  const { usuario, setUsuario, nombres, setNombres, apellidos, setApellidos } =
+  const { usuario, setUsuario, nombres, setNombres, apellidos, setApellidos , cadenaArticulo, setCadenaArticulo, cadenaArticulo2 , setCadenaArticulo2} =
     useUserContext();
 
   const navigate = useNavigate();
@@ -22,11 +22,9 @@ const Home = () => {
       nombre: "Hernán",
       apellido: "Mohadile",
       cadenaArticulo:
-        "<Codigo:Articulo><Descripcion:Detalle><Desc_Rubro:Rubro><Stock:Cantidad>",
-      cadenaArticulo:
-        "<Codigo:Articulo><Descripcion:Detalle><Desc_Rubro:Rubro><Stock:Cantidad>",
+        "<Codigo:Articulos><Descripcion:Detalles><Desc_Rubro:Rubros><Stock:Cantidades>",
       cadenaArticulo2:
-        "<Precio_Compra:Precio de compra><Precio_Costo:Precio de costo><Precio_Lp1:Precio lista 1>",
+        "<Precio_Compra:Precio de compras><Precio_Costo:Precio de costos><Precio_Lp1:Precios lista 1>",
       cadenaCliente: "<Codigo:Código><Razon_social:Nombre><Direccion><Cuit>",
       cadenaCliente2:
         "<telefono:Teléfono><e-mail:Correo Electrónico><Web_empresa:Sitio Web><Saldo_Cc:Saldo>",
@@ -38,8 +36,6 @@ const Home = () => {
       password: "654321",
       nombre: "Gabriel",
       apellido: "Sastre",
-      cadenaArticulo:
-        "<Codigo:Articulo><Descripcion:Detalle><Desc_Rubro:Rubro><Stock:Cantidad>",
       cadenaArticulo:
         "<Codigo:Articulo><Descripcion:Detalle><Desc_Rubro:Rubro><Stock:Cantidad>",
       cadenaArticulo2:
@@ -67,14 +63,8 @@ const Home = () => {
     );
   };
 
-  //let mostrarConsola = JSON.parse(jsonUsuario);
-  //console.log(jsonUsuario);
-
   //aca se define lo que hace el boton
   const onSubmit = (values) => {
-    //setUsuario(true);
-    //setNombre();
-    //navigate("/Dashboard");
 
     /*
     //comparo si el nombre de usuario que ingrese esta en el json
@@ -93,7 +83,8 @@ const Home = () => {
         setUsuario(true);
         setNombres(e.nombre);
         setApellidos(e.apellido);
-        console.log(nombres);
+        setCadenaArticulo(e.cadenaArticulo);
+        setCadenaArticulo2(e.cadenaArticulo2);
         navigate("/Dashboard");
       } else {
         console.log("Los datos son erroneos");

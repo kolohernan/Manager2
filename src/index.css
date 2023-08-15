@@ -76,7 +76,7 @@
 }
 
 .Resultado-api {
-  padding-top: 150px !important;
+  padding-top: 200px !important;
 }
 .Resultado-api table {
   margin-top: 0 !important;
@@ -90,4 +90,11 @@
   .Resultado-api table .btn-manager {
     padding: 0.375rem 0.75rem !important;
   }
+}
+
+
+/*Navbar*/
+
+.modal-content {
+  background-color: #ffc107 !important;
 }

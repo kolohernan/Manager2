@@ -4,6 +4,7 @@ import Navbarside from "../Componentes/Navbar side";
 import Header from "../Componentes/Header";
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import { useUserContext } from "../context/UserContext";
 
 function Articulos() {
   //Seteo el titulo de la pagina
@@ -12,39 +13,18 @@ function Articulos() {
   }, []);
   const location = useLocation();
 
-  /*
- -------------------------------------------------------------------------------------------------------------
- -------------------------------------------------------------------------------------------------------------
- -------------------------------------------------------------------------------------------------------------
-  const { data, loading, error } = useFetch(
-    "http://chiarottotal.ddns.net:3381/v300/api/Api_Articulos/Consulta?key=ChatBotManager&campo=OTRO&valor=*"
-  );
+  //traigo la cadena del Usercontext
+  const { cadenaArticulo, cadenaArticulo2 } = useUserContext();
 
- 
-  //estado para buscar: query de la busqueda
-  const [busqueda, setBusqueda] = useState("");
-
-  //estado derivado -> a partir de data + input => obtener la data filtrada
-  const resultado = data?.filter((elemento) => {
-    // includes => true/false. filter requiere que retornes true/false
-    // .toLowerCase() los hace en minuscula
-    //return elemento.Descripcion.includes(busqueda);
-    return elemento.Descripcion.toLowerCase().includes(busqueda.toLowerCase());
-  });
-
-  -------------------------------------------------------------------------------------------------------------
-  -------------------------------------------------------------------------------------------------------------
-  -------------------------------------------------------------------------------------------------------------
-*/
   // guardar en estado el elemento seleccionado después de hacer click en Ver Mas
-  const [cliente, Setcliente] = useState(null);
+  const [datosnav, SetDatosnav] = useState(null);
 
   const [search, setSearch] = useState("");
   // estado para guardar el resultado de la búsqueda
   const [searchResult, setSearchResult] = useState([]);
-  //siempre está bueno mostrar si está cargando o si hay un error cuando se hace la request.
-  //Asi que estos dos estados son para eso
+  //estado para mostrar si está cargando
   const [isLoading, setIsLoading] = useState(false);
+  //estado para mostrar si hay un error
   const [error, setError] = useState("");
   // ejemplo de cadena que viene por el usuario
 
@@ -54,6 +34,7 @@ function Articulos() {
     //....
   };
 
+  //ACA MANEJO LO QUE HACE EL BOTON DE BUSQUEDA
   const handleSubmit = async (e) => {
     e.preventDefault();
     // probamos hacer algo.. si falla nos vamos al catch
@@ -82,21 +63,14 @@ function Articulos() {
       setIsLoading(false);
     }
   };
-
-  let ArticuloUsuario1 =
-    "<Codigo:Articulo><Descripcion:Detalle><Desc_Rubro:Rubro><Stock:Cantidad>";
-
-  //constante para mostrar
-  const titulosColumnas2 = JSON.stringify(
-    parseColumnTitles(ArticuloUsuario1)
-  ).toLocaleLowerCase();
+    let ArticuloUsuario1 = cadenaArticulo;
 
   //separar la cadena con la funcion declarada
   const titulosColumnas = parseColumnTitles(ArticuloUsuario1);
   return (
     <>
-      <p>{titulosColumnas2}</p>
-      <Navbarside cliente={cliente} />
+      {/* Le paso a la Sidebar los datos del api de articulos y de las columnas */}
+      <Navbarside datosnav={datosnav} cadenaArticulo2={cadenaArticulo2}/>
 
       <header id="header-busqueda" className="text-center fixed-top">
         <div className="container">
@@ -175,7 +149,7 @@ function Articulos() {
                         data-bs-target="#offcanvasDarkNavbar"
                         aria-controls="offcanvasDarkNavbar"
                         onClick={() => {
-                          Setcliente(Articulos);
+                          SetDatosnav(Articulos);
                         }}
                       >
                         Ver mas

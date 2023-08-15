@@ -6,6 +6,8 @@ const UserProvider = ({ children }) => {
   const [usuario, setUsuario] = useState(false);
   const [nombres, setNombres] = useState("");
   const [apellidos, setApellidos] = useState("");
+  const [cadenaArticulo, setCadenaArticulo] = useState("");
+  const [cadenaArticulo2, setCadenaArticulo2] = useState("");
 
   return (
     <UserContext.Provider
@@ -16,6 +18,10 @@ const UserProvider = ({ children }) => {
         setNombres,
         apellidos,
         setApellidos,
+        cadenaArticulo,
+        setCadenaArticulo,
+        cadenaArticulo2,
+        setCadenaArticulo2
       }}
     >
       {children}
