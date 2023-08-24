@@ -12,23 +12,22 @@ const Home = () => {
   const {
     usuario,
     setUsuario,
-    nombres,
-    setNombres,
-    apellidos,
-    setApellidos,
-    cadenaArticulo,
-    setCadenaArticulo,
-    cadenaArticulo2,
-    setCadenaArticulo2,
-    cadenaCliente,
-    setCadenaCliente,
-    cadenaCliente2,
-    setCadenaCliente2,
+    // nombres,
+    // setNombres,
+    // apellidos,
+    // setApellidos,
+    // cadenaArticulo,
+    // setCadenaArticulo,
+    // cadenaArticulo2,
+    // setCadenaArticulo2,
+    // cadenaCliente,
+    // setCadenaCliente,
+    // cadenaCliente2,
+    // setCadenaCliente2,
   } = useUserContext();
 
   const navigate = useNavigate();
 
-  //defino un json
   let jsonUsuario = [
     {
       user: "kolohernan",
@@ -62,51 +61,40 @@ const Home = () => {
     },
   ];
 
-  const Cartel = () => {
-    return (
-      <>
-        <div class="alert alert-danger alert-dismissible fade show">
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="alert"
-          ></button>
-          <strong>Eror</strong> Los datos ingresados son incorrectos.
-        </div>
-      </>
-    );
-  };
+  // estado de error: donde guardar un string del que se va a mostrar
+  const [erroruser, setErroruser] = useState();
 
   //aca se define lo que hace el boton
   const onSubmit = (values) => {
-    /*
     //comparo si el nombre de usuario que ingrese esta en el json
-    const resultado = jsonUsuario?.filter((e) => {
-      return e.user.toLowerCase() === values.text.toLowerCase();
-    });
-    console.log({ resultado });
-    */
-
-    //comparo si el nombre de usuario que ingrese esta en el json
+    //TODO: usar método .find
     const resultado = jsonUsuario?.filter((e) => {
       if (
         e.user.toLowerCase() === values.text.toLowerCase() &&
         e.password.toLowerCase() === values.password.toLowerCase()
       ) {
-        setUsuario(true);
-        setNombres(e.nombre);
-        setApellidos(e.apellido);
-        setCadenaArticulo(e.cadenaArticulo);
-        setCadenaArticulo2(e.cadenaArticulo2);
-        setCadenaCliente(e.cadenaCliente);
-        setCadenaCliente2(e.cadenaCliente2);
+        // Armo un objeto para agrupar todos los datos del usuario
+        const User = {
+          nombre: e.nombre,
+          apellido: e.apellido,
+          cadenaArticulo: e.cadenaArticulo,
+          cadenaArticulo2: e.cadenaArticulo2,
+          cadenaCliente: e.cadenaCliente,
+          cadenaCliente2: e.cadenaCliente2,
+          visulizaCC_sn: e.visulizaCC_sn,
+          visulizaCpt_sn: e.visulizaCpt_sn,
+        };
+        // Asigno los datos a objeto Usuario y me permita loguear
+        setUsuario(User);
+
+        localStorage.setItem("credenciales", JSON.stringify(User));
+
         navigate("/Dashboard");
       } else {
-        console.log("Los datos son erroneos");
-        Cartel();
+        // setear el mensaje de error ^ en el estado
+        setErroruser(true);
       }
     });
-    console.log({ resultado });
   };
 
   return (
@@ -155,6 +143,19 @@ const Home = () => {
             </form>
           )}
         </Form>
+        {erroruser ? (
+          <div className="alert alert-danger alert-dismissible fade show mt-2 d-block">
+            <strong>Error</strong> Los datos ingresados son incorrectos.
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="alert"
+              onClick={() => {
+                setErroruser(false);
+              }}
+            ></button>
+          </div>
+        ) : null}
       </div>
     </div>
   );

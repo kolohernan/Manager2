@@ -1,20 +1,9 @@
-import { Outlet, useNavigate, useNavigation } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import Navbar from "../Componentes/Navbar";
 import Footer from "../Componentes/Footer";
-import { useUserContext } from "../context/UserContext";
-import { Fragment, useEffect } from "react";
+import { Fragment } from "react";
 
 const LayoutPrivate = () => {
-  const { usuario, setUsuario } = useUserContext();
-  const navigation = useNavigation();
-  const navigate = useNavigate();
-
-  //si el usuario es falso, lo vuelvo a la pagina de inicio
-  useEffect(() => {
-    if (!usuario) {
-      navigate("/NotFound");
-    }
-  }, []);
   return (
     <Fragment>
       <Navbar />

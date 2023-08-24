@@ -5,7 +5,7 @@ function Navbarside({ datosnav, cadenaArticulo2 }) {
   let ArticuloUsuario2 =
     "<Precio_Compra:Precio de compra><Precio_Costo:Precio de costo><Precio_Lp1:Precio lista 1>";
   */
-    let ArticuloUsuario2 = cadenaArticulo2;
+  let ArticuloUsuario2 = cadenaArticulo2;
 
   //separar la cadena con la funcion declarada
   const titulosColumnasNav = parseColumnTitles(ArticuloUsuario2);

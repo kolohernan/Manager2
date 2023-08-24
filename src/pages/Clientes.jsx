@@ -12,7 +12,9 @@ function Clientes() {
   const location = useLocation();
 
   //traigo la cadena del Usercontext
-  const { cadenaCliente, cadenaCliente2 } = useUserContext();
+  const {
+    usuario: { cadenaCliente, cadenaCliente2 },
+  } = useUserContext();
 
   // guardar en estado el elemento seleccionado después de hacer click en Ver Mas
   const [datosnav, SetDatosnav] = useState(null);

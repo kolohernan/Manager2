@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { Fragment, useEffect } from "react";
 import { useUserContext } from "../context/UserContext";
 
 const Dashboard = () => {
@@ -6,16 +6,28 @@ const Dashboard = () => {
   useEffect(() => {
     document.title = "Dashboard";
   }, []);
-  const { nombres, apellidos, cadenaArticulo, cadenaArticulo2 } = useUserContext();
+  const { usuario } = useUserContext();
+
+  //tarda en cargar
+  if (!usuario)
+    return (
+      <Fragment>
+        <p>Cargando</p>
+      </Fragment>
+    );
 
   return (
     <>
       <h4>
-        Bienvenido {nombres} {apellidos}
+        Bienvenido {usuario.nombre} {usuario.apellido}
       </h4>
-      <br/>
-      <p><strong>Cadena para Articulos</strong> {cadenaArticulo}</p>
-      <p><strong>Cadena para Articulos NavSide</strong> {cadenaArticulo2}</p>
+      <br />
+      <p>
+        <strong>Cadena para Articulos</strong> {usuario.cadenaArticulo}
+      </p>
+      <p>
+        <strong>Cadena para Articulos NavSide</strong> {usuario.cadenaArticulo2}
+      </p>
     </>
   );
 };
