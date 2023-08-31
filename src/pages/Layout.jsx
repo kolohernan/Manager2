@@ -25,7 +25,7 @@ const Layout = () => {
           navigate("/NotFound");
         }
       } else {
-        navigate("/NotFound");
+        navigate("/");
       }
     }
   }, []);

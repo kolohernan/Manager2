@@ -46,6 +46,7 @@
 #header-busqueda {
   margin-top: 56px;
   background-color: #ffc107 !important;
+
   z-index: 2;
 }
 #Nav-MasDatos .list-group-item {
@@ -91,7 +92,6 @@
     padding: 0.375rem 0.75rem !important;
   }
 }
-
 
 /*Navbar*/
 
