@@ -7,6 +7,7 @@ import Articulos from "../pages/Articulos";
 import Clientes from "../pages/Clientes";
 import Pedidos from "../pages/Pedidos";
 import NotFound from "../pages/NotFound";
+import CuentaCorriente from "../pages/CuentaCorriente";
 
 export const router = createBrowserRouter([
   {
@@ -39,6 +40,10 @@ export const router = createBrowserRouter([
           {
             path: "/Dashboard/Pedidos",
             element: <Pedidos />,
+          },
+          {
+            path: "/Dashboard/Clientes/CC",
+            element: <CuentaCorriente />,
           },
         ],
       },

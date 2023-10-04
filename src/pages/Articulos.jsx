@@ -50,6 +50,14 @@ function Articulos() {
       // en este caso la respuesta tiene un `items` que tiene la lista de usuarios de github que dio como resultado
       setSearchResult(json);
       // mirá la consola para ver qué forma tiene (esto desp borralo)
+      if (response?.ok) {
+        console.log('funciono!');
+      } else {
+        console.log(`Error: ${response?.status}`)
+      }
+      if(response.status >= 400) {
+        throw new Error("Server responds with error!");
+    }
     } catch (e) {
       //si hubo un error esto viene acá... entonces agregamos un mensaje para notificar al usuario de que algo salió mal (esto lo vas a tener que renderizar abajo vos después)
       if (e?.Error_Code) setError(mapaLabelError[e.Error_Code]);
@@ -100,9 +108,16 @@ function Articulos() {
         </div>
       </header>
       {isLoading ? (
-        <h1>Loading...</h1>
+        <div className="Resultado-api d-flex text-center">
+          <h5 className="mx-5" >Cargando</h5>
+          <div className="spinner-border text-warning" role="status">
+            <span className="visually-hidden">Cargando...</span>
+          </div>
+        </div>
       ) : error ? (
-        <h1>error...</h1>
+        <div className="Resultado-api d-flex text-center">
+          <h5 className="mx-5" >Error</h5>
+        </div>
       ) : (
         <div className="Resultado-api">
           <table className="table table-mobile-responsive table-mobile-sided mt-5">

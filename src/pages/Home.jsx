@@ -37,7 +37,7 @@ const Home = () => {
       cadenaArticulo:
         "<Codigo:Articulos><Descripcion:Detalles><Desc_Rubro:Rubros><Stock:Cantidades>",
       cadenaArticulo2:
-        "<Precio_Compra:Precio de compras><Precio_Costo:Precio de costos><Precio_Lp1:Precios lista 1>",
+        "<Codbarra:Codigo de Barras><Precio_Compra:Precio de compras><Dto_1><Dto_2><Dto_3><Precio_Costo:Precio de costos><Precio_Lp1:Precios lista 1>",
       cadenaCliente: "<Codigo:Código><Razon_social:Nombre><Direccion><Cuit>",
       cadenaCliente2:
         "<telefono:Teléfono><e-mail:Correo Electrónico><Web_empresa:Sitio Web><Saldo_Cc:Saldo>",
@@ -52,7 +52,7 @@ const Home = () => {
       cadenaArticulo:
         "<Codigo:Articulo><Descripcion:Detalle><Desc_Rubro:Rubro><Stock:Cantidad>",
       cadenaArticulo2:
-        "<Precio_Compra:Precio de compra><Precio_Costo:Precio de costo><Precio_Lp1:Precio lista 1>",
+        "<Precio_Compra:Precio de compra><Precio_Costo:Precio de costo><Precio_Lp1:Precio lista 1><Precio_Lp2:precio2><Precio_Lp3><Precio_Lp4><Precio_Lp5><Activo><locacion>",
       cadenaCliente: "<Codigo:Código><Razon_social:Nombre><Direccion><Cuit>",
       cadenaCliente2:
         "<telefono:Teléfono><e-mail:Correo Electrónico><Web_empresa:Sitio Web><Saldo_Cc:Saldo>",
@@ -148,7 +148,7 @@ const Home = () => {
             <strong>Error</strong> Los datos ingresados son incorrectos.
             <button
               type="button"
-              class="btn-close"
+              className="btn-close"
               data-bs-dismiss="alert"
               onClick={() => {
                 setErroruser(false);

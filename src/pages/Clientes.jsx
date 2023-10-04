@@ -1,5 +1,5 @@
 import { parseColumnTitles } from "../funciones/Utilidades";
-import Navbarside from "../Componentes/Navbar side";
+import NavsideClientes from "../Componentes/NavSide_clientes";
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useUserContext } from "../context/UserContext";
@@ -12,9 +12,7 @@ function Clientes() {
   const location = useLocation();
 
   //traigo la cadena del Usercontext
-  const {
-    usuario: { cadenaCliente, cadenaCliente2 },
-  } = useUserContext();
+  const { usuario, clientesCC, setclientesCC } = useUserContext();
 
   // guardar en estado el elemento seleccionado después de hacer click en Ver Mas
   const [datosnav, SetDatosnav] = useState(null);
@@ -63,14 +61,17 @@ function Clientes() {
       setIsLoading(false);
     }
   };
-  let ClientesUsuario1 = cadenaCliente;
+  let ClientesUsuario1 = usuario.cadenaCliente;
 
   //separar la cadena con la funcion declarada
   const titulosColumnas = parseColumnTitles(ClientesUsuario1);
   return (
     <>
       {/* Le paso a la Sidebar los datos del api de articulos y de las columnas */}
-      {/* <Navbarside datosnav={datosnav} cadenaCliente2={cadenaCliente2} />*/}
+      <NavsideClientes
+        datosnav={datosnav}
+        cadenaCliente2={usuario.cadenaCliente2}
+      />
 
       <header id="header-busqueda" className="text-center fixed-top">
         <div className="container">
@@ -150,6 +151,7 @@ function Clientes() {
                         aria-controls="offcanvasDarkNavbar"
                         onClick={() => {
                           SetDatosnav(Articulos);
+                          setclientesCC(Articulos);
                         }}
                       >
                         Ver mas

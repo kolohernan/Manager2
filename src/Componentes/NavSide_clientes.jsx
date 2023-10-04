@@ -1,11 +1,12 @@
 import { parseColumnTitles } from "../funciones/Utilidades";
+import { Link } from "react-router-dom";
 
-function Navbarside({ datosnav, cadenaArticulo2 }) {
+function NavsideClientes({ datosnav, cadenaCliente2 }) {
   /*
   let ArticuloUsuario2 =
     "<Precio_Compra:Precio de compra><Precio_Costo:Precio de costo><Precio_Lp1:Precio lista 1>";
   */
-  let ArticuloUsuario2 = cadenaArticulo2;
+  let ArticuloUsuario2 = cadenaCliente2;
 
   //separar la cadena con la funcion declarada
   const titulosColumnasNav = parseColumnTitles(ArticuloUsuario2);
@@ -13,18 +14,18 @@ function Navbarside({ datosnav, cadenaArticulo2 }) {
   return (
     <div className="container-fluid" id="Nav-MasDatos">
       <div
-        className="offcanvas offcanvas-end sidenavManager"
+        className="offcanvas offcanvas-end text-bg-dark"
         tabIndex="-1"
         id="offcanvasDarkNavbar"
         aria-labelledby="offcanvasDarkNavbarLabel"
       >
         <div className="offcanvas-header">
           <h5 className="offcanvas-title" id="offcanvasDarkNavbarLabel">
-            Datos adicionales
+            Mas Datos
           </h5>
           <button
             type="button"
-            className="btn-close btn-close-black"
+            className="btn-close btn-close-white"
             data-bs-dismiss="offcanvas"
             aria-label="Close"
           ></button>
@@ -42,9 +43,10 @@ function Navbarside({ datosnav, cadenaArticulo2 }) {
               );
             })}
           </ul>
+            <Link to="/Dashboard/Clientes/CC">Cuenta Corriente</Link>
         </div>
       </div>
     </div>
   );
 }
-export default Navbarside;
+export default NavsideClientes;

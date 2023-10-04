@@ -8,7 +8,7 @@ function Navbar() {
 
   return (
     <>
-      <nav className="navbar navbar-dark navbar-expand-lg bg-dark fixed-top">
+      <nav className="navbar navbar-dark navbar-expand-md bg-navbar-manager fixed-top">
         <div className="container-fluid">
           <NavLink className="navbar-brand" to="/Dashboard">
             <img
@@ -30,8 +30,8 @@ function Navbar() {
             <span className="navbar-toggler-icon"></span>
           </button>
           <div className="collapse navbar-collapse" id="navbarNav">
-            <ul className="navbar-nav mb-2 mb-lg-0 me-auto">
-              <li className="nav-item">
+            <ul className="navbar-nav mb-1 mt-1 mb-lg-0 me-auto">
+              <li className="nav-item mx-2">
                 <NavLink
                   to="/Dashboard/Articulos"
                   className="nav-link"
@@ -41,7 +41,7 @@ function Navbar() {
                   Articulos
                 </NavLink>
               </li>
-              <li className="nav-item">
+              <li className="nav-item mx-2">
                 <NavLink
                   to="/Dashboard/Clientes"
                   className="nav-link"
@@ -51,7 +51,7 @@ function Navbar() {
                   Clientes
                 </NavLink>
               </li>
-              <li className="nav-item">
+              <li className="nav-item mx-2">
                 <NavLink
                   to="/Dashboard/Pedidos"
                   className="nav-link"
@@ -64,7 +64,7 @@ function Navbar() {
             </ul>
             <ul className="navbar-nav mb-2 mb-lg-0 ms-auto">
               {usuario && (
-                <li className="nav-item">
+                <li className="nav-item mx-2">
                   <button
                     className="nav-link"
                     data-bs-toggle="modal"
@@ -88,25 +88,18 @@ function Navbar() {
         aria-hidden="true"
       >
         <div className="modal-dialog">
-          <div className="modal-content rounded-0 text-center my-3">
+          <div className="modal-content rounded-0 text-center m-0">
             <div className="modal-header border-0">
               <img
-                className="my-2 ms-auto"
+                className="my-2 mx-auto d-block"
                 src="../src/assets/logo.png"
                 alt="Manager"
                 height="57"
               />
             </div>
-            <div className="modal-body my-2">Desea cerrar sesion?</div>
-            <div className="modal-footer align-center border-0 d-block my-3">
-              <button
-                type="button"
-                className="btn btn-login"
-                data-bs-dismiss="modal"
-              >
-                No
-              </button>
-              <button
+            <div className="modal-body m-0">Desea cerrar sesion?</div>
+            <div className="modal-footer align-center border-0 d-block m-0">
+            <button
                 type="button"
                 data-bs-dismiss="modal"
                 className="btn btn-login"
@@ -117,6 +110,13 @@ function Navbar() {
                 }}
               >
                 SI
+              </button>
+              <button
+                type="button"
+                className="btn btn-login"
+                data-bs-dismiss="modal"
+              >
+                No
               </button>
             </div>
           </div>
