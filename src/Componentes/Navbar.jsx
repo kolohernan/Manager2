@@ -12,7 +12,7 @@ function Navbar() {
         <div className="container-fluid">
           <NavLink className="navbar-brand" to="/Dashboard">
             <img
-              src="./src/assets/logo.png"
+              src="http://localhost:5173/src/assets/logo.png"
               alt="Manager"
               height="24"
               className="d-inline-block align-text-top"
@@ -99,7 +99,7 @@ function Navbar() {
             </div>
             <div className="modal-body m-0">Desea cerrar sesion?</div>
             <div className="modal-footer align-center border-0 d-block m-0">
-            <button
+              <button
                 type="button"
                 data-bs-dismiss="modal"
                 className="btn btn-login"

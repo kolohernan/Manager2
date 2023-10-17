@@ -14,7 +14,7 @@ function NavsideClientes({ datosnav, cadenaCliente2 }) {
   return (
     <div className="container-fluid" id="Nav-MasDatos">
       <div
-        className="offcanvas offcanvas-end text-bg-dark"
+        className="offcanvas offcanvas-end sidenavManager"
         tabIndex="-1"
         id="offcanvasDarkNavbar"
         aria-labelledby="offcanvasDarkNavbarLabel"
@@ -43,7 +43,19 @@ function NavsideClientes({ datosnav, cadenaCliente2 }) {
               );
             })}
           </ul>
-            <Link to="/Dashboard/Clientes/CC">Cuenta Corriente</Link>
+        </div>
+        <div className="offcanvas-header">
+          <p className="offcanvas-title">
+            {datosnav?.Codigo ? (
+              <Link
+                className="text-decoration-none text-dark fw-bolder"
+                target="_blank"
+                to={`/Dashboard/Clientes/CuentaCorriente/CC_${datosnav.Codigo}`}
+              >
+                Cuenta Corriente
+              </Link>
+            ) : null}
+          </p>
         </div>
       </div>
     </div>

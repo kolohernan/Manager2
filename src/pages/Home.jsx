@@ -9,22 +9,7 @@ const Home = () => {
     document.title = "Iniciar sesion";
   }, []);
   //las variables que voy a usar
-  const {
-    usuario,
-    setUsuario,
-    // nombres,
-    // setNombres,
-    // apellidos,
-    // setApellidos,
-    // cadenaArticulo,
-    // setCadenaArticulo,
-    // cadenaArticulo2,
-    // setCadenaArticulo2,
-    // cadenaCliente,
-    // setCadenaCliente,
-    // cadenaCliente2,
-    // setCadenaCliente2,
-  } = useUserContext();
+  const { usuario, setUsuario } = useUserContext();
 
   const navigate = useNavigate();
 

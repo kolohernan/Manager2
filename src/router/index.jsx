@@ -28,7 +28,6 @@ export const router = createBrowserRouter([
             index: true,
             element: <Dashboard />,
           },
-
           {
             path: "/Dashboard/Clientes",
             element: <Clientes />,
@@ -42,7 +41,7 @@ export const router = createBrowserRouter([
             element: <Pedidos />,
           },
           {
-            path: "/Dashboard/Clientes/CC",
+            path: "/Dashboard/Clientes/CuentaCorriente/:cuentaCorriente",
             element: <CuentaCorriente />,
           },
         ],

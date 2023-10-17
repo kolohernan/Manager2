@@ -20,7 +20,7 @@ const Layout = () => {
           // igualo el Usuario con User
           setUsuario(UsuarioLocal);
           // Lo mando a la app
-          navigate("/Dashboard");
+          //navigate("/Dashboard");
         } catch (error) {
           navigate("/NotFound");
         }

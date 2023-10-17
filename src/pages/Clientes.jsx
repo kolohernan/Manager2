@@ -12,7 +12,7 @@ function Clientes() {
   const location = useLocation();
 
   //traigo la cadena del Usercontext
-  const { usuario, clientesCC, setclientesCC } = useUserContext();
+  const { usuario, setclientesCC } = useUserContext();
 
   // guardar en estado el elemento seleccionado después de hacer click en Ver Mas
   const [datosnav, SetDatosnav] = useState(null);
@@ -100,9 +100,16 @@ function Clientes() {
         </div>
       </header>
       {isLoading ? (
-        <h1>Loading...</h1>
+        <div className="Resultado-api d-flex text-center">
+          <h5 className="mx-5">Cargando</h5>
+          <div className="spinner-border text-warning" role="status">
+            <span className="visually-hidden">Cargando...</span>
+          </div>
+        </div>
       ) : error ? (
-        <h1>error...</h1>
+        <div className="Resultado-api d-flex text-center">
+          <h5 className="mx-5">Error</h5>
+        </div>
       ) : (
         <div className="Resultado-api">
           <table className="table table-mobile-responsive table-mobile-sided mt-5">

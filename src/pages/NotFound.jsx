@@ -11,11 +11,15 @@ const NotFound = () => {
   console.log(error);
 
   return (
-    <div>
-      <h1>404</h1>
-      <p>No existe la pagina</p>
-      <p>{error.statusText || error.message}</p>
-      <Link to="/"> Volver al Inicio</Link>
+    <div className="container-fluid text-center" id="container-home">
+      <h1 className="display-1 text-white fw-bold">404</h1>
+      <br></br>
+      <h1>No existe la pagina</h1>
+      <h1>{error.statusText || error.message}</h1>
+      <hr></hr>
+      <h2>
+        <Link to="/"> Volver al Inicio</Link>
+      </h2>
     </div>
   );
 };
