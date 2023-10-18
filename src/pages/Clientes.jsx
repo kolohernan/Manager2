@@ -1,6 +1,6 @@
 import { parseColumnTitles } from "../funciones/Utilidades";
 import NavsideClientes from "../Componentes/NavSide_clientes";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Fragment } from "react";
 import { useLocation } from "react-router-dom";
 import { useUserContext } from "../context/UserContext";
 
@@ -65,6 +65,8 @@ function Clientes() {
 
   //separar la cadena con la funcion declarada
   const titulosColumnas = parseColumnTitles(ClientesUsuario1);
+    //tarda en cargar
+
   return (
     <>
       {/* Le paso a la Sidebar los datos del api de articulos y de las columnas */}

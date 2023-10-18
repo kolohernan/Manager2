@@ -7,13 +7,23 @@
 #container-dashboard {
   padding-top: 6rem !important;
   --bs-bg-opacity: 1;
-  background-color: #F8F9FA !important;
+  background-color: #f8f9fa !important;
   min-height: 100vh;
   max-height: 100%;
 }
-#container-dashboard .offcanvas-body{
-  padding:0;
-  margin-top:1rem;
+#container-dashboard .offcanvas-body {
+  padding: 0;
+  margin-top: 1rem;
+}
+#container-dashboard .card {
+  background-color: #ffac07;
+  border: none;
+  padding: 80px 0;
+  transition: 0.3s;
+  filter: brightness(0.8);
+}
+#container-dashboard .card:hover {
+  filter: brightness(1);
 }
 
 .btn-manager {
@@ -42,10 +52,9 @@
   margin-top: 56px;
   z-index: 2;
 }
-#header-busqueda h2{
-  color:#444444;
+#header-busqueda h2 {
+  color: #444444;
 }
-
 
 /*Login de usuarios*/
 
@@ -55,7 +64,7 @@
 }
 .btn-login {
   padding: 13px 29px;
-  width:80px;
+  width: 80px;
   line-height: 17px;
   font-size: 14px;
   border-radius: 0;
@@ -77,12 +86,10 @@
   margin-top: 0 !important;
 }
 
-.Resultado-api tbody tr:hover{
+.Resultado-api tbody tr:hover {
   transition: background-color 150ms ease-out 0.5s;
   background-color: #dfe0e1;
 }
-
-
 
 @media only screen and (max-width: 760px),
   (min-device-width: 768px) and (max-device-width: 1024px) {
@@ -99,9 +106,9 @@
 .modal-content {
   background-color: #ffc107 !important;
 }
-.bg-navbar-manager{
+.bg-navbar-manager {
   background-color: #ffc107;
-  padding:0;
+  padding: 0;
 }
 .nav-link {
   color: #fff;
@@ -110,7 +117,7 @@
   background-position: 0% 100%;
   background-repeat: no-repeat;
   background-size: 0% 1px;
-  transition: background-size .3s;
+  transition: background-size 0.3s;
 }
 .nav-link:hover {
   color: #fff;
@@ -121,12 +128,12 @@
   font-weight: 600;
 }
 
-.sidenavManager{
+.sidenavManager {
   background-color: rgba(var(--bs-light-rgb), var(--bs-bg-opacity)) !important;
 }
 
-.sidenavManager .offcanvas-header{
-  background-color: #ffc107
+.sidenavManager .offcanvas-header {
+  background-color: #ffc107;
 }
 
 #Nav-MasDatos .list-group-item {
@@ -134,15 +141,15 @@
   color: #000 !important;
 }
 #Nav-MasDatos .list-group-item:hover {
-  background-color: #dfe0e1!important;
+  background-color: #dfe0e1 !important;
   color: #000 !important;
 }
 
-.btn-close.btn-close-black{
+.btn-close.btn-close-black {
   border-radius: 50%;
 }
 
-.btn-close.btn-close-black:hover{
+.btn-close.btn-close-black:hover {
   transition: background-color 150ms ease-out 0s;
   background-color: #ffac07;
   z-index: 1;

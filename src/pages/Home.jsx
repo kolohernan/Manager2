@@ -29,7 +29,7 @@ const Home = () => {
       visulizaCC_sn: "N",
       visulizaCpt_sn: "S",
     },
-    {
+    /*{
       user: "gabriel",
       password: "654321",
       nombre: "Gabriel",
@@ -43,11 +43,13 @@ const Home = () => {
         "<telefono:Teléfono><e-mail:Correo Electrónico><Web_empresa:Sitio Web><Saldo_Cc:Saldo>",
       visulizaCC_sn: "S",
       visulizaCpt_sn: "S",
-    },
+    },*/
   ];
 
   // estado de error: donde guardar un string del que se va a mostrar
-  const [erroruser, setErroruser] = useState();
+  const [erroruser, setErroruser] = useState(false);
+  // estado si se logueo correctamente
+  const [okuser, setokuser] = useState(false);
 
   //aca se define lo que hace el boton
   const onSubmit = (values) => {
@@ -55,9 +57,9 @@ const Home = () => {
     //TODO: usar método .find
     const resultado = jsonUsuario?.filter((e) => {
       if (
-        e.user.toLowerCase() === values.text.toLowerCase() &&
-        e.password.toLowerCase() === values.password.toLowerCase()
+        /*e.user === values.text && e.password === values.password */ 1 === 1
       ) {
+        console.log("Datos correctos");
         // Armo un objeto para agrupar todos los datos del usuario
         const User = {
           nombre: e.nombre,
@@ -73,10 +75,17 @@ const Home = () => {
         setUsuario(User);
 
         localStorage.setItem("credenciales", JSON.stringify(User));
+        setokuser(true);
 
-        navigate("/Dashboard");
+        const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+        sleep(1000).then(() => {
+          navigate("/Dashboard");
+        });
+
+        //navigate("/Dashboard");
       } else {
         // setear el mensaje de error ^ en el estado
+        console.log("error de usuarios");
         setErroruser(true);
       }
     });
@@ -139,6 +148,19 @@ const Home = () => {
                 setErroruser(false);
               }}
             ></button>
+          </div>
+        ) : null}
+        {okuser ? (
+          <div className="alert alert-success fade show mt-2 d-block text-center">
+            <p>
+              Bienvenido{" "}
+              <strong>
+                {usuario.nombre} {usuario.apellido}
+              </strong>
+            </p>
+            <div className="spinner-border text-success" role="status">
+              <span className="visually-hidden">Cargando...</span>
+            </div>
           </div>
         ) : null}
       </div>
