@@ -8,7 +8,6 @@ function CuentaCorriente() {
   //parametro para renderizar solo una vez la cuenta corriente
   let theadRendered = false;
   let tfootRendered = false;
-  let tablaRenderizada = false;
 
   const [Url, setUrl] = useState(null);
   const url_cuenta = `http://localhost:5173/Dashboard/Clientes/${params.cuentaCorriente}`;
@@ -258,7 +257,7 @@ function CuentaCorriente() {
         ) : (
           <Fragment>
             {searchResult.map((item, index, lastitem) => {
-              /* calculo el sando acumulado */
+              /* */
               const saldoAcumulado = searchResult
                 .slice(0, index + 1)
                 .reduce((acumulado, item) => acumulado + item.Importe, 0);
@@ -299,8 +298,8 @@ function CuentaCorriente() {
                   {(theadRendered = true)}
                   <tbody>
                     <tr>
-                      <td className="text-start">{fechaCpbt}</td>
-                      <td className="text-start">
+                      <td>{fechaCpbt}</td>
+                      <td>
                         <a
                           href={"http://" + url_comprobante}
                           target="_blank"
@@ -311,7 +310,7 @@ function CuentaCorriente() {
                         </a>
                       </td>
                       <td>${item.Importe.toLocaleString()}</td>
-                      <td>${saldoAcumulado.toLocaleString()}</td>
+                      <td>{saldoAcumulado}</td>
                     </tr>
                   </tbody>
                   {lastitem.length - 1 === index ? (

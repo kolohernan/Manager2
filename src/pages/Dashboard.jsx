@@ -1,9 +1,11 @@
 import { Fragment, useEffect } from "react";
 import { useUserContext } from "../context/UserContext";
 import { NavLink } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 const Dashboard = () => {
   //Seteo el titulo de la pagina
+  const params = useParams();
   useEffect(() => {
     document.title = "Dashboard";
   }, []);
@@ -40,7 +42,7 @@ const Dashboard = () => {
         <div className="row align-items-center justify-content-center">
           <div className="col-4">
             <NavLink
-              to="/Dashboard/Articulos"
+              to={"/Dashboard/Articulos"}
               className="nav-link"
               aria-current="page"
               href="#"

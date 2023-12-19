@@ -1,7 +1,8 @@
 import { parseColumnTitles } from "../funciones/Utilidades";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 function NavsideClientes({ datosnav, cadenaCliente2 }) {
+  const params = useParams();
   /*
   let ArticuloUsuario2 =
     "<Precio_Compra:Precio de compra><Precio_Costo:Precio de costo><Precio_Lp1:Precio lista 1>";
@@ -50,7 +51,7 @@ function NavsideClientes({ datosnav, cadenaCliente2 }) {
               <Link
                 className="text-decoration-none text-dark fw-bolder"
                 target="_blank"
-                to={`/Dashboard/Clientes/CuentaCorriente/CC_${datosnav.Codigo}`}
+                to={`/${params.id}/Dashboard/Clientes/CuentaCorriente/CC_${datosnav.Codigo}`}
               >
                 Cuenta Corriente
               </Link>

@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUserContext } from "../context/UserContext";
+import { useParams } from "react-router-dom";
 import Form from "../Componentes/Form";
 
 const Home = () => {
+  const params = useParams();
+  console.log(params);
   //Seteo el titulo de la pagina
   useEffect(() => {
     document.title = "Iniciar sesion";
@@ -79,7 +82,7 @@ const Home = () => {
 
         const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
         sleep(1000).then(() => {
-          navigate("/Dashboard");
+          navigate(`/${params.id}/Dashboard/`);
         });
 
         //navigate("/Dashboard");

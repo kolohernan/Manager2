@@ -1,16 +1,17 @@
 import { NavLink } from "react-router-dom";
 import { useUserContext } from "../context/UserContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 function Navbar() {
   const { usuario, setUsuario } = useUserContext();
   const navigate = useNavigate();
+  const params = useParams();
 
   return (
     <>
       <nav className="navbar navbar-dark navbar-expand-md bg-navbar-manager fixed-top">
         <div className="container-fluid">
-          <NavLink className="navbar-brand" to="/Dashboard">
+          <NavLink className="navbar-brand" to={`/${params.id}/Dashboard`}>
             <img
               src="http://localhost:5173/src/assets/logo.png"
               alt="Manager"
@@ -33,7 +34,7 @@ function Navbar() {
             <ul className="navbar-nav mb-1 mt-1 mb-lg-0 me-auto">
               <li className="nav-item mx-2">
                 <NavLink
-                  to="/Dashboard/Articulos"
+                  to={`Articulos`}
                   className="nav-link"
                   aria-current="page"
                   href="#"
@@ -43,7 +44,7 @@ function Navbar() {
               </li>
               <li className="nav-item mx-2">
                 <NavLink
-                  to="/Dashboard/Clientes"
+                  to={`Clientes`}
                   className="nav-link"
                   aria-current="page"
                   href="#"
@@ -53,7 +54,7 @@ function Navbar() {
               </li>
               <li className="nav-item mx-2">
                 <NavLink
-                  to="/Dashboard/Pedidos"
+                  to={`Pedidos`}
                   className="nav-link"
                   aria-current="page"
                   href="#"
@@ -106,7 +107,7 @@ function Navbar() {
                 onClick={() => {
                   setUsuario(null);
                   localStorage.removeItem("credenciales");
-                  navigate("/");
+                  navigate(`/${params.id}/`);
                 }}
               >
                 SI

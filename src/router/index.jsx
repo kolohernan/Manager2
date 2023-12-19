@@ -11,7 +11,7 @@ import CuentaCorriente from "../pages/CuentaCorriente";
 
 export const router = createBrowserRouter([
   {
-    path: "/",
+    path: "/:id",
     element: <Layout />,
     errorElement: <NotFound />,
     children: [
@@ -20,7 +20,7 @@ export const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: "/Dashboard",
+        path: "Dashboard",
         element: <LayoutPrivate />,
         errorElement: <NotFound />,
         children: [
@@ -29,19 +29,19 @@ export const router = createBrowserRouter([
             element: <Dashboard />,
           },
           {
-            path: "/Dashboard/Clientes",
+            path: "Clientes",
             element: <Clientes />,
           },
           {
-            path: "/Dashboard/Articulos",
+            path: "Articulos",
             element: <Articulos />,
           },
           {
-            path: "/Dashboard/Pedidos",
+            path: "Pedidos",
             element: <Pedidos />,
           },
           {
-            path: "/Dashboard/Clientes/CuentaCorriente/:cuentaCorriente",
+            path: "Clientes/CuentaCorriente/:cuentaCorriente",
             element: <CuentaCorriente />,
           },
         ],

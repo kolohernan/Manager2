@@ -1,11 +1,12 @@
 import { parseColumnTitles } from "../funciones/Utilidades";
 import Navbarside from "../Componentes/Navbar side";
 import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { useUserContext } from "../context/UserContext";
 
 function Articulos() {
   //Seteo el titulo de la pagina
+  const params = useParams();
   useEffect(() => {
     document.title = "Busqueda de Articulos";
   }, []);
@@ -51,13 +52,13 @@ function Articulos() {
       setSearchResult(json);
       // mirá la consola para ver qué forma tiene (esto desp borralo)
       if (response?.ok) {
-        console.log('funciono!');
+        console.log("funciono!");
       } else {
-        console.log(`Error: ${response?.status}`)
+        console.log(`Error: ${response?.status}`);
       }
-      if(response.status >= 400) {
+      if (response.status >= 400) {
         throw new Error("Server responds with error!");
-    }
+      }
     } catch (e) {
       //si hubo un error esto viene acá... entonces agregamos un mensaje para notificar al usuario de que algo salió mal (esto lo vas a tener que renderizar abajo vos después)
       if (e?.Error_Code) setError(mapaLabelError[e.Error_Code]);
@@ -109,14 +110,14 @@ function Articulos() {
       </header>
       {isLoading ? (
         <div className="Resultado-api d-flex text-center">
-          <h5 className="mx-5" >Cargando</h5>
+          <h5 className="mx-5">Cargando</h5>
           <div className="spinner-border text-warning" role="status">
             <span className="visually-hidden">Cargando...</span>
           </div>
         </div>
       ) : error ? (
         <div className="Resultado-api d-flex text-center">
-          <h5 className="mx-5" >Error</h5>
+          <h5 className="mx-5">Error</h5>
         </div>
       ) : (
         <div className="Resultado-api">

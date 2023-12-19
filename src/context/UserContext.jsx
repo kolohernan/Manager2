@@ -5,6 +5,8 @@ export const UserContext = createContext();
 const UserProvider = ({ children }) => {
   const [usuario, setUsuario] = useState(null);
   const [clientesCC, setclientesCC] = useState(null);
+  const [dominio, setDominio] = useState(null);
+  const [token, setToken] = useState(null);
 
   // if (usuario) // false si nul
 
@@ -15,6 +17,10 @@ const UserProvider = ({ children }) => {
         setUsuario,
         clientesCC,
         setclientesCC,
+        dominio,
+        setDominio,
+        token,
+        setToken,
       }}
     >
       {children}

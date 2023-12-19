@@ -1,14 +1,9 @@
-import { useEffect, useState, Fragment } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 function CuentaCorriente() {
   const params = useParams();
   //console.log("kolo", params);
-
-  //parametro para renderizar solo una vez la cuenta corriente
-  let theadRendered = false;
-  let tfootRendered = false;
-  let tablaRenderizada = false;
 
   const [Url, setUrl] = useState(null);
   const url_cuenta = `http://localhost:5173/Dashboard/Clientes/${params.cuentaCorriente}`;
@@ -143,6 +138,7 @@ function CuentaCorriente() {
     fetchCliente();
     fetchCuentaCorriente();
     //...
+    
   }, []);
   useEffect(() => {
     Url?.map((url) => {
@@ -231,76 +227,71 @@ function CuentaCorriente() {
             </div>
           </div>
         ) : error ? (
-          <div
-            className="alert alert-danger d-flex align-items-center"
-            role="alert"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" style={{ display: "none" }}>
-              <symbol
-                id="exclamation-triangle-fill"
-                fill="currentColor"
-                viewBox="0 0 16 16"
-              >
-                <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+          <div className="alert alert-danger d-flex align-items-center" role="alert">
+            <svg xmlns="http://www.w3.org/2000/svg" style={{display: "none"}}>
+              <symbol id="exclamation-triangle-fill" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
               </symbol>
             </svg>
-            <svg
-              className="bi flex-shrink-0 me-2"
-              width="24"
-              height="24"
-              role="img"
-              aria-label="Danger:"
-            >
-              <use xlinkHref="#exclamation-triangle-fill" />
-            </svg>
-            <div>Error</div>
+            <svg className="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlinkHref="#exclamation-triangle-fill"/></svg>
+            <div>
+              Error
+            </div>
           </div>
         ) : (
-          <Fragment>
-            {searchResult.map((item, index, lastitem) => {
-              /* calculo el sando acumulado */
-              const saldoAcumulado = searchResult
-                .slice(0, index + 1)
-                .reduce((acumulado, item) => acumulado + item.Importe, 0);
-              /* Obtengo la url del comprobante*/
-              let url_comprobante = "";
-              if (
-                item.Url_Ubicacion !== undefined &&
-                item.Url_Ubicacion !== null
-              ) {
-                url_comprobante = item.Url_Ubicacion;
-                //console.log(url_comprobante);
-              }
+          <div>
+            <table className="table table-mobile-responsive table-mobile-sided mt-5">
+              <thead>
+                <tr>
+                  <th scope="col">Fecha</th>
+                  <th scope="col">Comprobante</th>
+                  <th scope="col">Importe</th>
+                  <th scope="col">Saldo</th>
+                </tr>
+              </thead>
+              {searchResult.map((item) => {
+                /* Obtengo la url del comprobante*/
+                let url_comprobante = "";
+                if (
+                  item.Url_Ubicacion !== undefined &&
+                  item.Url_Ubicacion !== null
+                ) {
+                  url_comprobante = item.Url_Ubicacion;
+                  //console.log(url_comprobante);
+                }
+                /*Acumulador del total de toda la suma*/
+                let total = searchResult.reduce(
+                  (accumulator, items) => [
+                    ...accumulator,
+                    accumulator[accumulator.length - 1] ??
+                      0 + parseFloat(items.Importe),
+                  ],
+                  []
+                );
 
-              /*Formato para la fecha */
-              let fechaComprobante = new Date(item.Fecha);
-              let currentDay = String(fechaComprobante.getDate()).padStart(
-                2,
-                "0"
-              );
-              let currentMonth = String(
-                fechaComprobante.getMonth() + 1
-              ).padStart(2, "0");
-              let currentYear = fechaComprobante.getFullYear();
-              let fechaCpbt = `${currentDay}/${currentMonth}/${currentYear}`;
-              let comprobante = `${item.Transaccion}${item.Tipocomprobante}${item.Ptoventa}${item.Nro}`;
-              return (
-                <table className="table" key={index}>
-                  {!theadRendered && (
-                    <thead>
-                      <tr>
-                        <th scope="col">Fecha</th>
-                        <th scope="col">Comprobante</th>
-                        <th scope="col">Importe</th>
-                        <th scope="col">Saldo</th>
-                      </tr>
-                    </thead>
-                  )}
-                  {(theadRendered = true)}
+                let total2 = searchResult.reduce(
+                  (acc, number) => acc + number.Importe,
+                  0
+                );
+
+                /*Formato para la fecha */
+                let fechaComprobante = new Date(item.Fecha);
+                let currentDay = String(fechaComprobante.getDate()).padStart(
+                  2,
+                  "0"
+                );
+                let currentMonth = String(
+                  fechaComprobante.getMonth() + 1
+                ).padStart(2, "0");
+                let currentYear = fechaComprobante.getFullYear();
+                let fechaCpbt = `${currentDay}/${currentMonth}/${currentYear}`;
+                let comprobante = `${item.Transaccion}${item.Tipocomprobante}${item.Ptoventa}${item.Nro}`;
+
+                return (
                   <tbody>
-                    <tr>
-                      <td className="text-start">{fechaCpbt}</td>
-                      <td className="text-start">
+                    <tr key={comprobante}>
+                      <td> {fechaCpbt}</td>
+                      <td>
                         <a
                           href={"http://" + url_comprobante}
                           target="_blank"
@@ -310,26 +301,22 @@ function CuentaCorriente() {
                           {item.Ptoventa}-{item.Nro}
                         </a>
                       </td>
-                      <td>${item.Importe.toLocaleString()}</td>
-                      <td>${saldoAcumulado.toLocaleString()}</td>
+                      <td> ${item.Importe.toLocaleString()}</td>
+                      <td>${total2}</td>
                     </tr>
                   </tbody>
-                  {lastitem.length - 1 === index ? (
-                    <tfoot>
-                      <tr>
-                        <td></td>
-                        <td></td>
-                        <td>Total:</td>
-                        <td>{saldoAcumulado}</td>
-                      </tr>
-                    </tfoot>
-                  ) : (
-                    ""
-                  )}
-                </table>
-              );
-            })}
-          </Fragment>
+                );
+              })}
+              <tfoot>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td>Total:</td>
+                  <td></td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
         )}
       </>
     );

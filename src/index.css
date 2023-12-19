@@ -10,6 +10,8 @@
   background-color: #f8f9fa !important;
   min-height: 100vh;
   max-height: 100%;
+  padding-bottom:56px;
+  
 }
 #container-dashboard .offcanvas-body {
   padding: 0;
@@ -49,7 +51,8 @@
   border-color: #ffc107;
 }
 #header-busqueda {
-  margin-top: 56px;
+  background-color: #f8f9fa !important;
+  margin-top: 44px;
   z-index: 2;
 }
 #header-busqueda h2 {
