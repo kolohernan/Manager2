@@ -9,9 +9,9 @@ const Layout = () => {
   const navigate = useNavigate();
   const params = useParams();
 
-  console.log(params);
+  //console.log(params);
 
-  const arraysParams = params.id.split("|");
+  const arraysParams = params.id.split("||");
 
   // hacerlos memoizados para evitar re-render
 

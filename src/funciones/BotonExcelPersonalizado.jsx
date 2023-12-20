@@ -1,0 +1,95 @@
+import React, { useState } from "react";
+import * as XLSX from "xlsx";
+
+const BotonExcelPersonalizado = ({ cc_excel }) => {
+  const [loading, setLoading] = useState(false);
+
+  const titulo = [{ A: "Reporte de Cuenta Corriente" }, {}];
+
+  const informacionAdicional = {
+    A: "Creador por: Manager Software de Gestion",
+  };
+
+  const longitudes = [20, 35, 35, 35];
+
+  const handleDownload = () => {
+    setLoading(true);
+
+    /*Formato para la fecha */
+    let fechaComprobante = new Date(cc_excel.Fecha);
+    let currentDay = String(fechaComprobante.getDate()).padStart(2, "0");
+    let currentMonth = String(fechaComprobante.getMonth() + 1).padStart(2, "0");
+    let currentYear = fechaComprobante.getFullYear();
+    let fechaCpbt = `${currentDay}/${currentMonth}/${currentYear}`;
+    /*Armo el comprobante */
+    let comprobante = `${cc_excel.Documento} ${cc_excel.Tipocomprobante} ${cc_excel.Ptoventa}-${cc_excel.Nro}`;
+    /* calculo el sando acumulado */
+    saldoAcumulado += cc_excel.importe;
+
+    let tabla = [
+      {
+        A: "Fecha",
+        B: "Comprobante",
+        C: "Importe",
+        D: "Saldo",
+      },
+    ];
+
+    cc_excel.forEach((cc_excel) => {
+      tabla.push({
+        A: fechaCpbt,
+        B: comprobante,
+        C: cc_excel.Importe.toLocaleString(),
+        D: saldoAcumulado.toLocaleString(),
+      });
+    });
+
+    const dataFinal = [...titulo, ...tabla, informacionAdicional];
+
+    setTimeout(() => {
+      creandoArchivo(dataFinal);
+      setLoading(false);
+    }, 1000);
+
+    const creandoArchivo = (dataFinal) => {
+      const libro = XLSX.utils.book_new();
+
+      const hoja = XLSX.utils.json_to_sheet(dataFinal, { skipHeader: true });
+
+      hoja["!merges"] = [
+        XLSX.utils.decode_range("A1:G1"),
+        XLSX.utils.decode_range("A2:G2"),
+        XLSX.utils.decode_range("A34:G34"),
+      ];
+
+      let propiedades = [];
+
+      longitudes.forEach((col) => {
+        propiedades.push({
+          width: col,
+        });
+      });
+
+      hoja["!cols"] = propiedades;
+
+      XLSX.utils.book_append_sheet(libro, hoja, "Cuenta Corriente");
+      XLSX.writeFile(libro, "Cuenta corriente personalizado.xlsx");
+    };
+  };
+  return (
+    <>
+      {!loading ? (
+        <button className="btn btn-manager" onClick={handleDownload}>
+          Exportar Excel
+        </button>
+      ) : (
+        <button className="btn btn-manager" disabled>
+          <div className="spinner-border text-warning" role="status">
+            <span className="visually-hidden">Cargando...</span>
+          </div>
+        </button>
+      )}
+    </>
+  );
+};
+export default BotonExcelPersonalizado;

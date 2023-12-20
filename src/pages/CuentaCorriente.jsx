@@ -1,18 +1,16 @@
 import { useEffect, useState, Fragment } from "react";
 import { useParams } from "react-router-dom";
+import BotonExcelDefault from "../funciones/BotonExcelDefault";
+import BotonExcelPersonalizado from "../funciones/BotonExcelPersonalizado";
 
 function CuentaCorriente() {
   const params = useParams();
   //console.log("kolo", params);
 
-  //parametro para renderizar solo una vez la cuenta corriente
-  let theadRendered = false;
-  let tfootRendered = false;
-  let tablaRenderizada = false;
-
   const [Url, setUrl] = useState(null);
   const url_cuenta = `http://localhost:5173/Dashboard/Clientes/${params.cuentaCorriente}`;
   const [clientes, setclientes] = useState(null);
+  const [SaldoAcum, setSaldoAcum] = useState(0);
 
   //Obtengo la longitud de la URL
   let clienteLongitud = url_cuenta.length;
@@ -256,80 +254,84 @@ function CuentaCorriente() {
             <div>Error</div>
           </div>
         ) : (
-          <Fragment>
-            {searchResult.map((item, index, lastitem) => {
-              /* calculo el sando acumulado */
-              const saldoAcumulado = searchResult
-                .slice(0, index + 1)
-                .reduce((acumulado, item) => acumulado + item.Importe, 0);
-              /* Obtengo la url del comprobante*/
-              let url_comprobante = "";
-              if (
-                item.Url_Ubicacion !== undefined &&
-                item.Url_Ubicacion !== null
-              ) {
-                url_comprobante = item.Url_Ubicacion;
-                //console.log(url_comprobante);
-              }
+          <>
+            <table className="table">
+              <thead className="table-dark">
+                <tr>
+                  <th scope="col">Fecha</th>
+                  <th scope="col">Comprobante</th>
+                  <th scope="col">Importe</th>
+                  <th scope="col">Saldo</th>
+                </tr>
+              </thead>
+              <tbody>
+                {searchResult.map((item, index) => {
+                  /* calculo el sando acumulado */
+                  const saldoAcumulado = searchResult
+                    .slice(0, index + 1)
+                    .reduce((acumulado, item) => acumulado + item.Importe, 0);
+                  /* Obtengo la url del comprobante*/
+                  let url_comprobante = "";
+                  if (
+                    item.Url_Ubicacion !== undefined &&
+                    item.Url_Ubicacion !== null
+                  ) {
+                    url_comprobante = item.Url_Ubicacion;
+                    //console.log(url_comprobante);
+                  }
 
-              /*Formato para la fecha */
-              let fechaComprobante = new Date(item.Fecha);
-              let currentDay = String(fechaComprobante.getDate()).padStart(
-                2,
-                "0"
-              );
-              let currentMonth = String(
-                fechaComprobante.getMonth() + 1
-              ).padStart(2, "0");
-              let currentYear = fechaComprobante.getFullYear();
-              let fechaCpbt = `${currentDay}/${currentMonth}/${currentYear}`;
-              let comprobante = `${item.Transaccion}${item.Tipocomprobante}${item.Ptoventa}${item.Nro}`;
-              return (
-                <table className="table" key={index}>
-                  {!theadRendered && (
-                    <thead>
-                      <tr>
-                        <th scope="col">Fecha</th>
-                        <th scope="col">Comprobante</th>
-                        <th scope="col">Importe</th>
-                        <th scope="col">Saldo</th>
+                  /*Formato para la fecha */
+                  let fechaComprobante = new Date(item.Fecha);
+                  let currentDay = String(fechaComprobante.getDate()).padStart(
+                    2,
+                    "0"
+                  );
+                  let currentMonth = String(
+                    fechaComprobante.getMonth() + 1
+                  ).padStart(2, "0");
+                  let currentYear = fechaComprobante.getFullYear();
+                  let fechaCpbt = `${currentDay}/${currentMonth}/${currentYear}`;
+
+                  /*Armo el comprobante */
+                  let comprobante = `${item.Documento} ${item.Tipocomprobante} ${item.Ptoventa}-${item.Nro}`;
+                  return (
+                    <Fragment>
+                      <tr key={index}>
+                        <td className="text-start">{fechaCpbt}</td>
+                        <td className="text-start">
+                          {url_comprobante ? (
+                            <a
+                              href={"http://" + url_comprobante}
+                              target="_blank"
+                              title=""
+                            >
+                              {comprobante}
+                            </a>
+                          ) : (
+                            <>{comprobante}</>
+                          )}
+                        </td>
+                        <td>${item.Importe.toLocaleString()}</td>
+                        <td>${saldoAcumulado.toLocaleString()}</td>
                       </tr>
-                    </thead>
-                  )}
-                  {(theadRendered = true)}
-                  <tbody>
-                    <tr>
-                      <td className="text-start">{fechaCpbt}</td>
-                      <td className="text-start">
-                        <a
-                          href={"http://" + url_comprobante}
-                          target="_blank"
-                          title=""
-                        >
-                          {item.Documento} {item.Tipocomprobante}{" "}
-                          {item.Ptoventa}-{item.Nro}
-                        </a>
-                      </td>
-                      <td>${item.Importe.toLocaleString()}</td>
-                      <td>${saldoAcumulado.toLocaleString()}</td>
-                    </tr>
-                  </tbody>
-                  {lastitem.length - 1 === index ? (
-                    <tfoot>
-                      <tr>
-                        <td></td>
-                        <td></td>
-                        <td>Total:</td>
-                        <td>{saldoAcumulado}</td>
-                      </tr>
-                    </tfoot>
-                  ) : (
-                    ""
-                  )}
-                </table>
-              );
-            })}
-          </Fragment>
+                    </Fragment>
+                  );
+                })}
+              </tbody>
+              <tfoot className="table-dark">
+                <tr>
+                  <th scope="col"></th>
+                  <th scope="col"></th>
+                  <th scope="col">Total:</th>
+                  <th scope="col">{SaldoAcum}</th>
+                </tr>
+              </tfoot>
+            </table>
+            <div className="text-end">
+              <BotonExcelDefault cc_excel={searchResult} />
+              <BotonExcelPersonalizado cc_excel={searchResult} />
+            </div>
+          </>
         )}
       </>
     );
