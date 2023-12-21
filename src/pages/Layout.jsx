@@ -30,6 +30,16 @@ const Layout = () => {
     setToken(token);
   }, [dominio, token]);
 
+  useEffect(() => {
+    if (dominio === "MSM") {
+      import(`../styles/manager.css`);
+    } else if (dominio === "MCN") {
+      import(`../styles/mecan.css`);
+    } else if (dominio === "FYE") {
+      import(`../styles/frenos.css`);
+    }
+  }, []);
+
   //TODO:
   //leer parametros
   // parsear el id y el token (id|token)

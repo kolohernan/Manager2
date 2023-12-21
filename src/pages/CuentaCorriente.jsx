@@ -196,7 +196,7 @@ function CuentaCorriente() {
           <input
             id="DateDesde"
             type="date"
-            className="form-control"
+            className="form-control mx-2"
             aria-label="Escribe para buscar"
             aria-describedby="button-busqueda-clientes"
             value={dateDesde}
@@ -205,7 +205,7 @@ function CuentaCorriente() {
           <input
             id="DateHasta"
             type="date"
-            className="form-control"
+            className="form-control mx-2"
             aria-label="Escribe para buscar"
             aria-describedby="button-busqueda-clientes"
             value={dateHasta}

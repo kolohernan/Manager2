@@ -107,6 +107,7 @@ const Home = () => {
                 src="../src/assets/logo.png"
                 alt="Manager"
                 height="57"
+                id="imagen-login"
               />
               <div className="form-floating">
                 <input
