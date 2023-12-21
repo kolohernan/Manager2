@@ -53,7 +53,7 @@ const Layout = () => {
           // Lo mando a la app
           //navigate("/Dashboard");
         } catch (error) {
-          navigate("/NotFound");
+          navigate(`/${params.id}/NotFound`);
         }
       } else {
         navigate(`/${params.id}/`);

@@ -42,7 +42,7 @@ const Dashboard = () => {
         <div className="row align-items-center justify-content-center">
           <div className="col-4">
             <NavLink
-              to={"/Dashboard/Articulos"}
+              to={`Articulos`}
               className="nav-link"
               aria-current="page"
               href="#"
@@ -56,7 +56,7 @@ const Dashboard = () => {
           </div>
           <div className="col-4">
             <NavLink
-              to="/Dashboard/Clientes"
+              to={`Clientes`}
               className="nav-link"
               aria-current="page"
               href="#"
@@ -70,7 +70,7 @@ const Dashboard = () => {
           </div>
           <div className="col-4">
             <NavLink
-              to="/Dashboard/Pedidos"
+              to={`Pedidos`}
               className="nav-link"
               aria-current="page"
               href="#"

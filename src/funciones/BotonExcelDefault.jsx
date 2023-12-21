@@ -4,7 +4,7 @@ import * as XLSX from "xlsx";
 const BotonExcelDefault = ({ cc_excel }) => {
   const [loading, setLoading] = useState(false);
 
-  console.log(cc_excel);
+  //console.log(cc_excel);
   const handleDownload = () => {
     setLoading(true);
 

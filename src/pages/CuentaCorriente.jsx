@@ -265,7 +265,7 @@ function CuentaCorriente() {
                 </tr>
               </thead>
               <tbody>
-                {searchResult.map((item, index) => {
+                {searchResult.map((item, index, lastitem) => {
                   /* calculo el sando acumulado */
                   const saldoAcumulado = searchResult
                     .slice(0, index + 1)
@@ -296,40 +296,65 @@ function CuentaCorriente() {
                   let comprobante = `${item.Documento} ${item.Tipocomprobante} ${item.Ptoventa}-${item.Nro}`;
                   return (
                     <Fragment>
-                      <tr key={index}>
-                        <td className="text-start">{fechaCpbt}</td>
-                        <td className="text-start">
-                          {url_comprobante ? (
-                            <a
-                              href={"http://" + url_comprobante}
-                              target="_blank"
-                              title=""
-                            >
-                              {comprobante}
-                            </a>
-                          ) : (
-                            <>{comprobante}</>
-                          )}
-                        </td>
-                        <td>${item.Importe.toLocaleString()}</td>
-                        <td>${saldoAcumulado.toLocaleString()}</td>
-                      </tr>
+                      {/* Si llego al final agrego un renglon mas y muestro el total */}
+                      {lastitem.length - 1 === index ? (
+                        <>
+                          <tr key={index}>
+                            <td className="text-start">{fechaCpbt}</td>
+                            <td className="text-start">
+                              {url_comprobante ? (
+                                <a
+                                  href={"http://" + url_comprobante}
+                                  target="_blank"
+                                  title=""
+                                >
+                                  {comprobante}
+                                </a>
+                              ) : (
+                                <>{comprobante}</>
+                              )}
+                            </td>
+                            <td>${item.Importe.toLocaleString()}</td>
+                            <td>${saldoAcumulado.toLocaleString()}</td>
+                          </tr>
+                          <tr className="table-dark">
+                            <td></td>
+                            <td></td>
+                            <td className="text-end">Total:</td>
+                            <td>${saldoAcumulado.toLocaleString()}</td>
+                          </tr>
+                        </>
+                      ) : (
+                        <tr key={index}>
+                          <td className="text-start">{fechaCpbt}</td>
+                          <td className="text-start">
+                            {url_comprobante ? (
+                              <a
+                                href={"http://" + url_comprobante}
+                                target="_blank"
+                                title=""
+                              >
+                                {comprobante}
+                              </a>
+                            ) : (
+                              <>{comprobante}</>
+                            )}
+                          </td>
+                          <td>${item.Importe.toLocaleString()}</td>
+                          <td>${saldoAcumulado.toLocaleString()}</td>
+                        </tr>
+                      )}
                     </Fragment>
                   );
                 })}
               </tbody>
-              <tfoot className="table-dark">
-                <tr>
-                  <th scope="col"></th>
-                  <th scope="col"></th>
-                  <th scope="col">Total:</th>
-                  <th scope="col">{SaldoAcum}</th>
-                </tr>
-              </tfoot>
             </table>
             <div className="text-end">
-              <BotonExcelDefault cc_excel={searchResult} />
-              <BotonExcelPersonalizado cc_excel={searchResult} />
+              <BotonExcelDefault cc_excel={searchResult} clientes={clientes} />
+              <BotonExcelPersonalizado
+                cc_excel={searchResult}
+                clientes={clientes}
+              />
             </div>
           </>
         )}

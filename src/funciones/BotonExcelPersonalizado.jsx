@@ -1,30 +1,29 @@
 import React, { useState } from "react";
 import * as XLSX from "xlsx";
 
-const BotonExcelPersonalizado = ({ cc_excel }) => {
+const BotonExcelPersonalizado = ({ cc_excel, clientes }) => {
   const [loading, setLoading] = useState(false);
+
+  let saldoAcumulado = 0;
 
   const titulo = [{ A: "Reporte de Cuenta Corriente" }, {}];
 
+  const datoClientes = [
+    { A: "Cliente: " + clientes.Razon_Social + "    CUIT:" + clientes.Cuit },
+    {},
+  ];
+  const datoClientes2 = [
+    { A: "Email: " + clientes.Email + "    Tel:" + clientes.Telefono },
+    {},
+  ];
   const informacionAdicional = {
     A: "Creador por: Manager Software de Gestion",
   };
 
-  const longitudes = [20, 35, 35, 35];
+  const longitudes = [15, 35, 20, 20];
 
   const handleDownload = () => {
     setLoading(true);
-
-    /*Formato para la fecha */
-    let fechaComprobante = new Date(cc_excel.Fecha);
-    let currentDay = String(fechaComprobante.getDate()).padStart(2, "0");
-    let currentMonth = String(fechaComprobante.getMonth() + 1).padStart(2, "0");
-    let currentYear = fechaComprobante.getFullYear();
-    let fechaCpbt = `${currentDay}/${currentMonth}/${currentYear}`;
-    /*Armo el comprobante */
-    let comprobante = `${cc_excel.Documento} ${cc_excel.Tipocomprobante} ${cc_excel.Ptoventa}-${cc_excel.Nro}`;
-    /* calculo el sando acumulado */
-    saldoAcumulado += cc_excel.importe;
 
     let tabla = [
       {
@@ -36,15 +35,35 @@ const BotonExcelPersonalizado = ({ cc_excel }) => {
     ];
 
     cc_excel.forEach((cc_excel) => {
+      /*Formato para la fecha */
+      let fechaComprobante = new Date(cc_excel.Fecha);
+      let currentDay = String(fechaComprobante.getDate()).padStart(2, "0");
+      let currentMonth = String(fechaComprobante.getMonth() + 1).padStart(
+        2,
+        "0"
+      );
+      let currentYear = fechaComprobante.getFullYear();
+      let fechaCpbt = `${currentDay}/${currentMonth}/${currentYear}`;
+      /*Armo el comprobante */
+      let comprobante = `${cc_excel.Documento} ${cc_excel.Tipocomprobante} ${cc_excel.Ptoventa}-${cc_excel.Nro}`;
+      /* calculo el sando acumulado */
+      saldoAcumulado += cc_excel.Importe;
+
       tabla.push({
         A: fechaCpbt,
         B: comprobante,
-        C: cc_excel.Importe.toLocaleString(),
-        D: saldoAcumulado.toLocaleString(),
+        C: "$" + cc_excel.Importe.toLocaleString(),
+        D: "$" + saldoAcumulado.toLocaleString(),
       });
     });
 
-    const dataFinal = [...titulo, ...tabla, informacionAdicional];
+    const dataFinal = [
+      ...titulo,
+      ...datoClientes,
+      ...datoClientes2,
+      ...tabla,
+      informacionAdicional,
+    ];
 
     setTimeout(() => {
       creandoArchivo(dataFinal);
@@ -57,9 +76,9 @@ const BotonExcelPersonalizado = ({ cc_excel }) => {
       const hoja = XLSX.utils.json_to_sheet(dataFinal, { skipHeader: true });
 
       hoja["!merges"] = [
-        XLSX.utils.decode_range("A1:G1"),
-        XLSX.utils.decode_range("A2:G2"),
-        XLSX.utils.decode_range("A34:G34"),
+        XLSX.utils.decode_range("A1:D1"),
+        XLSX.utils.decode_range("A3:D3"),
+        XLSX.utils.decode_range("A5:D5"),
       ];
 
       let propiedades = [];
@@ -73,7 +92,7 @@ const BotonExcelPersonalizado = ({ cc_excel }) => {
       hoja["!cols"] = propiedades;
 
       XLSX.utils.book_append_sheet(libro, hoja, "Cuenta Corriente");
-      XLSX.writeFile(libro, "Cuenta corriente personalizado.xlsx");
+      XLSX.writeFile(libro, `Cuenta corriente ${clientes.Razon_Social}.xlsx`);
     };
   };
   return (
