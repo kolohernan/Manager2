@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 // funcion para separar por <> y :
 
 export const parseColumnTitles = (titles) => {
@@ -14,4 +16,29 @@ export const parseColumnTitles = (titles) => {
     ];
   });
   return titulosParseados;
+};
+
+export const funcionLogin = async (urlDominio, user, password) => {
+  console.log("aca llegue");
+  console.log("aca deberia llegar el dominio", urlDominio);
+  console.log("aca deberia llegar el usuario", user);
+  console.log("aca deberia llegar el password", password);
+  try {
+    const response = await fetch(
+      `${urlDominio}Api_Usuarios/Login?key=ChatBotManager&usuario=${user}&password=${password}`
+    );
+    console.log("aca la respuesta del response", response);
+    const json = await response.json();
+    //setSearchResult(json);
+    if (response.ok) {
+      console.log("Se logueo");
+    } else {
+      console.log("NO se logueo");
+    }
+    console.log(json);
+  } catch (e) {
+    console.log("aca dio error");
+    console.log("aca muestro el error", e);
+  } finally {
+  }
 };

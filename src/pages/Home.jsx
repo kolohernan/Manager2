@@ -3,16 +3,17 @@ import { useNavigate } from "react-router-dom";
 import { useUserContext } from "../context/UserContext";
 import { useParams } from "react-router-dom";
 import Form from "../Componentes/Form";
+import { funcionLogin } from "../funciones/Utilidades";
 
 const Home = () => {
   const params = useParams();
-  console.log(params);
+  //console.log("muestro lo que trae params: - ", params);
   //Seteo el titulo de la pagina
   useEffect(() => {
     document.title = "Iniciar sesion";
   }, []);
   //las variables que voy a usar
-  const { usuario, setUsuario } = useUserContext();
+  const { usuario, setUsuario, urlDominio } = useUserContext();
 
   const navigate = useNavigate();
 
@@ -32,21 +33,6 @@ const Home = () => {
       visulizaCC_sn: "N",
       visulizaCpt_sn: "S",
     },
-    /*{
-      user: "gabriel",
-      password: "654321",
-      nombre: "Gabriel",
-      apellido: "Sastre",
-      cadenaArticulo:
-        "<Codigo:Articulo><Descripcion:Detalle><Desc_Rubro:Rubro><Stock:Cantidad>",
-      cadenaArticulo2:
-        "<Precio_Compra:Precio de compra><Precio_Costo:Precio de costo><Precio_Lp1:Precio lista 1><Precio_Lp2:precio2><Precio_Lp3><Precio_Lp4><Precio_Lp5><Activo><locacion>",
-      cadenaCliente: "<Codigo:Código><Razon_social:Nombre><Direccion><Cuit>",
-      cadenaCliente2:
-        "<telefono:Teléfono><e-mail:Correo Electrónico><Web_empresa:Sitio Web><Saldo_Cc:Saldo>",
-      visulizaCC_sn: "S",
-      visulizaCpt_sn: "S",
-    },*/
   ];
 
   // estado de error: donde guardar un string del que se va a mostrar
@@ -56,6 +42,9 @@ const Home = () => {
 
   //aca se define lo que hace el boton
   const onSubmit = (values) => {
+    const datos = funcionLogin(urlDominio, values.text, values.password);
+
+    console.log("aca los datos", datos);
     //comparo si el nombre de usuario que ingrese esta en el json
     //TODO: usar método .find
     const resultado = jsonUsuario?.filter((e) => {
@@ -82,7 +71,7 @@ const Home = () => {
 
         const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
         sleep(1000).then(() => {
-          navigate(`/${params.id}/Dashboard/`);
+          /*navigate(`/${params.id}/Dashboard/`);*/
         });
 
         //navigate("/Dashboard");
