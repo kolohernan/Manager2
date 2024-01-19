@@ -1,6 +1,6 @@
-import { useState } from "react";
 
-// funcion para separar por <> y :
+import { useUserContext } from "../context/UserContext";
+//const { SetLogin } = useUserContext();
 
 export const parseColumnTitles = (titles) => {
   const titulosParseados = titles.split(">").flatMap((item) => {
@@ -18,27 +18,28 @@ export const parseColumnTitles = (titles) => {
   return titulosParseados;
 };
 
-export const funcionLogin = async (urlDominio, user, password) => {
-  console.log("aca llegue");
+export const funcionLogin = async (urlDominio, user, password, key) => {
   console.log("aca deberia llegar el dominio", urlDominio);
   console.log("aca deberia llegar el usuario", user);
   console.log("aca deberia llegar el password", password);
+  //const { SetLogin } = useUserContext();
   try {
     const response = await fetch(
-      `${urlDominio}Api_Usuarios/Login?key=ChatBotManager&usuario=${user}&password=${password}`
+      `${urlDominio}Api_Usuarios/Login?key=${key}&usuario=${user}&password=${password}`
     );
-    console.log("aca la respuesta del response", response);
+    //console.log("aca la respuesta del response", response);
     const json = await response.json();
-    //setSearchResult(json);
     if (response.ok) {
-      console.log("Se logueo");
+      console.log("Respuesta del login llego bien");
     } else {
-      console.log("NO se logueo");
+      console.log("Respuesta del login llego mal");
     }
     console.log(json);
   } catch (e) {
-    console.log("aca dio error");
     console.log("aca muestro el error", e);
   } finally {
+    console.log("finally");
+    //SetLogin(json)
   }
+  return funcionLogin;
 };

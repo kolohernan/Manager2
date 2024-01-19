@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useUserContext } from "../context/UserContext";
 import { useParams } from "react-router-dom";
 import Form from "../Componentes/Form";
-import { funcionLogin } from "../funciones/Utilidades";
+import { useFetch } from "../funciones/useFetch";
 
 const Home = () => {
   const params = useParams();
@@ -13,55 +13,64 @@ const Home = () => {
     document.title = "Iniciar sesion";
   }, []);
   //las variables que voy a usar
-  const { usuario, setUsuario, urlDominio } = useUserContext();
+  const { usuario, setUsuario, urlDominio, key, login } = useUserContext();
 
   const navigate = useNavigate();
-
-  let jsonUsuario = [
-    {
-      user: "kolohernan",
-      password: "123456",
-      nombre: "Hernán",
-      apellido: "Mohadile",
-      cadenaArticulo:
-        "<Codigo:Articulos><Descripcion:Detalles><Desc_Rubro:Rubros><Stock:Cantidades>",
-      cadenaArticulo2:
-        "<Codbarra:Codigo de Barras><Precio_Compra:Precio de compras><Dto_1><Dto_2><Dto_3><Precio_Costo:Precio de costos><Precio_Lp1:Precios lista 1>",
-      cadenaCliente: "<Codigo:Código><Razon_social:Nombre><Direccion><Cuit>",
-      cadenaCliente2:
-        "<telefono:Teléfono><e-mail:Correo Electrónico><Web_empresa:Sitio Web><Saldo_Cc:Saldo>",
-      visulizaCC_sn: "N",
-      visulizaCpt_sn: "S",
-    },
-  ];
 
   // estado de error: donde guardar un string del que se va a mostrar
   const [erroruser, setErroruser] = useState(false);
   // estado si se logueo correctamente
   const [okuser, setokuser] = useState(false);
 
-  //aca se define lo que hace el boton
-  const onSubmit = (values) => {
-    const datos = funcionLogin(urlDominio, values.text, values.password);
+  const [datos, setDatos] = useState(false);
 
-    console.log("aca los datos", datos);
-    //comparo si el nombre de usuario que ingrese esta en el json
-    //TODO: usar método .find
-    const resultado = jsonUsuario?.filter((e) => {
-      if (
-        /*e.user === values.text && e.password === values.password */ 1 === 1
-      ) {
-        console.log("Datos correctos");
+  const [search, setSearch] = useState("");
+
+  // estado para guardar el resultado de la búsqueda
+  const [searchResult, setSearchResult] = useState([]);
+  //estado para mostrar si está cargando
+  const [isLoading, setIsLoading] = useState(false);
+  //estado para mostrar si hay un error
+  const [error, setError] = useState("");
+
+  //aca se define lo que hace el boton
+  const onSubmit = async (values) => {
+    // probamos hacer algo.. si falla nos vamos al catch
+    try {
+      // declaramos que se está cargando y limpiamos el error si hay alguno
+      setIsLoading(true);
+      setError("");
+      // hacemos el fetch
+      const response = await fetch(
+        `${urlDominio}Api_Usuarios/Login?key=${key}&usuario=${values.text}&password=${values.password}`
+      );
+      const json = await response.json();
+      console.log(json);
+      setSearchResult(json);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsLoading(false);
+    }
+
+    const sleep2 = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+    sleep2(2000).then(() => {
+      //Si el estado es OK
+      if (searchResult?.[0].Estado === "OK") {
+        console.log(searchResult?.[0].Estado);
+
         // Armo un objeto para agrupar todos los datos del usuario
         const User = {
-          nombre: e.nombre,
-          apellido: e.apellido,
-          cadenaArticulo: e.cadenaArticulo,
-          cadenaArticulo2: e.cadenaArticulo2,
-          cadenaCliente: e.cadenaCliente,
-          cadenaCliente2: e.cadenaCliente2,
-          visulizaCC_sn: e.visulizaCC_sn,
-          visulizaCpt_sn: e.visulizaCpt_sn,
+          /*
+        nombre: e.nombre,
+        apellido: e.apellido,
+        cadenaArticulo: e.cadenaArticulo,
+        cadenaArticulo2: e.cadenaArticulo2,
+        cadenaCliente: e.cadenaCliente,
+        cadenaCliente2: e.cadenaCliente2,
+        visulizaCC_sn: e.visulizaCC_sn,
+        visulizaCpt_sn: e.visulizaCpt_sn,
+        */
         };
         // Asigno los datos a objeto Usuario y me permita loguear
         setUsuario(User);
@@ -71,13 +80,14 @@ const Home = () => {
 
         const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
         sleep(1000).then(() => {
-          /*navigate(`/${params.id}/Dashboard/`);*/
+          navigate(`/${params.id}/Dashboard/`);
         });
 
         //navigate("/Dashboard");
       } else {
         // setear el mensaje de error ^ en el estado
-        console.log("error de usuarios");
+        console.log("Código del Error:", searchResult?.[0].Error_Code);
+        console.log("Descripción del Error:", searchResult?.[0].Error_Msj);
         setErroruser(true);
       }
     });

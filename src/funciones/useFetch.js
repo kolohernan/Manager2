@@ -15,7 +15,7 @@ export function useFetch(url) {
       //este metodo se ejecuta cuando terminan todas las promesas
       .finally(() => setLoading(false));
     //se pasa un array vacio, asi no se ejecuta cada vez que se actualiza la pagina y solo lo que esta dentro del hook
-  }, []);
+  }, [url]);
 
   return { data, loading, error };
 }

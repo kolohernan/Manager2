@@ -11,6 +11,8 @@ const UserProvider = ({ children }) => {
   const [pass, setPass] = useState(null);
   const [urlDominio, SeturlDominio] = useState(null);
   const [key, setKey] = useState(null);
+  const [Css, setCss] = useState(null);
+  const [login, setLogin] = useState(null);
 
   // if (usuario) // false si nul
 
@@ -29,6 +31,10 @@ const UserProvider = ({ children }) => {
         SeturlDominio,
         key,
         setKey,
+        Css,
+        setCss,
+        login,
+        setLogin
       }}
     >
       {children}

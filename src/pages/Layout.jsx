@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 import { useLeerCSV } from "../funciones/useLeerCSV";
 
 const Layout = () => {
-  const { usuario, setUsuario, setDominio, setToken, urlDominio } =
+  const { usuario, setUsuario, setDominio, setToken, urlDominio, key, Css } =
     useUserContext();
   const navigation = useNavigation();
   const navigate = useNavigate();
@@ -16,6 +16,7 @@ const Layout = () => {
 
   // parsear el id y el token (id|token)
   const arraysParams = params.id.split("||");
+
   // hacerlos memoizados para evitar re-render
   const dominio = useMemo(() => {
     return arraysParams[0];
@@ -28,27 +29,20 @@ const Layout = () => {
   useEffect(() => {
     setDominio(dominio);
     setToken(token);
-  }, [dominio, token]);
+  }, [dominio, setDominio, setToken, token]);
+
+  // Leo los datos del CSV
+  useLeerCSV(dominio);
 
   //seteo el estilo - despues ver
   useEffect(() => {
-    if (dominio === "MSM") {
-      import(`../styles/manager.css`);
-    } else if (dominio === "CTT") {
-      import(`../styles/mecan.css`);
-    } else if (dominio === "FYE") {
-      import(`../styles/frenos.css`);
+    if (Css) {
+      import(Css);
     }
-  }, []);
+  }, [Css]);
 
-  //TODO:
-
-  // futuro: leer google sheets y obtener info de la api
-  // pasar las apis al usercontext
-  useLeerCSV(dominio);
-
+  //Obtengo los datos del tipo de usuario con el token
   useEffect(() => {
-    // asi no se ejecuta la request:
     if (!token || !urlDominio) {
       //Si no hay o token o da error
       console.log("token incorrecto");
@@ -62,7 +56,7 @@ const Layout = () => {
     const consultaToken = async (e) => {
       try {
         const response = await fetch(
-          `${urlDominio}Api_Usuarios/ConsultaToken?key=ChatBotManager&token=${token}`
+          `${urlDominio}Api_Usuarios/ConsultaToken?key=${key}&token=${token}`
         );
         //console.log(response);
         const json = await response.json();
@@ -75,15 +69,20 @@ const Layout = () => {
         }
         //console.log(searchResult);
       } catch (e) {
-        ("lala");
+        console.log(e)("lala");
       } finally {
         ("lalal");
       }
     };
     consultaToken();
-  }, [token, urlDominio]);
+  }, [key, token, urlDominio]);
 
-  console.log(datosToken?.[0]?.Entidad_Tipo);
+  //muestro los datos que obtuve de token
+  useEffect(() => {
+    const entidadUser = datosToken?.[0]?.Entidad_Tipo;
+    console.log(entidadUser);
+    //if (!entidadUser)
+  }, [datosToken]);
 
   useEffect(() => {
     // Chequeo si el usuario esta en momemoria (contexto)
@@ -106,7 +105,7 @@ const Layout = () => {
         navigate(`/${params.id}/`);
       }
     }
-  }, []);
+  }, [navigate, params.id, setUsuario, usuario]);
 
   return (
     <Fragment>
