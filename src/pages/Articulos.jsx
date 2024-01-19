@@ -70,17 +70,21 @@ function Articulos() {
       setIsLoading(false);
     }
   };
-  let ArticuloUsuario1 = usuario.cadenaArticulo;
+  //let ArticuloUsuario1 = usuario.cadenaArticulo;
+  const ArticuloUsuario1 =
+    "<Codigo:Articulos><Descripcion:Detalles><Desc_Rubro:Rubros><Stock:Cantidades>";
 
   //separar la cadena con la funcion declarada
   const titulosColumnas = parseColumnTitles(ArticuloUsuario1);
   return (
     <>
       {/* Le paso a la Sidebar los datos del api de articulos y de las columnas */}
+      {/*
       <Navbarside
         datosnav={datosnav}
         cadenaArticulo2={usuario.cadenaArticulo2}
       />
+  */}
 
       <header id="header-busqueda" className="text-center fixed-top">
         <div className="container">

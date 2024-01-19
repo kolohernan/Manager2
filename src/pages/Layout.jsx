@@ -1,7 +1,12 @@
-import { Outlet, useNavigation, useNavigate } from "react-router-dom";
+import {
+  Outlet,
+  useNavigation,
+  useNavigate,
+  useLocation,
+  useParams,
+} from "react-router-dom";
 import { useUserContext } from "../context/UserContext";
 import { Fragment, useEffect, useMemo, useState } from "react";
-import { useParams } from "react-router-dom";
 import { useLeerCSV } from "../funciones/useLeerCSV";
 
 const Layout = () => {
@@ -84,11 +89,15 @@ const Layout = () => {
     //if (!entidadUser)
   }, [datosToken]);
 
+  const location = useLocation();
+  const { pathname } = location;
+
   useEffect(() => {
     // Chequeo si el usuario esta en momemoria (contexto)
     if (!usuario) {
       // le asigno a crede el valor del localstorage en texto
       const crede = localStorage.getItem("credenciales");
+      // SI LAS CREDENCIALES ESTAN EN EL LOCALSTORAGE
       if (crede) {
         // try catch para que no crashee la app si el parse falla. (JSON.parse puede fallar si la string no es parseable a JSON)
         try {
@@ -96,17 +105,18 @@ const Layout = () => {
           const UsuarioLocal = JSON.parse(crede);
           // igualo el Usuario con User
           setUsuario(UsuarioLocal);
-          // Lo mando a la app
-          //navigate("/Dashboard");
-          navigate(`/${params.id}/Dashboard/`);
+          // SI LAS CREDENCIALES ESTAN BIEN, LO REDIRIJO A LA PAGINA QUE QUIERE INGRESAR
+          navigate(`${pathname}/`);
         } catch (error) {
+          // SI LAS CREDENCIALES ESTAN MAL, LO REDIRIJO A LA PAGINA QUE QUIERE INGRESAR
           navigate(`/${params.id}/NotFound`);
         }
       } else {
+        // SI LAS CREDENCIALES NO ESTAN EN EL LOCALSTORAGE, LOS MANDO AL HOME PARA QUE SE PUEDAN LOGUEAR
         navigate(`/${params.id}/`);
       }
     }
-  }, [navigate, params.id, setUsuario, usuario]);
+  }, [navigate, params.id, pathname, setUsuario, usuario]);
 
   return (
     <Fragment>
