@@ -1,13 +1,14 @@
-import { Link, useRouteError,useLocation } from "react-router-dom";
+import { Link, useRouteError, useLocation, useParams } from "react-router-dom";
 import { useEffect } from "react";
-
 const NotFound = () => {
   //Seteo el titulo de la pagina
   useEffect(() => {
     document.title = "Página Inexistente";
   }, []);
   const location = useLocation();
+  const params = useParams();
   const error = useRouteError();
+
   console.log(error);
 
   return (
@@ -18,7 +19,7 @@ const NotFound = () => {
       <h1>{error.statusText || error.message}</h1>
       <hr></hr>
       <h2>
-        <Link to="/"> Volver al Inicio</Link>
+        <Link to={`/${params.id}/Dashboard`}> Volver al Inicio</Link>
       </h2>
     </div>
   );

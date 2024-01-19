@@ -98,6 +98,7 @@ const Layout = () => {
           setUsuario(UsuarioLocal);
           // Lo mando a la app
           //navigate("/Dashboard");
+          navigate(`/${params.id}/Dashboard/`);
         } catch (error) {
           navigate(`/${params.id}/NotFound`);
         }

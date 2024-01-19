@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { useUserContext } from "../context/UserContext";
 import { useParams } from "react-router-dom";
 import Form from "../Componentes/Form";
-import { useFetch } from "../funciones/useFetch";
 
 const Home = () => {
   const params = useParams();
@@ -12,6 +11,7 @@ const Home = () => {
   useEffect(() => {
     document.title = "Iniciar sesion";
   }, []);
+
   //las variables que voy a usar
   const { usuario, setUsuario, urlDominio, key, login } = useUserContext();
 
@@ -39,58 +39,48 @@ const Home = () => {
     try {
       // declaramos que se está cargando y limpiamos el error si hay alguno
       setIsLoading(true);
+      setErroruser(false);
       setError("");
       // hacemos el fetch
       const response = await fetch(
         `${urlDominio}Api_Usuarios/Login?key=${key}&usuario=${values.text}&password=${values.password}`
       );
       const json = await response.json();
-      console.log(json);
+      //Verifico si llego todo ok
+      if (response.ok) {
+        //Si el estado es OK, hago lo siguiente
+        if (json?.[0].Estado === "OK") {
+          console.log(json?.[0].Estado);
+          //Guardo los datos en la variable User
+          const User = {
+            Nombre_Usuario: json?.[0].Nombre_Usuario,
+            Apellido_Usuario: json?.[0].Apellido_Usuario,
+            Session_Id: json?.[0].Session_Id,
+          };
+          //Guardo los datos de User en la vatiable Usuario
+          setUsuario(User);
+          //Guardo los datos en el localstorage
+          localStorage.setItem("credenciales", JSON.stringify(User));
+          //Seteo variable asi muestro el cartel de bienvenido
+          setokuser(true);
+          //Hago una pausa y redirijo al dashboard
+          const sleep = (ms) =>
+            new Promise((resolve) => setTimeout(resolve, ms));
+          sleep(1000).then(() => {
+            navigate(`/${params.id}/Dashboard/`);
+          });
+        }
+      } else {
+        setErroruser(true);
+        console.log("Respuesta del login llego mal");
+        console.log(json);
+      }
       setSearchResult(json);
     } catch (e) {
       console.error(e);
     } finally {
       setIsLoading(false);
     }
-
-    const sleep2 = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-    sleep2(2000).then(() => {
-      //Si el estado es OK
-      if (searchResult?.[0].Estado === "OK") {
-        console.log(searchResult?.[0].Estado);
-
-        // Armo un objeto para agrupar todos los datos del usuario
-        const User = {
-          /*
-        nombre: e.nombre,
-        apellido: e.apellido,
-        cadenaArticulo: e.cadenaArticulo,
-        cadenaArticulo2: e.cadenaArticulo2,
-        cadenaCliente: e.cadenaCliente,
-        cadenaCliente2: e.cadenaCliente2,
-        visulizaCC_sn: e.visulizaCC_sn,
-        visulizaCpt_sn: e.visulizaCpt_sn,
-        */
-        };
-        // Asigno los datos a objeto Usuario y me permita loguear
-        setUsuario(User);
-
-        localStorage.setItem("credenciales", JSON.stringify(User));
-        setokuser(true);
-
-        const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-        sleep(1000).then(() => {
-          navigate(`/${params.id}/Dashboard/`);
-        });
-
-        //navigate("/Dashboard");
-      } else {
-        // setear el mensaje de error ^ en el estado
-        console.log("Código del Error:", searchResult?.[0].Error_Code);
-        console.log("Descripción del Error:", searchResult?.[0].Error_Msj);
-        setErroruser(true);
-      }
-    });
   };
 
   return (
@@ -158,7 +148,8 @@ const Home = () => {
             <p>
               Bienvenido{" "}
               <strong>
-                {usuario.nombre} {usuario.apellido}
+                {console.log(usuario.Nombre_Usuario)}
+                {usuario.Nombre_Usuario} {usuario.Apellido_Usuario}
               </strong>
             </p>
             <div className="spinner-border text-success" role="status">

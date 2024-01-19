@@ -1,7 +1,3 @@
-
-import { useUserContext } from "../context/UserContext";
-//const { SetLogin } = useUserContext();
-
 export const parseColumnTitles = (titles) => {
   const titulosParseados = titles.split(">").flatMap((item) => {
     if (!item) return [];
