@@ -1,5 +1,4 @@
 export const parseColumnTitles = (titles) => {
-  console.log(titles);
   if (titles !== undefined) {
     const titulosParseados = titles.split(">").flatMap((item) => {
       if (!item) return [];

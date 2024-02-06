@@ -74,7 +74,7 @@ const Layout = () => {
         }
         //console.log(searchResult);
       } catch (e) {
-        console.log(e)("lala");
+        console.log(e, "lala");
       } finally {
         ("lalal");
       }

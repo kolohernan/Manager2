@@ -46,6 +46,11 @@ const Home = () => {
         `${urlDominio}Api_Usuarios/Login?key=${key}&usuario=${values.text}&password=${values.password}`
       );
       const json = await response.json();
+
+      const response2 = await fetch(
+        `${urlDominio}Api_Usuarios/ConsultaUsuario?key=${key}&usuario=${values.text}`
+      );
+      const json2 = await response2.json();
       //Verifico si llego todo ok
       if (response.ok) {
         //Si el estado es OK, hago lo siguiente
@@ -56,6 +61,19 @@ const Home = () => {
             Nombre_Usuario: json?.[0].Nombre_Usuario,
             Apellido_Usuario: json?.[0].Apellido_Usuario,
             Session_Id: json?.[0].Session_Id,
+            Solo_Web_Sn: json2?.[0].Solo_Web_Sn,
+            Entidad_Tipo: json2?.[0].Entidad_Tipo, //Puede ser VEN | CLI | USR
+            Entidad_Codigos: json2?.[0].Entidad_Codigos,
+            Prod_Sn: json2?.[0].Prod_Sn, //Permite o no Búsqueda de Artículos
+            Prod_Campos_Grid: json2?.[0].Prod_Campos_Grid,
+            Prod_Campos_Det: json2?.[0].Prod_Campos_Det,
+            Prod_Descarga_Sn: json2?.[0].Prod_Descarga_Sn, //Permite o no descarga de datos
+            Cli_Sn: json2?.[0].Cli_Sn, //Permite o no Búsqueda de Clientes
+            Cli_Campos_Grid: json2?.[0].Cli_Campos_Grid,
+            Cli_Campos_Det: json2?.[0].Cli_Campos_Det,
+            Cli_Cta_Cte_Sn: json2?.[0].Cli_Cta_Cte_Sn, //Muestra o no botón de consulta de Cuenta Corriente
+            Cli_Descarga_Sn: json2?.[0].Cli_Descarga_Sn, //Permite o no descarga de datos
+            Cli_Descarga_Cpbte_Sn: json2?.[0].Cli_Descarga_Cpbte_Sn, //Permite o no descarga de comprobantes
           };
           //Guardo los datos de User en la vatiable Usuario
           setUsuario(User);

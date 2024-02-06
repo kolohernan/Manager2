@@ -1,9 +1,10 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigation } from "react-router-dom";
 import Navbar from "../Componentes/Navbar";
 import Footer from "../Componentes/Footer";
 import { Fragment } from "react";
 
 const LayoutPrivate = () => {
+  const navigation = useNavigation();
   return (
     <Fragment>
       <Navbar />

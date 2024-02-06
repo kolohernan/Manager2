@@ -1,6 +1,4 @@
 ﻿Dominio;Api_usuarios;Key;Css
 MSM;api usuarios manager;;.../styles/lala.css
 CTT;http://chiarottotal.ddns.net:3381/v300/api/;ChatBotManager;../styles/mecan.css
-FYE;http://frenosyequipos2.ddns.net:3381/v300/api/;;../styles/frenos.css
-;;;
-;;;
+FYE;http://frenosyequipos2.ddns.net:3381/v300/api/;AppMobileFyE1289;../styles/frenos.css

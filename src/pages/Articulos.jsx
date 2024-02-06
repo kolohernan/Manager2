@@ -1,11 +1,14 @@
 import { parseColumnTitles } from "../funciones/Utilidades";
 import Navbarside from "../Componentes/Navbar side";
 import { useState, useEffect } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useParams, useNavigate } from "react-router-dom";
 import { useUserContext } from "../context/UserContext";
+import { axiosInstance } from "../funciones/axios-instance";
+import { useMutation } from "@tanstack/react-query";
 
 function Articulos() {
   //Seteo el titulo de la pagina
+  const navigate = useNavigate();
   const params = useParams();
   useEffect(() => {
     document.title = "Busqueda de Articulos";
@@ -13,19 +16,48 @@ function Articulos() {
   const location = useLocation();
 
   //traigo la cadena del Usercontext
-  const { usuario } = useUserContext();
+  const { usuario, urlDominio, key } = useUserContext();
 
   // guardar en estado el elemento seleccionado después de hacer click en Ver Mas
   const [datosnav, SetDatosnav] = useState(null);
 
   const [search, setSearch] = useState("");
-  // estado para guardar el resultado de la búsqueda
-  const [searchResult, setSearchResult] = useState([]);
-  //estado para mostrar si está cargando
-  const [isLoading, setIsLoading] = useState(false);
   //estado para mostrar si hay un error
   const [error, setError] = useState("");
   // ejemplo de cadena que viene por el usuario
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    buscarArticulo();
+  };
+
+  //react q
+  // useQuery // buscar info
+  // useMutation // para hacer llamadas programáticas, cuando el usuario es el que le pega al servidor (un boton ponele)
+
+  const {
+    mutate: buscarArticulo,
+    isPending,
+    data: searchResult,
+  } = useMutation({
+    mutationFn: async () => {
+      return axiosInstance.get(
+        `${urlDominio}Api_Articulos/Consulta?key=${key}&campo=OTRO&valor=%${search}%`
+      );
+    },
+    onError: (e) => {
+      // if (response.status >= 400) {
+      //   throw new Error("Server responds with error!");
+      // }
+      if (e === "Deslogueado") {
+        navigate(`/${params.id}/`);
+        return;
+      }
+      if (e?.Error_Code) setError(mapaLabelError[e.Error_Code]);
+      // siempre está bueno loggear el error para debuggear
+      console.error(e);
+    },
+  });
 
   const mapaLabelError = {
     "-1": "Hubo una excepcion",
@@ -33,43 +65,6 @@ function Articulos() {
     //....
   };
 
-  //ACA MANEJO LO QUE HACE EL BOTON DE BUSQUEDA
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    // probamos hacer algo.. si falla nos vamos al catch
-    try {
-      // declaramos que se está cargando y limpiamos el error si hay alguno
-      setIsLoading(true);
-      setError("");
-      // hacemos el fetch
-      const response = await fetch(
-        `http://chiarottotal.ddns.net:3381/v300/api/Api_Articulos/Consulta?key=ChatBotManager&campo=OTRO&valor=%${search}%`
-      );
-      // importante llamar a `.json` para obtener la respuesta
-      const json = await response.json();
-      // guardamos lo que sea relevante de la request en el estado q declaramos para los resultados.
-      // en este caso la respuesta tiene un `items` que tiene la lista de usuarios de github que dio como resultado
-      setSearchResult(json);
-      // mirá la consola para ver qué forma tiene (esto desp borralo)
-      if (response?.ok) {
-        console.log("funciono!");
-      } else {
-        console.log(`Error: ${response?.status}`);
-      }
-      if (response.status >= 400) {
-        throw new Error("Server responds with error!");
-      }
-    } catch (e) {
-      //si hubo un error esto viene acá... entonces agregamos un mensaje para notificar al usuario de que algo salió mal (esto lo vas a tener que renderizar abajo vos después)
-      if (e?.Error_Code) setError(mapaLabelError[e.Error_Code]);
-      // siempre está bueno loggear el error para debuggear
-      console.error(e);
-      //finally es para hacer cosas sin importar si hubo error o no. Ocurre siempre
-    } finally {
-      // no importa lo que pase, el "cargando" debería desactivarse cuando termina todo esto
-      setIsLoading(false);
-    }
-  };
   //let ArticuloUsuario1 = usuario.cadenaArticulo;
   const ArticuloUsuario1 =
     "<Codigo:Articulos><Descripcion:Detalles><Desc_Rubro:Rubros><Stock:Cantidades>";
@@ -112,7 +107,7 @@ function Articulos() {
           </div>
         </div>
       </header>
-      {isLoading ? (
+      {isPending ? (
         <div className="Resultado-api d-flex text-center">
           <h5 className="mx-5">Cargando</h5>
           <div className="spinner-border text-warning" role="status">
@@ -140,7 +135,7 @@ function Articulos() {
             </thead>
             <tbody>
               {/* Recorremos el array con map*/}
-              {searchResult?.map((Articulos) => {
+              {searchResult?.data?.map((Articulos) => {
                 //->
                 const articulosConKeysEnMinusculas = Object.fromEntries(
                   Object.entries(Articulos).map(([k, v]) => {

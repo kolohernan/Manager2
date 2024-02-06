@@ -7,7 +7,7 @@ const Dashboard = () => {
   //Seteo el titulo de la pagina
   const params = useParams();
   useEffect(() => {
-    document.title = "Dashboard";
+    document.title = "Inicio";
   }, []);
   const { usuario } = useUserContext();
 
@@ -23,15 +23,18 @@ const Dashboard = () => {
     <>
       <div className="container">
         <h4>
-          Hola {usuario.nombre} {usuario.apellido}
+          Hola {usuario.Nombre_Usuario} {usuario.Apellido_Usuario}
         </h4>
         <br />
         <p>
-          <strong>Cadena para Articulos</strong> {usuario.cadenaArticulo}
+          <strong>Solo Web</strong> {usuario.Solo_Web_Sn}
+        </p>
+        <p>
+          <strong>Cadena para Articulos</strong> {usuario.Prod_Campos_Grid}
         </p>
         <p>
           <strong>Cadena para Articulos NavSide</strong>{" "}
-          {usuario.cadenaArticulo2}
+          {usuario.Prod_Campos_Det}
         </p>
         <p>
           <strong>Cadena para Clientes</strong> {usuario.cadenaCliente}
