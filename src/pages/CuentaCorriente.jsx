@@ -2,15 +2,18 @@ import { useEffect, useState, Fragment } from "react";
 import { useParams } from "react-router-dom";
 import BotonExcelDefault from "../funciones/BotonExcelDefault";
 import BotonExcelPersonalizado from "../funciones/BotonExcelPersonalizado";
+import { useUserContext } from "../context/UserContext";
 
 function CuentaCorriente() {
   const params = useParams();
   //console.log("kolo", params);
 
+  //traigo la cadena del Usercontext
+  const { urlDominio, key } = useUserContext();
   const [Url, setUrl] = useState(null);
   const url_cuenta = `http://localhost:5173/Dashboard/Clientes/${params.cuentaCorriente}`;
+  console.log("url cuenta", url_cuenta);
   const [clientes, setclientes] = useState(null);
-  const [SaldoAcum, setSaldoAcum] = useState(0);
 
   //Obtengo la longitud de la URL
   let clienteLongitud = url_cuenta.length;
@@ -25,8 +28,11 @@ function CuentaCorriente() {
       // declaramos que se está cargando y limpiamos el error si hay alguno
       setIsLoading(true);
       setError(false);
+      const lala = `${urlDominio}Api_Clientes/Consulta?key=${key}&campo=ID&valor=${url_codCliente}`;
+      console.log("url del lalallalal", lala);
+      console.log("url del clientes", url_codCliente);
       const responseCliente = await fetch(
-        `http://chiarottotal.ddns.net:3381/v300/api/Api_Clientes/Consulta?key=ChatBotManager&campo=ID&valor=${url_codCliente}`
+        `${urlDominio}Api_Clientes/Consulta?key=${key}&campo=ID&valor=${url_codCliente}`
       );
       const jsonCliente = await responseCliente.json();
       setUrl(jsonCliente);
@@ -40,14 +46,19 @@ function CuentaCorriente() {
       //si hubo un error esto viene acá... entonces agregamos un mensaje para notificar al usuario de que algo salió mal (esto lo vas a tener que renderizar abajo vos después)
       if (e?.Error_Code) setError(mapaLabelError[e.Error_Code]);
       // siempre está bueno loggear el error para debuggear
-      console.error(e);
+      //console.error(e);
+      console.log(e);
       //finally es para hacer cosas sin importar si hubo error o no. Ocurre siempre
     } finally {
       // no importa lo que pase, el "cargando" debería desactivarse cuando termina todo esto
       setIsLoading(false);
     }
   };
-
+  const mapaLabelError = {
+    "-1": "Hubo una excepcion",
+    "-11": "Datos no encontrados",
+    //....
+  };
   /* Obtener las fechas necesarias para inicializar */
   const date = new Date();
   let currentDay = String(date.getDate()).padStart(2, "0");

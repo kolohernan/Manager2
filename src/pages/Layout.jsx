@@ -5,28 +5,27 @@ import {
   useLocation,
   useParams,
 } from "react-router-dom";
+import { consultaSesion } from "../funciones/Utilidades";
 import { useUserContext } from "../context/UserContext";
 import { Fragment, useEffect, useMemo, useState } from "react";
 import { useLeerCSV } from "../funciones/useLeerCSV";
 
 const Layout = () => {
+  //RECUPERO LOS DATOS DEL USERCONTEX Y DEMAS LIBRERIAS
   const { usuario, setUsuario, setDominio, setToken, urlDominio, key, Css } =
     useUserContext();
   const navigation = useNavigation();
   const navigate = useNavigate();
   const params = useParams();
 
-  // estado para guardar el resultado de la búsqueda
+  // ESTADO PARA GUARDAR LOS DATOS DEL TOKEN
   const [datosToken, setDatosToken] = useState([]);
-
-  // parsear el id y el token (id|token)
+  // PARSEO EL ID Y EL TOKEN (id|token)
   const arraysParams = params.id.split("||");
-
   // hacerlos memoizados para evitar re-render
   const dominio = useMemo(() => {
     return arraysParams[0];
   }, [arraysParams]);
-
   const token = useMemo(() => {
     return arraysParams[1];
   }, [arraysParams]);
@@ -35,16 +34,30 @@ const Layout = () => {
     setDominio(dominio);
     setToken(token);
   }, [dominio, setDominio, setToken, token]);
-
-  // Leo los datos del CSV
+  // LEO LOS DATOS DEL ARCHIVO CSV
   useLeerCSV(dominio);
 
-  //seteo el estilo - despues ver
+  //SETEO EL ESTILO DEPENDIENDO DEL DOMINIO
   useEffect(() => {
     if (Css) {
       import(Css);
     }
   }, [Css]);
+
+  //VERIFICO SI LA SESIONID DE LA CACHE, ESTA ACTIVO EN LA API
+  const [Estado, setEstado] = useState([]);
+  useEffect(() => {
+    const recuperarDatos = async () => {
+      const result = await consultaSesion(urlDominio, key);
+      setEstado(result);
+    };
+    recuperarDatos();
+  }, []);
+  if (Estado === "S") {
+    console.log("Estado correcto", Estado);
+  } else {
+    console.log("Estado incorrecto", Estado);
+  }
 
   //Obtengo los datos del tipo de usuario con el token
   useEffect(() => {

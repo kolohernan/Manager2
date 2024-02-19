@@ -18,7 +18,6 @@ const Dashboard = () => {
         <p>Cargando</p>
       </Fragment>
     );
-
   return (
     <>
       <div className="container">
@@ -27,21 +26,41 @@ const Dashboard = () => {
         </h4>
         <br />
         <p>
-          <strong>Solo Web</strong> {usuario.Solo_Web_Sn}
+          <strong>Entidad_Tipo</strong> {usuario.Entidad_Tipo}
+        </p>
+        <br />
+        <p>
+          <strong>Prod_Sn</strong> {usuario.Prod_Sn}
         </p>
         <p>
-          <strong>Cadena para Articulos</strong> {usuario.Prod_Campos_Grid}
+          <strong>Prod_Campos_Grid</strong> {usuario.Prod_Campos_Grid}
         </p>
         <p>
-          <strong>Cadena para Articulos NavSide</strong>{" "}
-          {usuario.Prod_Campos_Det}
+          <strong>Prod_Campos_Det</strong> {usuario.Prod_Campos_Det}
         </p>
         <p>
-          <strong>Cadena para Clientes</strong> {usuario.cadenaCliente}
+          <strong>Prod_Descarga_Sn</strong> {usuario.Prod_Descarga_Sn}
+        </p>
+        <br />
+        <p>
+          <strong>Cli_Sn</strong> {usuario.Cli_Sn}
         </p>
         <p>
-          <strong>Cadena para Clientes NavSide</strong> {usuario.cadenaCliente2}
+          <strong>Cli_Campos_Grid</strong> {usuario.Cli_Campos_Grid}
         </p>
+        <p>
+          <strong>Cli_Campos_Det</strong> {usuario.Cli_Campos_Det}
+        </p>
+        <p>
+          <strong>Cli_Cta_Cte_Sn</strong> {usuario.Cli_Cta_Cte_Sn}
+        </p>
+        <p>
+          <strong>Cli_Descarga_Sn</strong> {usuario.Cli_Descarga_Sn}
+        </p>
+        <p>
+          <strong>Cli_Descarga_Cpbte_Sn</strong> {usuario.Cli_Descarga_Cpbte_Sn}
+        </p>
+
         <div className="row align-items-center justify-content-center">
           <div className="col-4">
             <NavLink

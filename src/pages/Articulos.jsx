@@ -8,11 +8,12 @@ import { useMutation } from "@tanstack/react-query";
 
 function Articulos() {
   //Seteo el titulo de la pagina
-  const navigate = useNavigate();
-  const params = useParams();
   useEffect(() => {
     document.title = "Busqueda de Articulos";
   }, []);
+
+  const navigate = useNavigate();
+  const params = useParams();
   const location = useLocation();
 
   //traigo la cadena del Usercontext
@@ -38,6 +39,7 @@ function Articulos() {
   const {
     mutate: buscarArticulo,
     isPending,
+    isError,
     data: searchResult,
   } = useMutation({
     mutationFn: async () => {
@@ -53,9 +55,11 @@ function Articulos() {
         navigate(`/${params.id}/`);
         return;
       }
-      if (e?.Error_Code) setError(mapaLabelError[e.Error_Code]);
+      /*if (e?.Error_Code) setError(mapaLabelError[e.Error_Code]);*/
+      if (e?.Error_Code) setError(e.message);
       // siempre está bueno loggear el error para debuggear
-      console.error(e);
+      //console.error(e);
+      console.log(e.message);
     },
   });
 
@@ -65,21 +69,15 @@ function Articulos() {
     //....
   };
 
-  //let ArticuloUsuario1 = usuario.cadenaArticulo;
-  const ArticuloUsuario1 =
-    "<Codigo:Articulos><Descripcion:Detalles><Desc_Rubro:Rubros><Stock:Cantidades>";
+  const Prod_Campos_Grid = usuario.Prod_Campos_Grid;
+  const Prod_Campos_Det = usuario.Prod_Campos_Det;
 
   //separar la cadena con la funcion declarada
-  const titulosColumnas = parseColumnTitles(ArticuloUsuario1);
+  const titulosColumnas = parseColumnTitles(Prod_Campos_Grid);
   return (
     <>
       {/* Le paso a la Sidebar los datos del api de articulos y de las columnas */}
-      {/*
-      <Navbarside
-        datosnav={datosnav}
-        cadenaArticulo2={usuario.cadenaArticulo2}
-      />
-  */}
+      {<Navbarside datosnav={datosnav} cadenaArticulo2={Prod_Campos_Det} />}
 
       <header id="header-busqueda" className="text-center fixed-top">
         <div className="container">
@@ -114,9 +112,9 @@ function Articulos() {
             <span className="visually-hidden">Cargando...</span>
           </div>
         </div>
-      ) : error ? (
+      ) : isError ? (
         <div className="Resultado-api d-flex text-center">
-          <h5 className="mx-5">Error</h5>
+          <h5 className="mx-5">{error.message}</h5>
         </div>
       ) : (
         <div className="Resultado-api">

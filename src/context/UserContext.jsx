@@ -7,8 +7,6 @@ const UserProvider = ({ children }) => {
   const [clientesCC, setclientesCC] = useState(null);
   const [dominio, setDominio] = useState(null);
   const [token, setToken] = useState(null);
-  const [user, setUser] = useState(null);
-  const [pass, setPass] = useState(null);
   const [urlDominio, SeturlDominio] = useState(null);
   const [key, setKey] = useState(null);
   const [Css, setCss] = useState(null);
@@ -34,7 +32,7 @@ const UserProvider = ({ children }) => {
         Css,
         setCss,
         login,
-        setLogin
+        setLogin,
       }}
     >
       {children}

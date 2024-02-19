@@ -1,6 +1,6 @@
 import { parseColumnTitles } from "../funciones/Utilidades";
 import NavsideClientes from "../Componentes/NavSide_clientes";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Fragment } from "react";
 import { useLocation, useParams, useNavigate } from "react-router-dom";
 import { useUserContext } from "../context/UserContext";
 import { axiosInstance } from "../funciones/axios-instance";
@@ -16,63 +16,19 @@ function Clientes() {
   const location = useLocation();
 
   //traigo la cadena del Usercontext
-  const { usuario, urlDominio, key } = useUserContext();
+  const { usuario, setclientesCC } = useUserContext();
 
   // guardar en estado el elemento seleccionado después de hacer click en Ver Mas
   const [datosnav, SetDatosnav] = useState(null);
-  // estado para guardar el resultado de la búsqueda
+
   const [search, setSearch] = useState("");
+  // estado para guardar el resultado de la búsqueda
+  const [searchResult, setSearchResult] = useState([]);
+  //estado para mostrar si está cargando
+  const [isLoading, setIsLoading] = useState(false);
   //estado para mostrar si hay un error
   const [error, setError] = useState("");
-
-  const [ruta, setRuta] = useState("");
   // ejemplo de cadena que viene por el usuario
-  //ACA MANEJO LO QUE HACE EL BOTON DE BUSQUEDA
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    buscarCliente();
-  };
-
-  useEffect(() => {
-    if (usuario.Entidad_Tipo === "CLI") {
-      setRuta(
-        `${urlDominio}Api_Clientes/Consulta?key=${key}&campo=ID&valor=${usuario.Entidad_Codigos}`
-      );
-      console.log(ruta);
-      buscarCliente();
-    } else {
-      setRuta(
-        `${urlDominio}Api_Clientes/Consulta?key=${key}&campo=OTRO&valor=%${search}%`
-      );
-    }
-  }, []);
-  //react q
-  // useQuery // buscar info
-  // useMutation // para hacer llamadas programáticas, cuando el usuario es el que le pega al servidor (un boton ponele)
-  console.log(ruta);
-  const {
-    mutate: buscarCliente,
-    isPending,
-    isError,
-    data: searchResult,
-  } = useMutation({
-    mutationFn: async () => {
-      return axiosInstance.get(ruta);
-    },
-    onError: (e) => {
-      // if (response.status >= 400) {
-      //   throw new Error("Server responds with error!");
-      // }
-      if (e === "Deslogueado") {
-        navigate(`/${params.id}/`);
-        return;
-      }
-      if (e?.Error_Code) setError(mapaLabelError[e.Error_Code]);
-      // siempre está bueno loggear el error para debuggear
-      console.error(e);
-    },
-  });
 
   const mapaLabelError = {
     "-1": "Hubo una excepcion",
@@ -80,17 +36,48 @@ function Clientes() {
     //....
   };
 
-  const Cli_Campos_Grid = usuario.Cli_Campos_Grid;
-  const Cli_Campos_Det = usuario.Cli_Campos_Det;
+  //ACA MANEJO LO QUE HACE EL BOTON DE BUSQUEDA
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    // probamos hacer algo.. si falla nos vamos al catch
+    try {
+      // declaramos que se está cargando y limpiamos el error si hay alguno
+      setIsLoading(true);
+      setError("");
+      // hacemos el fetch
+      const response = await fetch(
+        `http://chiarottotal.ddns.net:3381/v300/api/Api_Clientes/Consulta?key=ChatBotManager&campo=OTRO&valor=%${search}%`
+      );
+      // importante llamar a `.json` para obtener la respuesta
+      const json = await response.json();
+      // guardamos lo que sea relevante de la request en el estado q declaramos para los resultados.
+      // en este caso la respuesta tiene un `items` que tiene la lista de usuarios de github que dio como resultado
+      setSearchResult(json);
+      // mirá la consola para ver qué forma tiene (esto desp borralo)
+    } catch (e) {
+      //si hubo un error esto viene acá... entonces agregamos un mensaje para notificar al usuario de que algo salió mal (esto lo vas a tener que renderizar abajo vos después)
+      if (e?.Error_Code) setError(mapaLabelError[e.Error_Code]);
+      // siempre está bueno loggear el error para debuggear
+      console.error(e);
+      //finally es para hacer cosas sin importar si hubo error o no. Ocurre siempre
+    } finally {
+      // no importa lo que pase, el "cargando" debería desactivarse cuando termina todo esto
+      setIsLoading(false);
+    }
+  };
+  let ClientesUsuario1 = usuario.cadenaCliente;
 
   //separar la cadena con la funcion declarada
-  const titulosColumnas = parseColumnTitles(Cli_Campos_Grid);
+  const titulosColumnas = parseColumnTitles(ClientesUsuario1);
   //tarda en cargar
 
   return (
     <>
-      {/* Le paso a la Sidebar los datos del api de Clientes y de las columnas */}
-      {<NavsideClientes datosnav={datosnav} cadenaCliente2={Cli_Campos_Det} />}
+      {/* Le paso a la Sidebar los datos del api de articulos y de las columnas */}
+      <NavsideClientes
+        datosnav={datosnav}
+        cadenaCliente2={usuario.cadenaCliente2}
+      />
 
       <header id="header-busqueda" className="text-center fixed-top">
         <div className="container">
@@ -98,7 +85,6 @@ function Clientes() {
           <div className="input-group mb-3">
             <form className="input-group" onSubmit={handleSubmit}>
               <input
-                disabled={usuario.Entidad_Tipo === "CLI"}
                 type="text"
                 className="form-control barra-Manager"
                 placeholder="Escribe para buscar"
@@ -112,7 +98,6 @@ function Clientes() {
                 className="btn btn-manager"
                 type="submit"
                 id="button-busqueda-clientes"
-                disabled={usuario.Entidad_Tipo === "CLI"}
               >
                 Buscar
               </button>
@@ -120,14 +105,14 @@ function Clientes() {
           </div>
         </div>
       </header>
-      {isPending ? (
+      {isLoading ? (
         <div className="Resultado-api d-flex text-center">
           <h5 className="mx-5">Cargando</h5>
           <div className="spinner-border text-warning" role="status">
             <span className="visually-hidden">Cargando...</span>
           </div>
         </div>
-      ) : isError ? (
+      ) : error ? (
         <div className="Resultado-api d-flex text-center">
           <h5 className="mx-5">Error</h5>
         </div>
@@ -148,7 +133,7 @@ function Clientes() {
             </thead>
             <tbody>
               {/* Recorremos el array con map*/}
-              {searchResult?.data?.map((Articulos) => {
+              {searchResult?.map((Articulos) => {
                 //->
                 const articulosConKeysEnMinusculas = Object.fromEntries(
                   Object.entries(Articulos).map(([k, v]) => {
@@ -179,6 +164,7 @@ function Clientes() {
                         aria-controls="offcanvasDarkNavbar"
                         onClick={() => {
                           SetDatosnav(Articulos);
+                          setclientesCC(Articulos);
                         }}
                       >
                         Ver mas

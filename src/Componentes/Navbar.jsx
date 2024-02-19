@@ -1,9 +1,11 @@
 import { NavLink } from "react-router-dom";
 import { useUserContext } from "../context/UserContext";
+import { funcionLogout } from "../funciones/Utilidades";
 import { useNavigate, useParams } from "react-router-dom";
 
 function Navbar() {
-  const { usuario, setUsuario } = useUserContext();
+  const { usuario, setUsuario, urlDominio, key } = useUserContext();
+  //traigo la cadena del Usercontext
   const navigate = useNavigate();
   const params = useParams();
 
@@ -105,8 +107,8 @@ function Navbar() {
                 data-bs-dismiss="modal"
                 className="btn btn-login"
                 onClick={() => {
+                  funcionLogout(urlDominio, key);
                   setUsuario(null);
-                  localStorage.removeItem("credenciales");
                   navigate(`/${params.id}/`);
                 }}
               >

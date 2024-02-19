@@ -57,7 +57,7 @@ const Home = () => {
         if (json?.[0].Estado === "OK") {
           console.log(json?.[0].Estado);
           //Guardo los datos en la variable User
-          const User = {
+          /*const User = {
             Nombre_Usuario: json?.[0].Nombre_Usuario,
             Apellido_Usuario: json?.[0].Apellido_Usuario,
             Session_Id: json?.[0].Session_Id,
@@ -74,9 +74,32 @@ const Home = () => {
             Cli_Cta_Cte_Sn: json2?.[0].Cli_Cta_Cte_Sn, //Muestra o no botón de consulta de Cuenta Corriente
             Cli_Descarga_Sn: json2?.[0].Cli_Descarga_Sn, //Permite o no descarga de datos
             Cli_Descarga_Cpbte_Sn: json2?.[0].Cli_Descarga_Cpbte_Sn, //Permite o no descarga de comprobantes
+          };*/
+          const User = {
+            Nombre_Usuario: "Hernan",
+            Apellido_Usuario: "Mohadile",
+            Session_Id: json?.[0].Session_Id,
+            Solo_Web_Sn: json2?.[0].Solo_Web_Sn,
+            Entidad_Tipo: "CLI", //Puede ser VEN | CLI | USR
+            Entidad_Codigos: 6596,
+            Prod_Sn: "S",
+            Prod_Campos_Grid:
+              "<Codigo:Articulosss><Descripcion:Detalles><Desc_Rubro:Rubros><Stock:Cantidades>",
+            Prod_Campos_Det:
+              "<Codigo:Articulosss><Descripcion:Detalles><Desc_Rubro:Rubros><Stock:Cantidades>",
+            Prod_Descarga_Sn: "S",
+            Cli_Sn: "S",
+            Cli_Campos_Grid:
+              "<Codigo:Codio><Razon_Social:Razon Social><Direccion:Direccion><Ciudad_Desc:Ciudad>",
+            Cli_Campos_Det:
+              "<Codigo:Codigo><Razon_Social:Razon Social><Direccion:Direccion><Ciudad_Desc:Ciudad>",
+            Cli_Cta_Cte_Sn: "S",
+            Cli_Descarga_Sn: "S",
+            Cli_Descarga_Cpbte_Sn: "S",
           };
           //Guardo los datos de User en la vatiable Usuario
           setUsuario(User);
+          console.log("datos de usuario", User);
           //Guardo los datos en el localstorage
           localStorage.setItem("credenciales", JSON.stringify(User));
           //Seteo variable asi muestro el cartel de bienvenido
