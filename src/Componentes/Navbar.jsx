@@ -34,26 +34,30 @@ function Navbar() {
           </button>
           <div className="collapse navbar-collapse" id="navbarNav">
             <ul className="navbar-nav mb-1 mt-1 mb-lg-0 me-auto">
-              <li className="nav-item mx-2">
-                <NavLink
-                  to={`Articulos`}
-                  className="nav-link"
-                  aria-current="page"
-                  href="#"
-                >
-                  Articulos
-                </NavLink>
-              </li>
-              <li className="nav-item mx-2">
-                <NavLink
-                  to={`Clientes`}
-                  className="nav-link"
-                  aria-current="page"
-                  href="#"
-                >
-                  Clientes
-                </NavLink>
-              </li>
+              {!usuario || usuario?.Prod_Sn === "N" ? null : (
+                <li className="nav-item mx-2">
+                  <NavLink
+                    to={`Articulos`}
+                    className="nav-link"
+                    aria-current="page"
+                    href="#"
+                  >
+                    Articulos
+                  </NavLink>
+                </li>
+              )}
+              {!usuario || usuario?.Cli_Sn === "N" ? null : (
+                <li className="nav-item mx-2">
+                  <NavLink
+                    to={`Clientes`}
+                    className="nav-link"
+                    aria-current="page"
+                    href="#"
+                  >
+                    Clientes
+                  </NavLink>
+                </li>
+              )}
               <li className="nav-item mx-2">
                 <NavLink
                   to={`Pedidos`}
@@ -108,6 +112,7 @@ function Navbar() {
                 className="btn btn-login"
                 onClick={() => {
                   funcionLogout(urlDominio, key);
+                  localStorage.removeItem("credenciales");
                   setUsuario(null);
                   navigate(`/${params.id}/`);
                 }}

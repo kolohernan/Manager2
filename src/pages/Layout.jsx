@@ -4,11 +4,14 @@ import {
   useNavigate,
   useLocation,
   useParams,
+  Navigate,
 } from "react-router-dom";
 import { consultaSesion } from "../funciones/Utilidades";
 import { useUserContext } from "../context/UserContext";
 import { Fragment, useEffect, useMemo, useState } from "react";
 import { useLeerCSV } from "../funciones/useLeerCSV";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import Home from "../pages/Home";
 
 const Layout = () => {
   //RECUPERO LOS DATOS DEL USERCONTEX Y DEMAS LIBRERIAS
@@ -44,20 +47,14 @@ const Layout = () => {
     }
   }, [Css]);
 
-  //VERIFICO SI LA SESIONID DE LA CACHE, ESTA ACTIVO EN LA API
-  const [Estado, setEstado] = useState([]);
-  useEffect(() => {
-    const recuperarDatos = async () => {
-      const result = await consultaSesion(urlDominio, key);
-      setEstado(result);
-    };
-    recuperarDatos();
-  }, []);
-  if (Estado === "S") {
-    console.log("Estado correcto", Estado);
-  } else {
-    console.log("Estado incorrecto", Estado);
-  }
+  //Redirigir??
+  // if (Estado === null) {
+  // }
+  // if (Estado === "S") {
+  //   console.log("Estado correcto", Estado);
+  // } else {
+  //   console.log("Estado incorrecto", Estado);
+  // }
 
   //Obtengo los datos del tipo de usuario con el token
   useEffect(() => {
@@ -119,7 +116,7 @@ const Layout = () => {
           // igualo el Usuario con User
           setUsuario(UsuarioLocal);
           // SI LAS CREDENCIALES ESTAN BIEN, LO REDIRIJO A LA PAGINA QUE QUIERE INGRESAR
-          navigate(`${pathname}/`);
+          navigate(`${pathname}`);
         } catch (error) {
           // SI LAS CREDENCIALES ESTAN MAL, LO REDIRIJO A LA PAGINA QUE QUIERE INGRESAR
           navigate(`/${params.id}/NotFound`);
@@ -130,6 +127,17 @@ const Layout = () => {
       }
     }
   }, [navigate, params.id, pathname, setUsuario, usuario]);
+
+  //VERIFICO SI LA SESIONID DE LA CACHE, ESTA ACTIVO EN LA API
+  const { data: estado } = useQuery({
+    queryKey: ["estado", urlDominio, key],
+    queryFn: async () => {
+      return consultaSesion(urlDominio, key);
+    },
+  });
+
+  if (!estado) return <p>Loading</p>;
+  if (estado === "N") return <Home />;
 
   return (
     <Fragment>

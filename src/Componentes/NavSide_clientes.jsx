@@ -1,5 +1,6 @@
 import { parseColumnTitles } from "../funciones/Utilidades";
 import { Link, useParams } from "react-router-dom";
+import { useUserContext } from "../context/UserContext";
 
 function NavsideClientes({ datosnav, cadenaCliente2 }) {
   const params = useParams();
@@ -8,6 +9,9 @@ function NavsideClientes({ datosnav, cadenaCliente2 }) {
     "<Precio_Compra:Precio de compra><Precio_Costo:Precio de costo><Precio_Lp1:Precio lista 1>";
   */
   let ArticuloUsuario2 = cadenaCliente2;
+
+  //traigo la cadena del Usercontext
+  const { usuario } = useUserContext();
 
   //separar la cadena con la funcion declarada
   const titulosColumnasNav = parseColumnTitles(ArticuloUsuario2);
@@ -51,6 +55,11 @@ function NavsideClientes({ datosnav, cadenaCliente2 }) {
               <Link
                 className="text-decoration-none text-dark fw-bolder"
                 target="_blank"
+                style={
+                  usuario.Cli_Cta_Cte_Sn === "N"
+                    ? { pointerEvents: "none" }
+                    : null
+                }
                 to={`/${params.id}/Dashboard/Clientes/CuentaCorriente/CC_${datosnav.Codigo}`}
               >
                 Cuenta Corriente

@@ -46,7 +46,7 @@ export const consultaSesion = async (urlDominio, key) => {
   //Obtengo el valor de las credenciales que tenogo guardadas
   const crede = localStorage.getItem("credenciales");
   // SI LAS CREDENCIALES ESTAN EN EL LOCALSTORAGE
-  let Estado = "N";
+  let Estado = "N"; //true or false
   if (crede) {
     // try catch para que no crashee la app si el parse falla. (JSON.parse puede fallar si la string no es parseable a JSON)
     try {

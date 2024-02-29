@@ -8,6 +8,7 @@ import Clientes from "../pages/Clientes";
 import Pedidos from "../pages/Pedidos";
 import NotFound from "../pages/NotFound";
 import CuentaCorriente from "../pages/CuentaCorriente";
+import useUserContext from "../context/UserContext";
 
 export const router = createBrowserRouter([
   {
@@ -28,6 +29,7 @@ export const router = createBrowserRouter([
             index: true,
             element: <Dashboard />,
           },
+
           {
             path: "Clientes",
             element: <Clientes />,
@@ -36,10 +38,12 @@ export const router = createBrowserRouter([
             path: "Articulos",
             element: <Articulos />,
           },
+          /*
           {
             path: "Pedidos",
             element: <Pedidos />,
           },
+          */
           {
             path: "Clientes/CuentaCorriente/:cuentaCorriente",
             element: <CuentaCorriente />,

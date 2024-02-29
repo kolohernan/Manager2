@@ -46,7 +46,14 @@ function Clientes() {
         `${urlDominio}Api_Clientes/Consulta?key=${key}&campo=OTRO&valor=%${search}%`
       );
     }
-  }, []);
+  }, [
+    key,
+    ruta,
+    search,
+    urlDominio,
+    usuario.Entidad_Codigos,
+    usuario.Entidad_Tipo,
+  ]);
   //react q
   // useQuery // buscar info
   // useMutation // para hacer llamadas programáticas, cuando el usuario es el que le pega al servidor (un boton ponele)

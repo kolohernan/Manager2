@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { useUserContext } from "../context/UserContext";
-import { useParams } from "react-router-dom";
 import Form from "../Componentes/Form";
+import { useQueryClient } from "@tanstack/react-query";
 
 const Home = () => {
   const params = useParams();
@@ -12,6 +12,8 @@ const Home = () => {
     document.title = "Iniciar sesion";
   }, []);
 
+  const location = useLocation();
+  const { pathname } = location;
   //las variables que voy a usar
   const { usuario, setUsuario, urlDominio, key, login } = useUserContext();
 
@@ -33,7 +35,9 @@ const Home = () => {
   //estado para mostrar si hay un error
   const [error, setError] = useState("");
 
+  const queryClient = useQueryClient();
   //aca se define lo que hace el boton
+
   const onSubmit = async (values) => {
     // probamos hacer algo.. si falla nos vamos al catch
     try {
@@ -75,6 +79,7 @@ const Home = () => {
             Cli_Descarga_Sn: json2?.[0].Cli_Descarga_Sn, //Permite o no descarga de datos
             Cli_Descarga_Cpbte_Sn: json2?.[0].Cli_Descarga_Cpbte_Sn, //Permite o no descarga de comprobantes
           };*/
+
           const User = {
             Nombre_Usuario: "Hernan",
             Apellido_Usuario: "Mohadile",
@@ -97,6 +102,7 @@ const Home = () => {
             Cli_Descarga_Sn: "S",
             Cli_Descarga_Cpbte_Sn: "S",
           };
+
           //Guardo los datos de User en la vatiable Usuario
           setUsuario(User);
           console.log("datos de usuario", User);
@@ -108,6 +114,7 @@ const Home = () => {
           const sleep = (ms) =>
             new Promise((resolve) => setTimeout(resolve, ms));
           sleep(1000).then(() => {
+            queryClient.invalidateQueries(["estado"]);
             navigate(`/${params.id}/Dashboard/`);
           });
         }
@@ -123,6 +130,29 @@ const Home = () => {
       setIsLoading(false);
     }
   };
+  useEffect(() => {
+    // le asigno a crede el valor del localstorage en texto
+    const crede = localStorage.getItem("credenciales");
+    // SI LAS CREDENCIALES ESTAN EN EL LOCALSTORAGE
+    if (crede) {
+      // try catch para que no crashee la app si el parse falla. (JSON.parse puede fallar si la string no es parseable a JSON)
+      try {
+        //hago el parse
+        const UsuarioLocal = JSON.parse(crede);
+        // igualo el Usuario con User
+        setUsuario(UsuarioLocal);
+        // SI LAS CREDENCIALES ESTAN BIEN, LO REDIRIJO A LA PAGINA QUE QUIERE INGRESAR
+        console.log("las credenciales estan bien");
+        navigate(`${pathname}Dashboard`);
+      } catch (error) {
+        // SI LAS CREDENCIALES ESTAN MAL, LO REDIRIJO A LA PAGINA QUE QUIERE INGRESAR
+        navigate(`/${params.id}/NotFound`);
+      }
+    } else {
+      // SI LAS CREDENCIALES NO ESTAN EN EL LOCALSTORAGE, LOS MANDO AL HOME PARA QUE SE PUEDAN LOGUEAR
+      navigate(`/${params.id}/`);
+    }
+  }, [navigate, params.id]);
 
   return (
     <div id="container-home" className="container-fluid">
