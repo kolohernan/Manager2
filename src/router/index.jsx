@@ -19,6 +19,7 @@ export const router = createBrowserRouter([
       {
         index: true,
         element: <Home />,
+        errorElement: <NotFound />,
       },
       {
         path: "Dashboard",
@@ -28,15 +29,18 @@ export const router = createBrowserRouter([
           {
             index: true,
             element: <Dashboard />,
+            errorElement: <NotFound />,
           },
 
           {
             path: "Clientes",
             element: <Clientes />,
+            errorElement: <NotFound />,
           },
           {
             path: "Articulos",
             element: <Articulos />,
+            errorElement: <NotFound />,
           },
           /*
           {
@@ -47,6 +51,7 @@ export const router = createBrowserRouter([
           {
             path: "Clientes/CuentaCorriente/:cuentaCorriente",
             element: <CuentaCorriente />,
+            errorElement: <NotFound />,
           },
         ],
       },

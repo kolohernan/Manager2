@@ -100,7 +100,7 @@ const Home = () => {
               "<Codigo:Codigo><Razon_Social:Razon Social><Direccion:Direccion><Ciudad_Desc:Ciudad>",
             Cli_Cta_Cte_Sn: "S",
             Cli_Descarga_Sn: "S",
-            Cli_Descarga_Cpbte_Sn: "S",
+            Cli_Descarga_Cpbte_Sn: "N",
           };
 
           //Guardo los datos de User en la vatiable Usuario

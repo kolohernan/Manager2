@@ -58,6 +58,7 @@ function Navbar() {
                   </NavLink>
                 </li>
               )}
+              {/*
               <li className="nav-item mx-2">
                 <NavLink
                   to={`Pedidos`}
@@ -67,7 +68,8 @@ function Navbar() {
                 >
                   Pedidos
                 </NavLink>
-              </li>
+              </li> 
+              */}
             </ul>
             <ul className="navbar-nav mb-2 mb-lg-0 ms-auto">
               {usuario && (

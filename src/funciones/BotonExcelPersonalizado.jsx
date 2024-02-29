@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import * as XLSX from "xlsx";
 
 const BotonExcelPersonalizado = ({ cc_excel, clientes }) => {

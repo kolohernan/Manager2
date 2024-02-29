@@ -1,6 +1,5 @@
 import { useEffect, useState, Fragment } from "react";
 import { useParams } from "react-router-dom";
-import BotonExcelDefault from "../funciones/BotonExcelDefault";
 import BotonExcelPersonalizado from "../funciones/BotonExcelPersonalizado";
 import { useUserContext } from "../context/UserContext";
 
@@ -9,7 +8,7 @@ function CuentaCorriente() {
   //console.log("kolo", params);
 
   //traigo la cadena del Usercontext
-  const { urlDominio, key } = useUserContext();
+  const { urlDominio, key, usuario } = useUserContext();
   const [Url, setUrl] = useState(null);
   const url_cuenta = `http://localhost:5173/Dashboard/Clientes/${params.cuentaCorriente}`;
   console.log("url cuenta", url_cuenta);
@@ -313,7 +312,7 @@ function CuentaCorriente() {
                           <tr key={index}>
                             <td className="text-start">{fechaCpbt}</td>
                             <td className="text-start">
-                              {url_comprobante ? (
+                              {usuario?.Cli_Descarga_Cpbte_Sn === "S" ? (
                                 <a
                                   href={"http://" + url_comprobante}
                                   target="_blank"
@@ -361,11 +360,12 @@ function CuentaCorriente() {
               </tbody>
             </table>
             <div className="text-end">
-              <BotonExcelDefault cc_excel={searchResult} clientes={clientes} />
-              <BotonExcelPersonalizado
-                cc_excel={searchResult}
-                clientes={clientes}
-              />
+              {!usuario || usuario?.Cli_Descarga_Sn === "N" ? null : (
+                <BotonExcelPersonalizado
+                  cc_excel={searchResult}
+                  clientes={clientes}
+                />
+              )}
             </div>
           </>
         )}
