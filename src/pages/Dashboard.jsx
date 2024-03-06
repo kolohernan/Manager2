@@ -62,48 +62,38 @@ const Dashboard = () => {
         </p>
 
         <div className="row align-items-center justify-content-center">
-          <div className="col-4">
-            <NavLink
-              to={`Articulos`}
-              className="nav-link"
-              aria-current="page"
-              href="#"
-            >
-              <div className="card text-center text-white">
-                <div className="card-body">
-                  <h1>Articulos</h1>
+          {!usuario || usuario?.Prod_Sn === "N" ? null : (
+            <div className="col-6">
+              <NavLink
+                to={`Articulos`}
+                className="nav-link"
+                aria-current="page"
+                href="#"
+              >
+                <div className="card text-center text-white">
+                  <div className="card-body">
+                    <h1>Articulos</h1>
+                  </div>
                 </div>
-              </div>
-            </NavLink>
-          </div>
-          <div className="col-4">
-            <NavLink
-              to={`Clientes`}
-              className="nav-link"
-              aria-current="page"
-              href="#"
-            >
-              <div className="card text-center text-white">
-                <div className="card-body">
-                  <h1>Clientes</h1>
+              </NavLink>
+            </div>
+          )}
+          {!usuario || usuario?.Cli_Sn === "N" ? null : (
+            <div className="col-6">
+              <NavLink
+                to={`Clientes`}
+                className="nav-link"
+                aria-current="page"
+                href="#"
+              >
+                <div className="card text-center text-white">
+                  <div className="card-body">
+                    <h1>Clientes</h1>
+                  </div>
                 </div>
-              </div>
-            </NavLink>
-          </div>
-          <div className="col-4">
-            <NavLink
-              to={`Pedidos`}
-              className="nav-link"
-              aria-current="page"
-              href="#"
-            >
-              <div className="card text-center text-white">
-                <div className="card-body">
-                  <h1>Pedidos</h1>
-                </div>
-              </div>
-            </NavLink>
-          </div>
+              </NavLink>
+            </div>
+          )}
         </div>
       </div>
     </>

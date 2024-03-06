@@ -35,9 +35,15 @@ function Clientes() {
   };
 
   useEffect(() => {
-    if (usuario.Entidad_Tipo === "CLI") {
+    if (usuario?.Entidad_Tipo === "CLI") {
       setRuta(
-        `${urlDominio}Api_Clientes/Consulta?key=${key}&campo=ID&valor=${usuario.Entidad_Codigos}`
+        `${urlDominio}Api_Clientes/Consulta?key=${key}&campo=ID&valor=${usuario?.Entidad_Codigos}`
+      );
+      console.log(ruta);
+      buscarCliente();
+    } else if (usuario?.Entidad_Tipo === "VEN") {
+      setRuta(
+        `${urlDominio}Api_Clientes/Consulta?key=${key}&campo=ID&valor=${usuario?.Entidad_Codigos}`
       );
       console.log(ruta);
       buscarCliente();

@@ -261,7 +261,9 @@ function CuentaCorriente() {
             >
               <use xlinkHref="#exclamation-triangle-fill" />
             </svg>
-            <div>Error</div>
+            <div>
+              Error, no se han recuperado datos entre las fechas consultadas.
+            </div>
           </div>
         ) : (
           <>
@@ -284,10 +286,10 @@ function CuentaCorriente() {
                   let url_comprobante = "";
                   if (
                     item.Url_Ubicacion !== undefined &&
-                    item.Url_Ubicacion !== null
+                    item.Url_Ubicacion !== null &&
+                    usuario?.Cli_Descarga_Cpbte_Sn === "S"
                   ) {
                     url_comprobante = item.Url_Ubicacion;
-                    //console.log(url_comprobante);
                   }
 
                   /*Formato para la fecha */
@@ -360,7 +362,7 @@ function CuentaCorriente() {
               </tbody>
             </table>
             <div className="text-end">
-              {!usuario || usuario?.Cli_Descarga_Sn === "N" ? null : (
+              {usuario?.Cli_Descarga_Sn === "N" ? null : (
                 <BotonExcelPersonalizado
                   cc_excel={searchResult}
                   clientes={clientes}
