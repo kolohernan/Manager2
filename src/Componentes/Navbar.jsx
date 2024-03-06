@@ -19,6 +19,7 @@ function Navbar() {
               alt="Manager"
               height="24"
               className="d-inline-block align-text-top"
+              id="imagen-login"
             />
           </NavLink>
           <button
@@ -104,6 +105,7 @@ function Navbar() {
                 src="../src/assets/logo.png"
                 alt="Manager"
                 height="57"
+                id="imagen-login"
               />
             </div>
             <div className="modal-body m-0">Desea cerrar sesion?</div>

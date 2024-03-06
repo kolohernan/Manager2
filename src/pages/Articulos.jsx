@@ -109,7 +109,7 @@ function Articulos() {
         <div className="Resultado-api d-flex text-center">
           <h5 className="mx-5">Cargando</h5>
           <div className="spinner-border text-warning" role="status">
-            <span className="visually-hidden">Cargando...</span>
+            <span className="visually-hidden">Cargando</span>
           </div>
         </div>
       ) : isError ? (

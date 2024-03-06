@@ -1,7 +1,7 @@
 #container-home,
 .bg-navbar-manager,
 #container-dashboard .card {
-  background-color: #cf5356;
+  background-color: rgb(255, 83, 49);
 }
 #imagen-login {
   content: url("../src/assets/ctt.png");
@@ -9,19 +9,25 @@
 .btn-manager:focus,
 .btn-manager:hover,
 .btn-manager:active {
-  background-color: #cf5356 !important;
+  background-color: rgb(255, 83, 49) !important;
   color: #fff !important;
-  border-color: #cf5356 !important;
+  border-color: rgb(255, 83, 49) !important;
 }
 .sidenavManager .offcanvas-header,
 .sidenavManager .offcanvas-header a {
-  background-color: #cf5356;
+  background-color: rgb(255, 83, 49);
   color: #fff !important;
 }
 .modal-content {
-  background-color: #cf5356 !important;
+  background-color: rgb(255, 83, 49) !important;
   color: #fff !important;
 }
 .spinner-border.text-warning {
-  color: #cf5356 !important;
+  color: rgb(255, 83, 49) !important;
+}
+.barra-Manager:focus {
+  border-color: rgb(255, 83, 49);
+}
+.btn-close.btn-close-black:hover {
+  background-color: rgb(241, 50, 12);
 }

@@ -10,8 +10,7 @@
   background-color: #f8f9fa !important;
   min-height: 100vh;
   max-height: 100%;
-  padding-bottom:56px;
-  
+  padding-bottom: 56px;
 }
 #container-dashboard .offcanvas-body {
   padding: 0;
@@ -58,7 +57,9 @@
 #header-busqueda h2 {
   color: #444444;
 }
-
+.spinner-border.text-warning {
+  color: #ffc107 !important;
+}
 /*Login de usuarios*/
 
 .form-signin {
