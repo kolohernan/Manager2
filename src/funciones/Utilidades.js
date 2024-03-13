@@ -69,7 +69,7 @@ export const consultaSesion = async (urlDominio, key) => {
         console.log("Respuesta del login llego mal");
       }
     } catch (error) {
-      console.log("catch");
+      console.log("catch", error);
     } finally {
       console.log("finally");
     }

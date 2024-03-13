@@ -52,8 +52,16 @@ const BotonExcelPersonalizado = ({ cc_excel, clientes }) => {
       tabla.push({
         A: fechaCpbt,
         B: comprobante,
-        C: "$" + cc_excel.Importe.toLocaleString(),
-        D: "$" + saldoAcumulado.toLocaleString(),
+        C:
+          "$" +
+          cc_excel.Importe.toLocaleString(undefined, {
+            minimumFractionDigits: 2,
+          }),
+        D:
+          "$" +
+          saldoAcumulado.toLocaleString(undefined, {
+            minimumFractionDigits: 2,
+          }),
       });
     });
 

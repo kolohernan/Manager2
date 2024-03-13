@@ -4,10 +4,11 @@ import { funcionLogout } from "../funciones/Utilidades";
 import { useNavigate, useParams } from "react-router-dom";
 
 function Navbar() {
-  const { usuario, setUsuario, urlDominio, key } = useUserContext();
+  const { usuario, setUsuario, urlDominio, key, dominio } = useUserContext();
   //traigo la cadena del Usercontext
   const navigate = useNavigate();
   const params = useParams();
+  console.log("dominio", dominio);
 
   return (
     <>

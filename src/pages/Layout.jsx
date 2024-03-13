@@ -36,7 +36,7 @@ const Layout = () => {
   useEffect(() => {
     setDominio(dominio);
     setToken(token);
-  }, [dominio, setDominio, setToken, token]);
+  }, [, setDominio, setToken, token]);
   // LEO LOS DATOS DEL ARCHIVO CSV
   useLeerCSV(dominio);
 
@@ -116,7 +116,7 @@ const Layout = () => {
           // igualo el Usuario con User
           setUsuario(UsuarioLocal);
           // SI LAS CREDENCIALES ESTAN BIEN, LO REDIRIJO A LA PAGINA QUE QUIERE INGRESAR
-          navigate(`${pathname}`);
+          navigate(`${pathname}/`);
         } catch (error) {
           // SI LAS CREDENCIALES ESTAN MAL, LO REDIRIJO A LA PAGINA QUE QUIERE INGRESAR
           navigate(`/${params.id}/NotFound`);

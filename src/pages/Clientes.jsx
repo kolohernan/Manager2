@@ -63,7 +63,7 @@ function Clientes() {
   //react q
   // useQuery // buscar info
   // useMutation // para hacer llamadas programáticas, cuando el usuario es el que le pega al servidor (un boton ponele)
-  console.log(ruta);
+  //console.log(ruta);
   const {
     mutate: buscarCliente,
     isPending,

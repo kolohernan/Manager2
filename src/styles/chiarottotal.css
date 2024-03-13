@@ -4,7 +4,7 @@
   background-color: rgb(255, 83, 49);
 }
 #imagen-login {
-  content: url("../src/assets/ctt.png");
+  content: url("/src/assets/ctt.png");
 }
 .btn-manager:focus,
 .btn-manager:hover,

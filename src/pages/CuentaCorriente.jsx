@@ -1,5 +1,5 @@
 import { useEffect, useState, Fragment } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import BotonExcelPersonalizado from "../funciones/BotonExcelPersonalizado";
 import { useUserContext } from "../context/UserContext";
 
@@ -11,7 +11,13 @@ function CuentaCorriente() {
   const { urlDominio, key, usuario } = useUserContext();
   const [Url, setUrl] = useState(null);
   const url_cuenta = `http://localhost:5173/Dashboard/Clientes/${params.cuentaCorriente}`;
+  //const url_cuenta = window.location.href;
   console.log("url cuenta", url_cuenta);
+  console.log("protocolo", window.location.protocol);
+  console.log("hostname", window.location.hostname);
+  console.log("pathname", window.location.pathname);
+  console.log("href", window.location.href);
+
   const [clientes, setclientes] = useState(null);
 
   //Obtengo la longitud de la URL
@@ -188,11 +194,11 @@ function CuentaCorriente() {
             >
               <div className="accordion-body">
                 <p>
-                  <b>Codigo:</b> {clientes.Codigo} <b>CUIT:</b>
+                  <b>Codigo: </b> {clientes.Codigo} <b>CUIT: </b>
                   {clientes.Cuit}
                 </p>
                 <p>
-                  <b>Email:</b> {clientes.Email} <b>Tel:</b>
+                  <b>Email: </b> {clientes.Email} <b>Tel: </b>
                   {clientes.Telefono}
                 </p>
               </div>
@@ -326,14 +332,29 @@ function CuentaCorriente() {
                                 <>{comprobante}</>
                               )}
                             </td>
-                            <td>${item.Importe.toLocaleString()}</td>
-                            <td>${saldoAcumulado.toLocaleString()}</td>
+                            <td className="text-end">
+                              $
+                              {item.Importe.toLocaleString(undefined, {
+                                minimumFractionDigits: 2,
+                              })}
+                            </td>
+                            <td className="text-end">
+                              $
+                              {saldoAcumulado.toLocaleString(undefined, {
+                                minimumFractionDigits: 2,
+                              })}
+                            </td>
                           </tr>
                           <tr className="table-dark">
                             <td></td>
                             <td></td>
                             <td className="text-end">Total:</td>
-                            <td>${saldoAcumulado.toLocaleString()}</td>
+                            <td className="text-end">
+                              $
+                              {saldoAcumulado.toLocaleString(undefined, {
+                                minimumFractionDigits: 2,
+                              })}
+                            </td>
                           </tr>
                         </>
                       ) : (
@@ -352,8 +373,18 @@ function CuentaCorriente() {
                               <>{comprobante}</>
                             )}
                           </td>
-                          <td>${item.Importe.toLocaleString()}</td>
-                          <td>${saldoAcumulado.toLocaleString()}</td>
+                          <td className="text-end">
+                            $
+                            {item.Importe.toLocaleString(undefined, {
+                              minimumFractionDigits: 2,
+                            })}
+                          </td>
+                          <td className="text-end">
+                            $
+                            {saldoAcumulado.toLocaleString(undefined, {
+                              minimumFractionDigits: 2,
+                            })}
+                          </td>
                         </tr>
                       )}
                     </Fragment>

@@ -85,7 +85,7 @@ const Home = () => {
             Apellido_Usuario: "Mohadile",
             Session_Id: json?.[0].Session_Id,
             Solo_Web_Sn: json2?.[0].Solo_Web_Sn,
-            Entidad_Tipo: "CLI", //Puede ser VEN | CLI | USR
+            Entidad_Tipo: "USR", //Puede ser VEN | CLI | USR
             Entidad_Codigos: 6596,
             Prod_Sn: "S",
             Prod_Campos_Grid:
@@ -99,8 +99,8 @@ const Home = () => {
             Cli_Campos_Det:
               "<Codigo:Codigo><Razon_Social:Razon Social><Direccion:Direccion><Ciudad_Desc:Ciudad>",
             Cli_Cta_Cte_Sn: "S",
-            Cli_Descarga_Sn: "N",
-            Cli_Descarga_Cpbte_Sn: "S",
+            Cli_Descarga_Sn: "S",
+            Cli_Descarga_Cpbte_Sn: "N",
           };
 
           //Guardo los datos de User en la vatiable Usuario
