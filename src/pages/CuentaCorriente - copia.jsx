@@ -1,4 +1,4 @@
-import { useEffect, useState, Fragment, useMemo } from "react";
+import { useEffect, useState, Fragment } from "react";
 import { useParams, useLocation } from "react-router-dom";
 import BotonExcelPersonalizado from "../funciones/BotonExcelPersonalizado";
 import { useUserContext } from "../context/UserContext";
@@ -152,23 +152,6 @@ function CuentaCorriente() {
     }
   };
 
-  const groupsByOrigen = useMemo(() => {
-    // Registro de origins { "AAA":[result1, result2,] }
-    const groups = {};
-    const acum = {};
-
-    for (const result of searchResult) {
-      /* calculo el sando acumulado */
-      acum[result.Origen] = acum[result.Origen]
-        ? acum[result.Origen] + result.Importe
-        : result.Importe;
-      groups[result.Origen] = groups[result.Origen]
-        ? [...groups[result.Origen], result]
-        : [result];
-    }
-    return { groups, acum };
-  }, [searchResult]);
-
   useEffect(() => {
     // esto es asyncrono
     fetchCliente();
@@ -269,7 +252,6 @@ function CuentaCorriente() {
             <svg xmlns="http://www.w3.org/2000/svg" style={{ display: "none" }}>
               <symbol
                 id="exclamation-triangle-fill"
-                // eslint-disable-next-line react/no-unknown-property
                 fill="currentColor"
                 viewBox="0 0 16 16"
               >
@@ -290,150 +272,135 @@ function CuentaCorriente() {
             </div>
           </div>
         ) : (
-          /** object entries transforma el objeto en array polemicamente.*/
-          Object.entries(groupsByOrigen.groups).map(
-            ([origen, item], indexOrigen) => {
-              return (
-                <Fragment key={indexOrigen}>
-                  <p>{origen}</p>
-                  <table className="table">
-                    <thead className="table-dark">
-                      <tr>
-                        <th scope="col">Fecha</th>
-                        <th scope="col">Comprobante</th>
-                        <th scope="col">Importe</th>
-                        <th scope="col">Saldo</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {item.map((item, indexItem, lastitem) => {
-                        /* calculo el sando acumulado */
-                        const saldoAcumulado = searchResult
-                          .slice(0, indexItem + 1)
-                          .reduce(
-                            (acumulado, item) => acumulado + item.Importe,
-                            0
-                          );
-                        /* Obtengo la url del comprobante*/
-                        let url_comprobante = "";
-                        if (
-                          item.Url_Ubicacion !== undefined &&
-                          item.Url_Ubicacion !== null &&
-                          usuario?.Cli_Descarga_Cpbte_Sn === "S"
-                        ) {
-                          url_comprobante = item.Url_Ubicacion;
-                        }
+          <>
+            <table className="table">
+              <thead className="table-dark">
+                <tr>
+                  <th scope="col">Fecha</th>
+                  <th scope="col">Comprobante</th>
+                  <th scope="col">Importe</th>
+                  <th scope="col">Saldo</th>
+                </tr>
+              </thead>
+              <tbody>
+                {searchResult.map((item, index, lastitem) => {
+                  /* calculo el sando acumulado */
+                  const saldoAcumulado = searchResult
+                    .slice(0, index + 1)
+                    .reduce((acumulado, item) => acumulado + item.Importe, 0);
+                  /* Obtengo la url del comprobante*/
+                  let url_comprobante = "";
+                  if (
+                    item.Url_Ubicacion !== undefined &&
+                    item.Url_Ubicacion !== null &&
+                    usuario?.Cli_Descarga_Cpbte_Sn === "S"
+                  ) {
+                    url_comprobante = item.Url_Ubicacion;
+                  }
 
-                        /*Formato para la fecha */
-                        let fechaComprobante = new Date(item.Fecha);
-                        let currentDay = String(
-                          fechaComprobante.getDate()
-                        ).padStart(2, "0");
-                        let currentMonth = String(
-                          fechaComprobante.getMonth() + 1
-                        ).padStart(2, "0");
-                        let currentYear = fechaComprobante.getFullYear();
-                        let fechaCpbt = `${currentDay}/${currentMonth}/${currentYear}`;
+                  /*Formato para la fecha */
+                  let fechaComprobante = new Date(item.Fecha);
+                  let currentDay = String(fechaComprobante.getDate()).padStart(
+                    2,
+                    "0"
+                  );
+                  let currentMonth = String(
+                    fechaComprobante.getMonth() + 1
+                  ).padStart(2, "0");
+                  let currentYear = fechaComprobante.getFullYear();
+                  let fechaCpbt = `${currentDay}/${currentMonth}/${currentYear}`;
 
-                        /*Armo el comprobante */
-                        let comprobante = `${item.Documento} ${item.Tipocomprobante} ${item.Ptoventa}-${item.Nro}`;
-                        return (
-                          <Fragment key={indexItem}>
-                            {/* Si llego al final agrego un renglon mas y muestro el total */}
-                            {lastitem.length - 1 === indexItem ? (
-                              <>
-                                <tr key={indexItem}>
-                                  <td className="text-start">{fechaCpbt}</td>
-                                  <td className="text-start">
-                                    {usuario?.Cli_Descarga_Cpbte_Sn === "S" ? (
-                                      <a
-                                        href={"http://" + url_comprobante}
-                                        rel="noreferrer"
-                                        target="_blank"
-                                        title=""
-                                      >
-                                        {comprobante}
-                                      </a>
-                                    ) : (
-                                      <>{comprobante}</>
-                                    )}
-                                  </td>
-                                  <td className="text-end">
-                                    $
-                                    {item.Importe.toLocaleString(undefined, {
-                                      minimumFractionDigits: 2,
-                                    })}
-                                  </td>
-                                  <td className="text-end">
-                                    $
-                                    {saldoAcumulado.toLocaleString(undefined, {
-                                      minimumFractionDigits: 2,
-                                    })}
-                                  </td>
-                                </tr>
-                              </>
+                  /*Armo el comprobante */
+                  let comprobante = `${item.Documento} ${item.Tipocomprobante} ${item.Ptoventa}-${item.Nro}`;
+                  return (
+                    <Fragment>
+                      {/* Si llego al final agrego un renglon mas y muestro el total */}
+                      {lastitem.length - 1 === index ? (
+                        <>
+                          <tr key={index}>
+                            <td className="text-start">{fechaCpbt}</td>
+                            <td className="text-start">
+                              {usuario?.Cli_Descarga_Cpbte_Sn === "S" ? (
+                                <a
+                                  href={"http://" + url_comprobante}
+                                  target="_blank"
+                                  title=""
+                                >
+                                  {comprobante}
+                                </a>
+                              ) : (
+                                <>{comprobante}</>
+                              )}
+                            </td>
+                            <td className="text-end">
+                              $
+                              {item.Importe.toLocaleString(undefined, {
+                                minimumFractionDigits: 2,
+                              })}
+                            </td>
+                            <td className="text-end">
+                              $
+                              {saldoAcumulado.toLocaleString(undefined, {
+                                minimumFractionDigits: 2,
+                              })}
+                            </td>
+                          </tr>
+                          <tr className="table-dark">
+                            <td></td>
+                            <td></td>
+                            <td className="text-end">Total:</td>
+                            <td className="text-end">
+                              $
+                              {saldoAcumulado.toLocaleString(undefined, {
+                                minimumFractionDigits: 2,
+                              })}
+                            </td>
+                          </tr>
+                        </>
+                      ) : (
+                        <tr key={index}>
+                          <td className="text-start">{fechaCpbt}</td>
+                          <td className="text-start">
+                            {url_comprobante ? (
+                              <a
+                                href={"http://" + url_comprobante}
+                                target="_blank"
+                                title=""
+                              >
+                                {comprobante}
+                              </a>
                             ) : (
-                              <tr key={indexItem}>
-                                <td className="text-start">{fechaCpbt}</td>
-                                <td className="text-start">
-                                  {url_comprobante ? (
-                                    <a
-                                      href={"http://" + url_comprobante}
-                                      rel="noreferrer"
-                                      target="_blank"
-                                      title=""
-                                    >
-                                      {comprobante}
-                                    </a>
-                                  ) : (
-                                    <>{comprobante}</>
-                                  )}
-                                </td>
-                                <td className="text-end">
-                                  $
-                                  {item.Importe.toLocaleString(undefined, {
-                                    minimumFractionDigits: 2,
-                                  })}
-                                </td>
-                                <td className="text-end">
-                                  $
-                                  {saldoAcumulado.toLocaleString(undefined, {
-                                    minimumFractionDigits: 2,
-                                  })}
-                                </td>
-                              </tr>
+                              <>{comprobante}</>
                             )}
-                          </Fragment>
-                        );
-                      })}
-                      <tr className="table-dark">
-                        <td></td>
-                        <td></td>
-                        <td className="text-end">Total:</td>
-                        <td className="text-end">
-                          $
-                          {groupsByOrigen.acum[origen].toLocaleString(
-                            undefined,
-                            {
+                          </td>
+                          <td className="text-end">
+                            $
+                            {item.Importe.toLocaleString(undefined, {
                               minimumFractionDigits: 2,
-                            }
-                          )}
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                  <div className="text-end">
-                    {usuario?.Cli_Descarga_Sn === "N" ? null : (
-                      <BotonExcelPersonalizado
-                        cc_excel={searchResult}
-                        clientes={clientes}
-                      />
-                    )}
-                  </div>
-                </Fragment>
-              );
-            }
-          )
+                            })}
+                          </td>
+                          <td className="text-end">
+                            $
+                            {saldoAcumulado.toLocaleString(undefined, {
+                              minimumFractionDigits: 2,
+                            })}
+                          </td>
+                        </tr>
+                      )}
+                    </Fragment>
+                  );
+                })}
+              </tbody>
+            </table>
+            <div className="text-end">
+              {usuario?.Cli_Descarga_Sn === "N" ? null : (
+                <BotonExcelPersonalizado
+                  cc_excel={searchResult}
+                  clientes={clientes}
+                />
+              )}
+            </div>
+          </>
         )}
       </>
     );
