@@ -301,8 +301,12 @@ function CuentaCorriente() {
                       <tr>
                         <th scope="col">Fecha</th>
                         <th scope="col">Comprobante</th>
-                        <th scope="col">Importe</th>
-                        <th scope="col">Saldo</th>
+                        <th scope="col" className="text-end">
+                          Importe
+                        </th>
+                        <th scope="col" className="text-end">
+                          Saldo
+                        </th>
                       </tr>
                     </thead>
                     <tbody>
@@ -409,7 +413,7 @@ function CuentaCorriente() {
                       <tr className="table-dark">
                         <td></td>
                         <td></td>
-                        <td className="text-end">Total:</td>
+                        <td className="text-end fw-bold">Total:</td>
                         <td className="text-end">
                           $
                           {groupsByOrigen.acum[origen].toLocaleString(

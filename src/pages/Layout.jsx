@@ -41,10 +41,24 @@ const Layout = () => {
   useLeerCSV(dominio);
 
   //SETEO EL ESTILO DEPENDIENDO DEL DOMINIO
+  /*
   useEffect(() => {
     if (Css) {
       import(Css);
     }
+  }, [Css]);
+  */
+  //SETEO EL ESTILO DEPENDIENDO DEL DOMINIO
+  useEffect(() => {
+    const setearCss = async () => {
+      // Create new link element
+      const link = document.createElement("link");
+      link.setAttribute("rel", "stylesheet");
+      link.setAttribute("href", `${Css}`);
+      // Append to the `head` element
+      document.head.appendChild(link);
+    };
+    setearCss();
   }, [Css]);
 
   //Redirigir??
@@ -116,7 +130,7 @@ const Layout = () => {
           // igualo el Usuario con User
           setUsuario(UsuarioLocal);
           // SI LAS CREDENCIALES ESTAN BIEN, LO REDIRIJO A LA PAGINA QUE QUIERE INGRESAR
-          navigate(`${pathname}/`);
+          navigate(`${pathname}`);
         } catch (error) {
           // SI LAS CREDENCIALES ESTAN MAL, LO REDIRIJO A LA PAGINA QUE QUIERE INGRESAR
           navigate(`/${params.id}/NotFound`);
@@ -141,11 +155,15 @@ const Layout = () => {
 
   return (
     <Fragment>
-      {/*<LeerCSV dominio={dominio} />*/}
-      {navigation.state === "loading" && (
+      {/*navigation.state === "loading" && (
         <div className="alert alert-info my-5">Cargando...</div>
+      )*/}
+      {Css === null ? (
+        ((<div className="alert alert-info my-5">Cargando...</div>),
+        console.log("lalalla"))
+      ) : (
+        <Outlet />
       )}
-      <Outlet />
     </Fragment>
   );
 };

@@ -2,6 +2,7 @@ import { NavLink } from "react-router-dom";
 import { useUserContext } from "../context/UserContext";
 import { funcionLogout } from "../funciones/Utilidades";
 import { useNavigate, useParams } from "react-router-dom";
+import Logo from "/src/assets/logo.png";
 
 function Navbar() {
   const { usuario, setUsuario, urlDominio, key, dominio } = useUserContext();
@@ -16,7 +17,7 @@ function Navbar() {
         <div className="container-fluid">
           <NavLink className="navbar-brand" to={`/${params.id}/Dashboard`}>
             <img
-              src="http://localhost:5173/src/assets/logo.png"
+              src={Logo}
               alt="Manager"
               height="24"
               className="d-inline-block align-text-top"

@@ -143,14 +143,14 @@ const Home = () => {
         setUsuario(UsuarioLocal);
         // SI LAS CREDENCIALES ESTAN BIEN, LO REDIRIJO A LA PAGINA QUE QUIERE INGRESAR
         console.log("las credenciales estan bien");
-        navigate(`${pathname}Dashboard`);
+        navigate(`${pathname}`);
       } catch (error) {
         // SI LAS CREDENCIALES ESTAN MAL, LO REDIRIJO A LA PAGINA QUE QUIERE INGRESAR
         navigate(`/${params.id}/NotFound`);
       }
     } else {
       // SI LAS CREDENCIALES NO ESTAN EN EL LOCALSTORAGE, LOS MANDO AL HOME PARA QUE SE PUEDAN LOGUEAR
-      navigate(`/${params.id}/`);
+      navigate(`/${params.id}`);
     }
   }, [navigate, params.id]);
 

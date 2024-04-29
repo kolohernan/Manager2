@@ -4,9 +4,11 @@ import Papa from "papaparse";
 export const useLeerCSV = (dominio) => {
   const { SeturlDominio, setKey, setCss } = useUserContext();
   console.log("entro a leer el archivo CSV");
-  const archivo = "http://localhost:5173/src/assets/dominio.csv";
+  //const archivo = "http://localhost:5173/src/assets/dominio.csv";
   //const archivo = "https://drive.google.com/file/d/10tWR3hK6R1vJAuCmwz7o1V0WV4qt4MCm/view?usp=sharing";
   //const archivo = "http://kolohernan.000webhostapp.com/src/assets/dominio.csv";
+  const archivo =
+    "https://docs.google.com/spreadsheets/d/e/2PACX-1vSx02r5QD7r3OEGXwBweGaasGQtyln0qBpupOILgFy7g0chc14gjh1rHdnyZJqBAeX9Wb_1aJJ44a43/pub?gid=2024963071&single=true&output=csv";
 
   //Parseo el archivo asi lo convierto en JSON
   useEffect(() => {
