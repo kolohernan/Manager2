@@ -114,7 +114,7 @@ function Articulos() {
         </div>
       ) : isError ? (
         <div className="Resultado-api d-flex text-center">
-          <h5 className="mx-5">{error.message}</h5>
+          <h5 className="mx-5">Error</h5>
         </div>
       ) : (
         <div className="Resultado-api">

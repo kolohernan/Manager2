@@ -91,13 +91,186 @@ function CuentaCorriente() {
       setError("");
       // hacemos el fetch
       const response = await fetch(
-        `http://chiarottotal.ddns.net:3381/v300/api/Api_Clientes/ConsultaSaldoDet?key=ChatBotManager&cliente=cli${url_codCliente}vend&origen=*&rango_periodico=periodo&fecha_desde=${dateDesde}&fecha_hasta=${dateHasta}`
+        `${urlDominio}Api_Clientes/ConsultaSaldoDet?key=${key}&cliente=cli${url_codCliente}vend&origen=*&rango_periodico=periodo&fecha_desde=${dateDesde}&fecha_hasta=${dateHasta}`
       );
       // importante llamar a `.json` para obtener la respuesta
+
       const json = await response.json();
+      /*
+      const json = [
+        {
+          Origen: "AAA",
+          Orden: "1",
+          Fecha: "2024-01-01T00:00:00",
+          Cliente: "6596",
+          Documento: "Saldo Anteriorss",
+          Transaccion: "",
+          Tipocomprobante: "",
+          Ptoventa: "",
+          Nro: "",
+          Tipodepago: "CC",
+          Estado: "P",
+          Importe: 327859.08,
+          Exportado_Pdf_Sn: "",
+          Url_Ubicacion: "",
+          Desc_Cpbte: "Saldo Anterior",
+          Campo1_String: "",
+          Campo2_String: "",
+          Campo3_String: "",
+          Campo1_Num: 0,
+          Campo2_Num: 0,
+          Campo3_Num: 0,
+        },
+        {
+          Origen: "AAA",
+          Orden: "2",
+          Fecha: "2024-01-05T09:19:07.65",
+          Cliente: "6596",
+          Documento: "Recibo",
+          Transaccion: "RC",
+          Tipocomprobante: "R",
+          Ptoventa: "0003",
+          Nro: "00005757",
+          Tipodepago: "CC",
+          Estado: "",
+          Importe: -11859.08,
+          Exportado_Pdf_Sn: "S",
+          Url_Ubicacion:
+            "chiarottotal.ddns.net:3381/cpbtes_a/240105_RCR000300005757_6596.pdf",
+          Desc_Cpbte: "RC R 0003-00005757",
+          Campo1_String: "05/01/2024",
+          Campo2_String: "",
+          Campo3_String: "",
+          Campo1_Num: 0,
+          Campo2_Num: 0,
+          Campo3_Num: 0,
+        },
+        {
+          Origen: "BBB",
+          Orden: "2",
+          Fecha: "2024-01-16T14:58:33.131",
+          Cliente: "6596",
+          Documento: "Factura",
+          Transaccion: "FC",
+          Tipocomprobante: "A",
+          Ptoventa: "0003",
+          Nro: "00006780",
+          Tipodepago: "CC",
+          Estado: "S",
+          Importe: 448347,
+          Exportado_Pdf_Sn: "S",
+          Url_Ubicacion:
+            "chiarottotal.ddns.net:3381/cpbtes_a/240116_FCA000300006780_6596.pdf",
+          Desc_Cpbte: "FC A 0003-00006780",
+          Campo1_String: "16/01/2024",
+          Campo2_String: "",
+          Campo3_String: "",
+          Campo1_Num: 0,
+          Campo2_Num: 0,
+          Campo3_Num: 0,
+        },
+        {
+          Origen: "AAA",
+          Orden: "2",
+          Fecha: "2024-01-18T14:33:06.545",
+          Cliente: "6596",
+          Documento: "Recibo",
+          Transaccion: "RC",
+          Tipocomprobante: "R",
+          Ptoventa: "0003",
+          Nro: "00005856",
+          Tipodepago: "CC",
+          Estado: "",
+          Importe: -316000,
+          Exportado_Pdf_Sn: "S",
+          Url_Ubicacion:
+            "chiarottotal.ddns.net:3381/cpbtes_a/240118_RCR000300005856_6596.pdf",
+          Desc_Cpbte: "RC R 0003-00005856",
+          Campo1_String: "18/01/2024",
+          Campo2_String: "",
+          Campo3_String: "",
+          Campo1_Num: 0,
+          Campo2_Num: 0,
+          Campo3_Num: 0,
+        },
+        {
+          Origen: "BBB",
+          Orden: "2",
+          Fecha: "2024-01-22T09:39:28.324",
+          Cliente: "6596",
+          Documento: "Nota de Crédito",
+          Transaccion: "NC",
+          Tipocomprobante: "A",
+          Ptoventa: "0003",
+          Nro: "00001042",
+          Tipodepago: "CC",
+          Estado: "S",
+          Importe: -448347,
+          Exportado_Pdf_Sn: "S",
+          Url_Ubicacion:
+            "chiarottotal.ddns.net:3381/cpbtes_a/240122_NCA000300001042_6596.pdf",
+          Desc_Cpbte: "NC A 0003-00001042",
+          Campo1_String: "22/01/2024",
+          Campo2_String: "",
+          Campo3_String: "",
+          Campo1_Num: 0,
+          Campo2_Num: 0,
+          Campo3_Num: 0,
+        },
+        {
+          Origen: "AAA",
+          Orden: "2",
+          Fecha: "2024-01-22T09:43:10.425",
+          Cliente: "6596",
+          Documento: "Factura",
+          Transaccion: "FC",
+          Tipocomprobante: "A",
+          Ptoventa: "0003",
+          Nro: "00006826",
+          Tipodepago: "CC",
+          Estado: "S",
+          Importe: 542500,
+          Exportado_Pdf_Sn: "S",
+          Url_Ubicacion:
+            "chiarottotal.ddns.net:3381/cpbtes_a/240122_FCA000300006826_6596.pdf",
+          Desc_Cpbte: "FC A 0003-00006826",
+          Campo1_String: "22/01/2024",
+          Campo2_String: "",
+          Campo3_String: "",
+          Campo1_Num: 0,
+          Campo2_Num: 0,
+          Campo3_Num: 0,
+        },
+        {
+          Origen: "AAA",
+          Orden: "2",
+          Fecha: "2024-02-22T08:39:21.213",
+          Cliente: "6596",
+          Documento: "Recibo",
+          Transaccion: "RC",
+          Tipocomprobante: "R",
+          Ptoventa: "0003",
+          Nro: "00006095",
+          Tipodepago: "CC",
+          Estado: "",
+          Importe: -542500,
+          Exportado_Pdf_Sn: "S",
+          Url_Ubicacion:
+            "chiarottotal.ddns.net:3381/cpbtes_a/240222_RCR000300006095_6596.pdf",
+          Desc_Cpbte: "RC R 0003-00006095",
+          Campo1_String: "22/02/2024",
+          Campo2_String: "",
+          Campo3_String: "",
+          Campo1_Num: 0,
+          Campo2_Num: 0,
+          Campo3_Num: 0,
+        },
+      ];
+      */
       // guardamos lo que sea relevante de la request en el estado q declaramos para los resultados.
       // en este caso la respuesta tiene un `items` que tiene la lista de usuarios de github que dio como resultado
       setSearchResult(json);
+
       if (response.ok) {
         console.log("CARGA INICIAL - llego bien busqueda cuenta corriente");
       } else {
@@ -116,6 +289,7 @@ function CuentaCorriente() {
       setIsLoading(false);
     }
   };
+
   // Funcion del boton
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -126,10 +300,182 @@ function CuentaCorriente() {
       setError("");
       // hacemos el fetch
       const response = await fetch(
-        `http://chiarottotal.ddns.net:3381/v300/api/Api_Clientes/ConsultaSaldoDet?key=ChatBotManager&cliente=cli${url_codCliente}vend&origen=*&rango_periodico=periodo&fecha_desde=${dateDesde}&fecha_hasta=${dateHasta}`
+        `${urlDominio}Api_Clientes/ConsultaSaldoDet?key=${key}&cliente=cli${url_codCliente}vend&origen=*&rango_periodico=periodo&fecha_desde=${dateDesde}&fecha_hasta=${dateHasta}`
       );
       // importante llamar a `.json` para obtener la respuesta
+
       const json = await response.json();
+      /*
+      const json = [
+        {
+          Origen: "AAA",
+          Orden: "1",
+          Fecha: "2024-01-01T00:00:00",
+          Cliente: "6596",
+          Documento: "Saldo Anteriorss",
+          Transaccion: "",
+          Tipocomprobante: "",
+          Ptoventa: "",
+          Nro: "",
+          Tipodepago: "CC",
+          Estado: "P",
+          Importe: 327859.08,
+          Exportado_Pdf_Sn: "",
+          Url_Ubicacion: "",
+          Desc_Cpbte: "Saldo Anterior",
+          Campo1_String: "",
+          Campo2_String: "",
+          Campo3_String: "",
+          Campo1_Num: 0,
+          Campo2_Num: 0,
+          Campo3_Num: 0,
+        },
+        {
+          Origen: "AAA",
+          Orden: "2",
+          Fecha: "2024-01-05T09:19:07.65",
+          Cliente: "6596",
+          Documento: "Recibo",
+          Transaccion: "RC",
+          Tipocomprobante: "R",
+          Ptoventa: "0003",
+          Nro: "00005757",
+          Tipodepago: "CC",
+          Estado: "",
+          Importe: -11859.08,
+          Exportado_Pdf_Sn: "S",
+          Url_Ubicacion:
+            "chiarottotal.ddns.net:3381/cpbtes_a/240105_RCR000300005757_6596.pdf",
+          Desc_Cpbte: "RC R 0003-00005757",
+          Campo1_String: "05/01/2024",
+          Campo2_String: "",
+          Campo3_String: "",
+          Campo1_Num: 0,
+          Campo2_Num: 0,
+          Campo3_Num: 0,
+        },
+        {
+          Origen: "BBB",
+          Orden: "2",
+          Fecha: "2024-01-16T14:58:33.131",
+          Cliente: "6596",
+          Documento: "Factura",
+          Transaccion: "FC",
+          Tipocomprobante: "A",
+          Ptoventa: "0003",
+          Nro: "00006780",
+          Tipodepago: "CC",
+          Estado: "S",
+          Importe: 448347,
+          Exportado_Pdf_Sn: "S",
+          Url_Ubicacion:
+            "chiarottotal.ddns.net:3381/cpbtes_a/240116_FCA000300006780_6596.pdf",
+          Desc_Cpbte: "FC A 0003-00006780",
+          Campo1_String: "16/01/2024",
+          Campo2_String: "",
+          Campo3_String: "",
+          Campo1_Num: 0,
+          Campo2_Num: 0,
+          Campo3_Num: 0,
+        },
+        {
+          Origen: "AAA",
+          Orden: "2",
+          Fecha: "2024-01-18T14:33:06.545",
+          Cliente: "6596",
+          Documento: "Recibo",
+          Transaccion: "RC",
+          Tipocomprobante: "R",
+          Ptoventa: "0003",
+          Nro: "00005856",
+          Tipodepago: "CC",
+          Estado: "",
+          Importe: -316000,
+          Exportado_Pdf_Sn: "S",
+          Url_Ubicacion:
+            "chiarottotal.ddns.net:3381/cpbtes_a/240118_RCR000300005856_6596.pdf",
+          Desc_Cpbte: "RC R 0003-00005856",
+          Campo1_String: "18/01/2024",
+          Campo2_String: "",
+          Campo3_String: "",
+          Campo1_Num: 0,
+          Campo2_Num: 0,
+          Campo3_Num: 0,
+        },
+        {
+          Origen: "BBB",
+          Orden: "2",
+          Fecha: "2024-01-22T09:39:28.324",
+          Cliente: "6596",
+          Documento: "Nota de Crédito",
+          Transaccion: "NC",
+          Tipocomprobante: "A",
+          Ptoventa: "0003",
+          Nro: "00001042",
+          Tipodepago: "CC",
+          Estado: "S",
+          Importe: -448347,
+          Exportado_Pdf_Sn: "S",
+          Url_Ubicacion:
+            "chiarottotal.ddns.net:3381/cpbtes_a/240122_NCA000300001042_6596.pdf",
+          Desc_Cpbte: "NC A 0003-00001042",
+          Campo1_String: "22/01/2024",
+          Campo2_String: "",
+          Campo3_String: "",
+          Campo1_Num: 0,
+          Campo2_Num: 0,
+          Campo3_Num: 0,
+        },
+        {
+          Origen: "AAA",
+          Orden: "2",
+          Fecha: "2024-01-22T09:43:10.425",
+          Cliente: "6596",
+          Documento: "Factura",
+          Transaccion: "FC",
+          Tipocomprobante: "A",
+          Ptoventa: "0003",
+          Nro: "00006826",
+          Tipodepago: "CC",
+          Estado: "S",
+          Importe: 542500,
+          Exportado_Pdf_Sn: "S",
+          Url_Ubicacion:
+            "chiarottotal.ddns.net:3381/cpbtes_a/240122_FCA000300006826_6596.pdf",
+          Desc_Cpbte: "FC A 0003-00006826",
+          Campo1_String: "22/01/2024",
+          Campo2_String: "",
+          Campo3_String: "",
+          Campo1_Num: 0,
+          Campo2_Num: 0,
+          Campo3_Num: 0,
+        },
+        {
+          Origen: "AAA",
+          Orden: "2",
+          Fecha: "2024-02-22T08:39:21.213",
+          Cliente: "6596",
+          Documento: "Recibo",
+          Transaccion: "RC",
+          Tipocomprobante: "R",
+          Ptoventa: "0003",
+          Nro: "00006095",
+          Tipodepago: "CC",
+          Estado: "",
+          Importe: -542500,
+          Exportado_Pdf_Sn: "S",
+          Url_Ubicacion:
+            "chiarottotal.ddns.net:3381/cpbtes_a/240222_RCR000300006095_6596.pdf",
+          Desc_Cpbte: "RC R 0003-00006095",
+          Campo1_String: "22/02/2024",
+          Campo2_String: "",
+          Campo3_String: "",
+          Campo1_Num: 0,
+          Campo2_Num: 0,
+          Campo3_Num: 0,
+        },
+      ];
+      */
       // guardamos lo que sea relevante de la request en el estado q declaramos para los resultados.
       // en este caso la respuesta tiene un `items` que tiene la lista de usuarios de github que dio como resultado
       setSearchResult(json);
@@ -158,7 +504,7 @@ function CuentaCorriente() {
     const acum = {};
 
     for (const result of searchResult) {
-      /* calculo el sando acumulado */
+      // calculo el sando acumulado
       acum[result.Origen] = acum[result.Origen]
         ? acum[result.Origen] + result.Importe
         : result.Importe;
@@ -426,19 +772,19 @@ function CuentaCorriente() {
                       </tr>
                     </tbody>
                   </table>
-                  <div className="text-end">
-                    {usuario?.Cli_Descarga_Sn === "N" ? null : (
-                      <BotonExcelPersonalizado
-                        cc_excel={searchResult}
-                        clientes={clientes}
-                      />
-                    )}
-                  </div>
                 </Fragment>
               );
             }
           )
         )}
+        <div className="text-end">
+          {usuario?.Cli_Descarga_Sn === "N" ? null : (
+            <BotonExcelPersonalizado
+              cc_excel={searchResult}
+              clientes={clientes}
+            />
+          )}
+        </div>
       </>
     );
   }

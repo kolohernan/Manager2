@@ -33,42 +33,17 @@ const Layout = () => {
     return arraysParams[1];
   }, [arraysParams]);
 
+  const [isStylesheetLoaded, setIsStylesheetLoaded] = useState(false);
+
   useEffect(() => {
     setDominio(dominio);
     setToken(token);
-  }, [, setDominio, setToken, token]);
+  }, [setDominio, setToken, token]);
+
   // LEO LOS DATOS DEL ARCHIVO CSV
   useLeerCSV(dominio);
 
   //SETEO EL ESTILO DEPENDIENDO DEL DOMINIO
-  /*
-  useEffect(() => {
-    if (Css) {
-      import(Css);
-    }
-  }, [Css]);
-  */
-  //SETEO EL ESTILO DEPENDIENDO DEL DOMINIO
-  useEffect(() => {
-    const setearCss = async () => {
-      // Create new link element
-      const link = document.createElement("link");
-      link.setAttribute("rel", "stylesheet");
-      link.setAttribute("href", `${Css}`);
-      // Append to the `head` element
-      document.head.appendChild(link);
-    };
-    setearCss();
-  }, [Css]);
-
-  //Redirigir??
-  // if (Estado === null) {
-  // }
-  // if (Estado === "S") {
-  //   console.log("Estado correcto", Estado);
-  // } else {
-  //   console.log("Estado incorrecto", Estado);
-  // }
 
   //Obtengo los datos del tipo de usuario con el token
   useEffect(() => {
@@ -148,22 +123,18 @@ const Layout = () => {
     queryFn: async () => {
       return consultaSesion(urlDominio, key);
     },
+    // enabled:true
   });
-
-  if (!estado) return <p>Loading</p>;
-  if (estado === "N") return <Home />;
+  if (!estado) {
+    return <p></p>;
+  }
 
   return (
     <Fragment>
       {/*navigation.state === "loading" && (
         <div className="alert alert-info my-5">Cargando...</div>
       )*/}
-      {Css === null ? (
-        ((<div className="alert alert-info my-5">Cargando...</div>),
-        console.log("lalalla"))
-      ) : (
-        <Outlet />
-      )}
+      {Css ? <Outlet /> : null}
     </Fragment>
   );
 };

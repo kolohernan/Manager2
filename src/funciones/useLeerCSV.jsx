@@ -4,9 +4,6 @@ import Papa from "papaparse";
 export const useLeerCSV = (dominio) => {
   const { SeturlDominio, setKey, setCss } = useUserContext();
   console.log("entro a leer el archivo CSV");
-  //const archivo = "http://localhost:5173/src/assets/dominio.csv";
-  //const archivo = "https://drive.google.com/file/d/10tWR3hK6R1vJAuCmwz7o1V0WV4qt4MCm/view?usp=sharing";
-  //const archivo = "http://kolohernan.000webhostapp.com/src/assets/dominio.csv";
   const archivo =
     "https://docs.google.com/spreadsheets/d/e/2PACX-1vSx02r5QD7r3OEGXwBweGaasGQtyln0qBpupOILgFy7g0chc14gjh1rHdnyZJqBAeX9Wb_1aJJ44a43/pub?gid=2024963071&single=true&output=csv";
 
@@ -23,10 +20,15 @@ export const useLeerCSV = (dominio) => {
           (item) => item.Dominio === dominio
         );
         //se puede simplemente guardar cada uno de los campos así:
+        //seteo el css a la web
         SeturlDominio(encontrado?.Api_usuarios);
         setKey(encontrado?.Key);
-        setCss(encontrado?.Css);
-        console.log(encontrado?.Css);
+        const link = document.createElement("link");
+        link.setAttribute("rel", "stylesheet");
+        link.setAttribute("href", `${encontrado?.Css}`);
+        // Append to the `head` element
+        document.head.appendChild(link);
+        setCss(true);
         //alternativa guardar todo en un objeto (crear nuevo useState en UserConetxt)
         //setInformacionDominio(encontrado)
       },

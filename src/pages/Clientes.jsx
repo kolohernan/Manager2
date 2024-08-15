@@ -142,7 +142,7 @@ function Clientes() {
         </div>
       ) : isError ? (
         <div className="Resultado-api d-flex text-center">
-          <h5 className="mx-5">Error</h5>
+          <h5 className="mx-5"></h5>
         </div>
       ) : (
         <div className="Resultado-api">

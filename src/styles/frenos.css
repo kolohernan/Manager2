@@ -4,5 +4,30 @@
   background-color: #517958;
 }
 #imagen-login {
-  content: url("../src/assets/fye.png");
+  content: url("/src/assets/fye.png");
+}
+.btn-manager:focus,
+.btn-manager:hover,
+.btn-manager:active {
+  background-color: #517958 !important;
+  color: #fff !important;
+  border-color: #517958 !important;
+}
+.sidenavManager .offcanvas-header,
+.sidenavManager .offcanvas-header a {
+  background-color: #517958;
+  color: #fff !important;
+}
+.modal-content {
+  background-color: #517958 !important;
+  color: #fff !important;
+}
+.spinner-border.text-warning {
+  color: #517958 !important;
+}
+.barra-Manager:focus {
+  border-color: #517958;
+}
+.btn-close.btn-close-black:hover {
+  background-color: #73b17f;
 }

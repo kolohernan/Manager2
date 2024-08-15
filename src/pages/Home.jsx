@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, Fragment } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { useUserContext } from "../context/UserContext";
 import Form from "../Componentes/Form";
@@ -15,7 +15,8 @@ const Home = () => {
   const location = useLocation();
   const { pathname } = location;
   //las variables que voy a usar
-  const { usuario, setUsuario, urlDominio, key, login } = useUserContext();
+  const { usuario, setUsuario, urlDominio, key, login, Cssyes } =
+    useUserContext();
 
   const navigate = useNavigate();
 
@@ -155,81 +156,92 @@ const Home = () => {
   }, [navigate, params.id]);
 
   return (
-    <div id="container-home" className="container-fluid">
-      <p></p>
-      <div className="form-signin w-100 m-auto mt-5 text-center">
-        {/* inicializo los valores en vacio */}
-        <Form onSubmit={onSubmit} initialState={{ text: "", password: "" }}>
-          {({ values, handleChange, handleSubmit }) => (
-            <form onSubmit={handleSubmit}>
-              <img
-                className="mb-4"
-                src="../src/assets/logo.png"
-                alt="Manager"
-                height="57"
-                id="imagen-login"
-              />
-              <div className="form-floating">
-                <input
-                  type="text"
-                  className="form-control barra-Manager"
-                  id="floatingInput"
-                  placeholder="name@example.com"
-                  value={values.text}
-                  onChange={handleChange}
-                  name="text"
-                />
-                <label htmlFor="floatingInput">Usuario</label>
-              </div>
+    <Fragment>
+      {Cssyes === "NO" ? (
+        <div id="container-loading" className="container-fluid">
+          <div className="row">
+            <h1 className="text-center">Cargando</h1>
+            {console.log("aca no se cargo")}
+          </div>
+        </div>
+      ) : (
+        <div id="container-home" className="container-fluid">
+          <p></p>
+          <div className="form-signin w-100 m-auto mt-5 text-center">
+            {/* inicializo los valores en vacio */}
+            <Form onSubmit={onSubmit} initialState={{ text: "", password: "" }}>
+              {({ values, handleChange, handleSubmit }) => (
+                <form onSubmit={handleSubmit}>
+                  <img
+                    className="mb-4"
+                    src="../src/assets/logo.png"
+                    alt="Manager"
+                    height="57"
+                    id="imagen-login"
+                  />
+                  <div className="form-floating">
+                    <input
+                      type="text"
+                      className="form-control barra-Manager"
+                      id="floatingInput"
+                      placeholder="name@example.com"
+                      value={values.text}
+                      onChange={handleChange}
+                      name="text"
+                    />
+                    <label htmlFor="floatingInput">Usuario</label>
+                  </div>
 
-              <div className="form-floating">
-                <input
-                  type="password"
-                  className="form-control barra-Manager"
-                  id="floatingPassword"
-                  placeholder="Password"
-                  value={values.password}
-                  onChange={handleChange}
-                  name="password"
-                />
-                <label htmlFor="floatingPassword">Contraseña</label>
+                  <div className="form-floating">
+                    <input
+                      type="password"
+                      className="form-control barra-Manager"
+                      id="floatingPassword"
+                      placeholder="Password"
+                      value={values.password}
+                      onChange={handleChange}
+                      name="password"
+                    />
+                    <label htmlFor="floatingPassword">Contraseña</label>
+                  </div>
+                  <hr></hr>
+                  <button className="w-100 btn btn-lg btn-login" type="submit">
+                    Iniciar sesion
+                  </button>
+                </form>
+              )}
+            </Form>
+            {erroruser ? (
+              <div className="alert alert-danger alert-dismissible fade show mt-2 d-block">
+                <strong>Error</strong> Los datos ingresados son incorrectos.
+                <button
+                  type="button"
+                  className="btn-close"
+                  data-bs-dismiss="alert"
+                  onClick={() => {
+                    setErroruser(false);
+                  }}
+                ></button>
               </div>
-              <hr></hr>
-              <button className="w-100 btn btn-lg btn-login" type="submit">
-                Iniciar sesion
-              </button>
-            </form>
-          )}
-        </Form>
-        {erroruser ? (
-          <div className="alert alert-danger alert-dismissible fade show mt-2 d-block">
-            <strong>Error</strong> Los datos ingresados son incorrectos.
-            <button
-              type="button"
-              className="btn-close"
-              data-bs-dismiss="alert"
-              onClick={() => {
-                setErroruser(false);
-              }}
-            ></button>
+            ) : null}
+            {okuser ? (
+              <div className="alert alert-success fade show mt-2 d-block text-center">
+                <p>
+                  Bienvenido{" "}
+                  <strong>
+                    {console.log(usuario.Nombre_Usuario)}
+                    {usuario.Nombre_Usuario} {usuario.Apellido_Usuario}
+                  </strong>
+                </p>
+                <div className="spinner-border text-success" role="status">
+                  <span className="visually-hidden">Cargando...</span>
+                </div>
+              </div>
+            ) : null}
           </div>
-        ) : null}
-        {okuser ? (
-          <div className="alert alert-success fade show mt-2 d-block text-center">
-            <p>
-              Bienvenido{" "}
-              <strong>
-                {console.log(usuario.Nombre_Usuario)}
-                {usuario.Nombre_Usuario} {usuario.Apellido_Usuario}
-              </strong>
-            </p>
-            <div className="spinner-border text-success" role="status">
-              <span className="visually-hidden">Cargando...</span>
-            </div>
-          </div>
-        ) : null}
-      </div>
-    </div>
+        </div>
+      )}
+    </Fragment>
   );
 };
 export default Home;

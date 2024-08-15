@@ -9,7 +9,7 @@ const UserProvider = ({ children }) => {
   const [token, setToken] = useState(null);
   const [urlDominio, SeturlDominio] = useState(null);
   const [key, setKey] = useState(null);
-  const [Css, setCss] = useState(null);
+  const [Css, setCss] = useState(false);
   const [login, setLogin] = useState(null);
 
   // if (usuario) // false si nul
