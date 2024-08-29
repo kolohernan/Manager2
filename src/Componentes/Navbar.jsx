@@ -37,7 +37,7 @@ function Navbar() {
           </button>
           <div className="collapse navbar-collapse" id="navbarNav">
             <ul className="navbar-nav mb-1 mt-1 mb-lg-0 me-auto">
-              {!usuario || usuario?.Prod_Sn === "N" ? null : (
+              {!usuario || usuario?.Prod_Sn !== "S" ? null : (
                 <li className="nav-item mx-2">
                   <NavLink
                     to={`Articulos`}
@@ -49,7 +49,7 @@ function Navbar() {
                   </NavLink>
                 </li>
               )}
-              {!usuario || usuario?.Cli_Sn === "N" ? null : (
+              {!usuario || usuario?.Cli_Sn !== "S" ? null : (
                 <li className="nav-item mx-2">
                   <NavLink
                     to={`Clientes`}

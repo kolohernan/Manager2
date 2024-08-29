@@ -25,9 +25,11 @@ const Home = () => {
   // estado si se logueo correctamente
   const [okuser, setokuser] = useState(false);
 
-  const [datos, setDatos] = useState(false);
+  const [rolCliente, setrolCliente] = useState(null);
+  const [okrol, setokrol] = useState(null);
+  //const [datos, setDatos] = useState(false);
 
-  const [search, setSearch] = useState("");
+  //const [search, setSearch] = useState("");
 
   // estado para guardar el resultado de la búsqueda
   const [searchResult, setSearchResult] = useState([]);
@@ -79,6 +81,7 @@ const Home = () => {
             Cli_Cta_Cte_Sn: json2?.[0].Cli_Cta_Cte_Sn, //Muestra o no botón de consulta de Cuenta Corriente
             Cli_Descarga_Sn: json2?.[0].Cli_Descarga_Sn, //Permite o no descarga de datos
             Cli_Descarga_Cpbte_Sn: json2?.[0].Cli_Descarga_Cpbte_Sn, //Permite o no descarga de comprobantes
+            Cod_Rol: json2?[0].Cod_Rol,
           };*/
 
           const User = {
@@ -90,7 +93,7 @@ const Home = () => {
             Entidad_Codigos: 6596,
             Prod_Sn: "S",
             Prod_Campos_Grid:
-              "<Codigo:Articulosss><Descripcion:Detalles><Desc_Rubro:Rubros><Stock:Cantidades>",
+              "<Codsigo:Articulosss><Descripcion:Detalles><Desc_Rubro:Rubros><Stock:Cantidades>",
             Prod_Campos_Det:
               "<Codigo:Articulosss><Descripcion:Detalles><Desc_Rubro:Rubros><Stock:Cantidades>",
             Prod_Descarga_Sn: "S",
@@ -102,6 +105,7 @@ const Home = () => {
             Cli_Cta_Cte_Sn: "S",
             Cli_Descarga_Sn: "S",
             Cli_Descarga_Cpbte_Sn: "N",
+            Cod_Rol: "lal",
           };
 
           //Guardo los datos de User en la vatiable Usuario
@@ -109,14 +113,21 @@ const Home = () => {
           console.log("datos de usuario", User);
           //Guardo los datos en el localstorage
           localStorage.setItem("credenciales", JSON.stringify(User));
+          setrolCliente(User.Cod_Rol);
+          console.log("datos en col_rol", User.Cod_Rol);
           //Seteo variable asi muestro el cartel de bienvenido
           setokuser(true);
           //Hago una pausa y redirijo al dashboard
           const sleep = (ms) =>
             new Promise((resolve) => setTimeout(resolve, ms));
           sleep(1000).then(() => {
-            queryClient.invalidateQueries(["estado"]);
-            navigate(`/${params.id}/Dashboard/`);
+            if (User.Cod_Rol === null) {
+              setokrol("N");
+            } else {
+              setokrol("S");
+              queryClient.invalidateQueries(["estado"]);
+              navigate(`/${params.id}/Dashboard/`);
+            }
           });
         }
       } else {
@@ -224,11 +235,22 @@ const Home = () => {
                 ></button>
               </div>
             ) : null}
-            {okuser ? (
+            {okrol === "N" ? (
+              <div className="alert alert-warning fade show mt-2 d-block text-center">
+                <p>
+                  Usuario no está habilitado para usar la plataforma web.
+                  <strong>
+                    {console.log("datos en rolCliente", rolCliente)}
+                  </strong>
+                </p>
+              </div>
+            ) : null}
+            {okuser && okrol !== "S" ? (
               <div className="alert alert-success fade show mt-2 d-block text-center">
                 <p>
                   Bienvenido{" "}
                   <strong>
+                    {console.log("datos en rolCliente", rolCliente)}
                     {console.log(usuario.Nombre_Usuario)}
                     {usuario.Nombre_Usuario} {usuario.Apellido_Usuario}
                   </strong>

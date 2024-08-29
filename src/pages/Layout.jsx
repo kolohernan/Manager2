@@ -134,7 +134,8 @@ const Layout = () => {
       {/*navigation.state === "loading" && (
         <div className="alert alert-info my-5">Cargando...</div>
       )*/}
-      {Css ? <Outlet /> : null}
+      {Css ? <Outlet /> : "lalal"}
+      {/*Css ? <Outlet /> : null*/}
     </Fragment>
   );
 };

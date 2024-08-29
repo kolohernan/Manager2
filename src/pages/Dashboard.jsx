@@ -62,7 +62,7 @@ const Dashboard = () => {
         </p>
 
         <div className="row align-items-center justify-content-center">
-          {!usuario || usuario?.Prod_Sn === "N" ? null : (
+          {!usuario || usuario?.Prod_Sn !== "S" ? null : (
             <div className="col-6">
               <NavLink
                 to={`Articulos`}
@@ -78,7 +78,7 @@ const Dashboard = () => {
               </NavLink>
             </div>
           )}
-          {!usuario || usuario?.Cli_Sn === "N" ? null : (
+          {!usuario || usuario?.Cli_Sn !== "S" ? null : (
             <div className="col-6">
               <NavLink
                 to={`Clientes`}
