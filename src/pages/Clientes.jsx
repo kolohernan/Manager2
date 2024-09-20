@@ -81,29 +81,86 @@ function Clientes() {
         navigate(`/${params.id}/`);
         return;
       }
-      if (e?.Error_Code) setError(mapaLabelError[e.Error_Code]);
+      /*if (e?.Error_Code) setError(mapaLabelError[e.Error_Code]);*/
+      if (e?.Error_Code) setError(e.message);
       // siempre está bueno loggear el error para debuggear
-      console.error(e);
+      //console.error(e);
+      console.log(e.message);
     },
   });
 
-  const mapaLabelError = {
-    "-1": "Hubo una excepcion",
-    "-11": "Datos no encontrados",
-    //....
-  };
+  let Cli_Campos_Grid;
+  let Cli_Campos_Det;
+  let Grid;
+  let Det;
+  if (usuario.Cli_Campos_Grid === null || usuario.Cli_Campos_Grid === "") {
+    Cli_Campos_Grid = "<Codigo><Razon_Social>";
+    Grid = "S";
+  } else {
+    Cli_Campos_Grid = usuario.Cli_Campos_Grid;
+  }
 
-  const Cli_Campos_Grid = usuario.Cli_Campos_Grid;
-  const Cli_Campos_Det = usuario.Cli_Campos_Det;
+  if (usuario.Cli_Campos_Det === null || usuario.Cli_Campos_Det === "") {
+    Cli_Campos_Det = Cli_Campos_Grid;
+    Det = "S";
+  } else {
+    Cli_Campos_Det = usuario.Cli_Campos_Det;
+  }
 
   //separar la cadena con la funcion declarada
   const titulosColumnas = parseColumnTitles(Cli_Campos_Grid);
   //tarda en cargar
+  ////////////////////////////////////////////////////////////////////////////////////////
+  const [data, setData] = useState(null);
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await fetch(
+          `${urlDominio}Api_Clientes/Consulta?key=${key}&campo=ID&valor=6596`
+        );
+        const data = await response.json();
+        setData(data);
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    }
+    fetchData();
+  }, [key]);
+
+  if (!data) {
+    return <div>Cargando...</div>;
+  } else {
+    const claves = Object.keys(data[0]);
+    console.log("RESULTADO EN DONDE TENGO QUE BUSCAR LAS CLAVES", claves);
+
+    titulosColumnas.forEach((titulo) => {
+      const valor = titulo[0];
+      if (!claves.includes(valor)) {
+        console.log(`El valor ${valor} no se encuentra en la lista de claves`);
+        Grid = "S";
+      } else {
+        console.log(`todos los valores se encontraron`);
+      }
+    });
+  }
+  console.log(`VALOR DE DET`, Det);
+
+  const titulosColumnasDefecto = [
+    ["Codigo", "Codigo"],
+    ["Descripcion", "Descripcion"],
+  ];
+  ////////////////////////////////////////////////////////////////////////////////////////
 
   return (
     <>
       {/* Le paso a la Sidebar los datos del api de Clientes y de las columnas */}
-      {<NavsideClientes datosnav={datosnav} cadenaCliente2={Cli_Campos_Det} />}
+      {
+        <NavsideClientes
+          datosnav={datosnav}
+          cadenaCliente2={Cli_Campos_Det}
+          Det={Det}
+        />
+      }
 
       <header id="header-busqueda" className="text-center fixed-top">
         <div className="container">
@@ -146,6 +203,11 @@ function Clientes() {
         </div>
       ) : (
         <div className="Resultado-api">
+          {Grid === "S" ? (
+            <div className="alert alert-warning" role="alert">
+              Esta vista es por Defecto
+            </div>
+          ) : null}
           <table className="table table-mobile-responsive table-mobile-sided mt-5">
             <thead>
               <tr>

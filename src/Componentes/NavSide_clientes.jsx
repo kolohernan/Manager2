@@ -2,7 +2,7 @@ import { parseColumnTitles } from "../funciones/Utilidades";
 import { Link, useParams } from "react-router-dom";
 import { useUserContext } from "../context/UserContext";
 
-function NavsideClientes({ datosnav, cadenaCliente2 }) {
+function NavsideClientes({ datosnav, cadenaCliente2, Det }) {
   const params = useParams();
   /*
   let ArticuloUsuario2 =
@@ -35,6 +35,11 @@ function NavsideClientes({ datosnav, cadenaCliente2 }) {
             aria-label="Close"
           ></button>
         </div>
+        {Det === "S" ? (
+          <div className="alert alert-warning m-0" role="alert">
+            Esta vista es por Defecto
+          </div>
+        ) : null}
         <div className="offcanvas-body">
           <ul className="list-group list-group-flush">
             {titulosColumnasNav.map((item) => {
@@ -49,17 +54,15 @@ function NavsideClientes({ datosnav, cadenaCliente2 }) {
             })}
           </ul>
         </div>
-        <div className="offcanvas-header">
+        <div
+          className="offcanvas-header"
+          style={usuario.Cli_Cta_Cte_Sn === "N" ? { display: "none" } : null}
+        >
           <p className="offcanvas-title">
             {datosnav?.Codigo ? (
               <Link
                 className="text-decoration-none text-dark fw-bolder"
                 target="_blank"
-                style={
-                  usuario.Cli_Cta_Cte_Sn === "N"
-                    ? { pointerEvents: "none" }
-                    : null
-                }
                 to={`/${params.id}/Dashboard/Clientes/CuentaCorriente/CC_${datosnav.Codigo}`}
               >
                 Cuenta Corriente

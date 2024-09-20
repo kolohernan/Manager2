@@ -105,7 +105,13 @@ const Layout = () => {
           // igualo el Usuario con User
           setUsuario(UsuarioLocal);
           // SI LAS CREDENCIALES ESTAN BIEN, LO REDIRIJO A LA PAGINA QUE QUIERE INGRESAR
-          navigate(`${pathname}`);
+          if (pathname === "/" + dominio + "/") {
+            navigate(`${pathname}Dashboard`);
+          } else if (pathname === "/" + dominio) {
+            navigate(`${pathname}/Dashboard`);
+          } else {
+            navigate(`${pathname}`);
+          }
         } catch (error) {
           // SI LAS CREDENCIALES ESTAN MAL, LO REDIRIJO A LA PAGINA QUE QUIERE INGRESAR
           navigate(`/${params.id}/NotFound`);
@@ -134,7 +140,30 @@ const Layout = () => {
       {/*navigation.state === "loading" && (
         <div className="alert alert-info my-5">Cargando...</div>
       )*/}
-      {Css ? <Outlet /> : "lalal"}
+      {Css ? (
+        <Outlet />
+      ) : (
+        <>
+          <div className="cotainer">
+            <div className="row">
+              <div
+                className="d-flex justify-content-center align-items-center"
+                style={{ height: "95vh" }}
+              >
+                <div className="page-loader flex-column text-center">
+                  <span
+                    className="spinner-border spinner-border-xl text-warning me-4"
+                    role="status"
+                  ></span>
+                  <span className="text-muted fs-1 fw-semibold mt-5">
+                    Cargando...
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
       {/*Css ? <Outlet /> : null*/}
     </Fragment>
   );

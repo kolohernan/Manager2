@@ -60,6 +60,9 @@ const Dashboard = () => {
         <p>
           <strong>Cli_Descarga_Cpbte_Sn</strong> {usuario.Cli_Descarga_Cpbte_Sn}
         </p>
+        <p>
+          <strong>Cod_Rol</strong> {usuario.Cod_Rol}
+        </p>
 
         <div className="row align-items-center justify-content-center">
           {!usuario || usuario?.Prod_Sn !== "S" ? null : (

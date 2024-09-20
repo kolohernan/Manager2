@@ -1,6 +1,6 @@
 import { parseColumnTitles } from "../funciones/Utilidades";
 
-function Navbarside({ datosnav, cadenaArticulo2 }) {
+function Navbarside({ datosnav, cadenaArticulo2, Det }) {
   /*
   let ArticuloUsuario2 =
     "<Precio_Compra:Precio de compra><Precio_Costo:Precio de costo><Precio_Lp1:Precio lista 1>";
@@ -9,6 +9,7 @@ function Navbarside({ datosnav, cadenaArticulo2 }) {
 
   //separar la cadena con la funcion declarada
   const titulosColumnasNav = parseColumnTitles(ArticuloUsuario2);
+  //console.log("lo que llego del parse de las columnas", titulosColumnasNav);
 
   return (
     <div className="container-fluid" id="Nav-MasDatos">
@@ -29,6 +30,11 @@ function Navbarside({ datosnav, cadenaArticulo2 }) {
             aria-label="Close"
           ></button>
         </div>
+        {Det === "S" ? (
+          <div className="alert alert-warning" role="alert">
+            Esta vista es por Defecto
+          </div>
+        ) : null}
         <div className="offcanvas-body">
           <ul className="list-group list-group-flush">
             {titulosColumnasNav.map((item) => {

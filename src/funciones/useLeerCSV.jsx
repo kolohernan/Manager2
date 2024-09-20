@@ -17,7 +17,7 @@ export const useLeerCSV = (dominio) => {
       },
       complete: function (results) {
         const encontrado = results.data?.find(
-          (item) => item.Dominio === dominio
+          (item) => item.Dominio.toLowerCase() === dominio.toLowerCase()
         );
         //se puede simplemente guardar cada uno de los campos así:
         //seteo el css a la web

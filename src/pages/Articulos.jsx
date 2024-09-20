@@ -32,10 +32,6 @@ function Articulos() {
     buscarArticulo();
   };
 
-  //react q
-  // useQuery // buscar info
-  // useMutation // para hacer llamadas programáticas, cuando el usuario es el que le pega al servidor (un boton ponele)
-
   const {
     mutate: buscarArticulo,
     isPending,
@@ -63,21 +59,85 @@ function Articulos() {
     },
   });
 
-  const mapaLabelError = {
-    "-1": "Hubo una excepcion",
-    "-11": "Datos no encontrados",
-    //....
-  };
+  ////////////////////////////////////////////////////////////////////////////////////////
 
-  const Prod_Campos_Grid = usuario.Prod_Campos_Grid;
-  const Prod_Campos_Det = usuario.Prod_Campos_Det;
+  //const claves = Object.keys(data[0]);
+  //console.log("RESULTADO DE las claves", claves);
+
+  let Prod_Campos_Grid;
+  let Prod_Campos_Det;
+  let Grid;
+  let Det;
+  if (usuario.Prod_Campos_Grid === null || usuario.Prod_Campos_Grid === "") {
+    Prod_Campos_Grid = "<Codigo><Descripcion>";
+    Grid = "S";
+  } else {
+    Prod_Campos_Grid = usuario.Prod_Campos_Grid;
+  }
+
+  if (usuario.Prod_Campos_Det === null || usuario.Prod_Campos_Det === "") {
+    Prod_Campos_Det = Prod_Campos_Grid;
+    Det = "S";
+  } else {
+    Prod_Campos_Det = usuario.Prod_Campos_Det;
+  }
 
   //separar la cadena con la funcion declarada
   const titulosColumnas = parseColumnTitles(Prod_Campos_Grid);
+
+  console.log("titulos parseados", titulosColumnas);
+
+  ////////////////////////////////////////////////////////////////////////////////////////
+  const [data, setData] = useState(null);
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await fetch(
+          `${urlDominio}Api_Articulos/Consulta?key=${key}&campo=ID&valor=5028`
+        );
+        const data = await response.json();
+        setData(data);
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    }
+    fetchData();
+  }, [key]);
+
+  if (!data) {
+    return <div>Cargando...</div>;
+  } else {
+    const claves = Object.keys(data[0]);
+    console.log("RESULTADO EN DONDE TENGO QUE BUSCAR LAS CLAVES", claves);
+
+    titulosColumnas.forEach((titulo) => {
+      const valor = titulo[0];
+      if (!claves.includes(valor)) {
+        console.log(`El valor ${valor} no se encuentra en la lista de claves`);
+        Grid = "S";
+      } else {
+        console.log(`todos los valores se encontraron`);
+      }
+    });
+  }
+  console.log(`VALOR DE DET`, Det);
+
+  const titulosColumnasDefecto = [
+    ["Codigo", "Codigo"],
+    ["Descripcion", "Descripcion"],
+  ];
+  ////////////////////////////////////////////////////////////////////////////////////////
+
   return (
     <>
       {/* Le paso a la Sidebar los datos del api de articulos y de las columnas */}
-      {<Navbarside datosnav={datosnav} cadenaArticulo2={Prod_Campos_Det} />}
+      {
+        <Navbarside
+          datosnav={datosnav}
+          cadenaArticulo2={Prod_Campos_Det}
+          Det={Det}
+        />
+      }
 
       <header id="header-busqueda" className="text-center fixed-top">
         <div className="container">
@@ -118,16 +178,29 @@ function Articulos() {
         </div>
       ) : (
         <div className="Resultado-api">
+          {Grid === "S" ? (
+            <div className="alert alert-warning" role="alert">
+              Esta vista es por Defecto
+            </div>
+          ) : null}
           <table className="table table-mobile-responsive table-mobile-sided mt-5">
             <thead>
               <tr>
-                {titulosColumnas.map((item) => {
-                  return (
-                    <th scope="col" key={item[0]}>
-                      {item[1]}
-                    </th>
-                  );
-                })}
+                {Grid === "S"
+                  ? titulosColumnasDefecto.map((item) => {
+                      return (
+                        <th scope="col" key={item[0]}>
+                          {item[1]}
+                        </th>
+                      );
+                    })
+                  : titulosColumnas.map((item) => {
+                      return (
+                        <th scope="col" key={item[0]}>
+                          {item[1]}
+                        </th>
+                      );
+                    })}
                 <th scope="col">Ver mas</th>
               </tr>
             </thead>

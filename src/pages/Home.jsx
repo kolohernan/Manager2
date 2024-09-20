@@ -64,7 +64,8 @@ const Home = () => {
         if (json?.[0].Estado === "OK") {
           console.log(json?.[0].Estado);
           //Guardo los datos en la variable User
-          /*const User = {
+          /*
+          const User = {
             Nombre_Usuario: json?.[0].Nombre_Usuario,
             Apellido_Usuario: json?.[0].Apellido_Usuario,
             Session_Id: json?.[0].Session_Id,
@@ -79,10 +80,13 @@ const Home = () => {
             Cli_Campos_Grid: json2?.[0].Cli_Campos_Grid,
             Cli_Campos_Det: json2?.[0].Cli_Campos_Det,
             Cli_Cta_Cte_Sn: json2?.[0].Cli_Cta_Cte_Sn, //Muestra o no botón de consulta de Cuenta Corriente
+            //Cli_Cta_Cte_Sn: "N",
             Cli_Descarga_Sn: json2?.[0].Cli_Descarga_Sn, //Permite o no descarga de datos
             Cli_Descarga_Cpbte_Sn: json2?.[0].Cli_Descarga_Cpbte_Sn, //Permite o no descarga de comprobantes
-            Cod_Rol: json2?[0].Cod_Rol,
-          };*/
+            Cod_Rol: json2?.[0].Cod_Rol,
+            //Cod_Rol: null,
+          };
+          */
 
           const User = {
             Nombre_Usuario: "Hernan",
@@ -92,43 +96,41 @@ const Home = () => {
             Entidad_Tipo: "USR", //Puede ser VEN | CLI | USR
             Entidad_Codigos: 6596,
             Prod_Sn: "S",
-            Prod_Campos_Grid:
-              "<Codsigo:Articulosss><Descripcion:Detalles><Desc_Rubro:Rubros><Stock:Cantidades>",
-            Prod_Campos_Det:
-              "<Codigo:Articulosss><Descripcion:Detalles><Desc_Rubro:Rubros><Stock:Cantidades>",
+            //Prod_Campos_Grid: "<Codigo:Articulosss><Descripcion:Detalles><Desc_Rubro:Rubros><Stock:Cantidades>",
+            Prod_Campos_Grid: null,
+            Prod_Campos_Det: "<Desc_Rubro:Rubros><Stock:Cantidades>",
             Prod_Descarga_Sn: "S",
             Cli_Sn: "S",
             Cli_Campos_Grid:
               "<Codigo:Codio><Razon_Social:Razon Social><Direccion:Direccion><Ciudad_Desc:Ciudad>",
-            Cli_Campos_Det:
-              "<Codigo:Codigo><Razon_Social:Razon Social><Direccion:Direccion><Ciudad_Desc:Ciudad>",
+            Cli_Campos_Det: "<Direccion:One Direccion><Ciudad_Desc:Ciudad>",
             Cli_Cta_Cte_Sn: "S",
             Cli_Descarga_Sn: "S",
             Cli_Descarga_Cpbte_Sn: "N",
-            Cod_Rol: "lal",
+            Cod_Rol: 1,
           };
 
-          //Guardo los datos de User en la vatiable Usuario
-          setUsuario(User);
-          console.log("datos de usuario", User);
-          //Guardo los datos en el localstorage
-          localStorage.setItem("credenciales", JSON.stringify(User));
-          setrolCliente(User.Cod_Rol);
-          console.log("datos en col_rol", User.Cod_Rol);
-          //Seteo variable asi muestro el cartel de bienvenido
-          setokuser(true);
-          //Hago una pausa y redirijo al dashboard
-          const sleep = (ms) =>
-            new Promise((resolve) => setTimeout(resolve, ms));
-          sleep(1000).then(() => {
-            if (User.Cod_Rol === null) {
-              setokrol("N");
-            } else {
-              setokrol("S");
+          /////////////////////////////////////////////////////////////////
+          if (User.Cod_Rol === null) {
+            setokrol("N");
+          } else {
+            setokrol("S");
+            //Guardo los datos de User en la vatiable Usuario
+            setUsuario(User);
+            //Guardo los datos en el localstorage
+            localStorage.setItem("credenciales", JSON.stringify(User));
+            setrolCliente(User.Cod_Rol);
+            //Seteo variable asi muestro el cartel de bienvenido
+            setokuser(true);
+            //Hago una pausa y redirijo al dashboard
+            const sleep = (ms) =>
+              new Promise((resolve) => setTimeout(resolve, ms));
+            sleep(1000).then(() => {
               queryClient.invalidateQueries(["estado"]);
               navigate(`/${params.id}/Dashboard/`);
-            }
-          });
+            });
+          }
+          /////////////////////////////////////////////////////////////////
         }
       } else {
         setErroruser(true);
@@ -245,13 +247,11 @@ const Home = () => {
                 </p>
               </div>
             ) : null}
-            {okuser && okrol !== "S" ? (
+            {okuser && okrol === "S" ? (
               <div className="alert alert-success fade show mt-2 d-block text-center">
                 <p>
                   Bienvenido{" "}
                   <strong>
-                    {console.log("datos en rolCliente", rolCliente)}
-                    {console.log(usuario.Nombre_Usuario)}
                     {usuario.Nombre_Usuario} {usuario.Apellido_Usuario}
                   </strong>
                 </p>
