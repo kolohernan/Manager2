@@ -31,3 +31,6 @@
 .btn-close.btn-close-black:hover {
   background-color: rgb(241, 50, 12);
 }
+.footer-Manager {
+  background-color: rgb(255, 83, 49) !important;
+}

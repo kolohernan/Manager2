@@ -86,7 +86,7 @@ const Home = () => {
             Cod_Rol: json2?.[0].Cod_Rol,
             //Cod_Rol: null,
           };
-          */
+            */
 
           const User = {
             Nombre_Usuario: "Hernan",
@@ -96,9 +96,12 @@ const Home = () => {
             Entidad_Tipo: "USR", //Puede ser VEN | CLI | USR
             Entidad_Codigos: 6596,
             Prod_Sn: "S",
-            //Prod_Campos_Grid: "<Codigo:Articulosss><Descripcion:Detalles><Desc_Rubro:Rubros><Stock:Cantidades>",
-            Prod_Campos_Grid: null,
+            Prod_Campos_Grid:
+              "<Codigo:Articulos><Descripcion:Detalles><Desc_Rubro:Rubros><Stock:Cantidades>",
+            //Prod_Campos_Grid: null,
+            //Prod_Campos_Grid: "<Codio:Articulosss><Descripcion:Detalles><Desc_Rubro:Rubros><Stock:Cantidades>",
             Prod_Campos_Det: "<Desc_Rubro:Rubros><Stock:Cantidades>",
+            //Prod_Campos_Det: null,
             Prod_Descarga_Sn: "S",
             Cli_Sn: "S",
             Cli_Campos_Grid:

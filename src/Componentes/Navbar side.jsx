@@ -9,6 +9,11 @@ function Navbarside({ datosnav, cadenaArticulo2, Det }) {
 
   //separar la cadena con la funcion declarada
   const titulosColumnasNav = parseColumnTitles(ArticuloUsuario2);
+
+  const titulosColumnasDefectoNav = [
+    ["Codigo", "Codigo"],
+    ["Descripcion", "Descripcion"],
+  ];
   //console.log("lo que llego del parse de las columnas", titulosColumnasNav);
 
   return (
@@ -37,16 +42,27 @@ function Navbarside({ datosnav, cadenaArticulo2, Det }) {
         ) : null}
         <div className="offcanvas-body">
           <ul className="list-group list-group-flush">
-            {titulosColumnasNav.map((item) => {
-              return (
-                <li
-                  className="list-group-item d-flex justify-content-between align-items-start"
-                  key={item[0]}
-                >
-                  {item[1]} - {datosnav?.[item[0]]}
-                </li>
-              );
-            })}
+            {Det === "S"
+              ? titulosColumnasDefectoNav.map((item) => {
+                  return (
+                    <li
+                      className="list-group-item d-flex justify-content-between align-items-start"
+                      key={item[0]}
+                    >
+                      {item[1]} - {datosnav?.[item[0]]}
+                    </li>
+                  );
+                })
+              : titulosColumnasNav.map((item) => {
+                  return (
+                    <li
+                      className="list-group-item d-flex justify-content-between align-items-start"
+                      key={item[0]}
+                    >
+                      {item[1]} - {datosnav?.[item[0]]}
+                    </li>
+                  );
+                })}
           </ul>
         </div>
       </div>

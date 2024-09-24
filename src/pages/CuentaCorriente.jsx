@@ -2,7 +2,7 @@ import { useEffect, useState, Fragment, useMemo, useCallback } from "react";
 import { useParams, useLocation } from "react-router-dom";
 import BotonExcelPersonalizado from "../funciones/BotonExcelPersonalizado";
 import { useUserContext } from "../context/UserContext";
-import { parseColumnTitles } from "../funciones/Utilidades";
+import { parseColumnTitles, consultaSesion } from "../funciones/Utilidades";
 
 function CuentaCorriente() {
   const params = useParams();
@@ -13,34 +13,13 @@ function CuentaCorriente() {
   const [Url, setUrl] = useState(null);
   const url_cuenta = `/Dashboard/Clientes/${params.cuentaCorriente}`;
   //const url_cuenta = window.location.href;
-  console.log("url cuenta", url_cuenta);
-  console.log("protocolo", window.location.protocol);
-  console.log("hostname", window.location.hostname);
-  console.log("pathname", window.location.pathname);
-  console.log("href", window.location.href);
+  //console.log("url cuenta", url_cuenta);
+  //console.log("protocolo", window.location.protocol);
+  //console.log("hostname", window.location.hostname);
+  //console.log("pathname", window.location.pathname);
+  //console.log("href", window.location.href);
 
   const [clientes, setclientes] = useState(null);
-
-  let Cli_Campos_Grid;
-  let Cli_Campos_Det;
-  let Grid;
-  let Det;
-  if (usuario.Cli_Campos_Grid === null || usuario.Cli_Campos_Grid === "") {
-    Cli_Campos_Grid = "<Codigo><Razon_Social>";
-    Grid = "S";
-  } else {
-    Cli_Campos_Grid = usuario.Cli_Campos_Grid;
-  }
-
-  if (usuario.Cli_Campos_Det === null || usuario.Cli_Campos_Det === "") {
-    Cli_Campos_Det = Cli_Campos_Grid;
-    Det = "S";
-  } else {
-    Cli_Campos_Det = usuario.Cli_Campos_Det;
-  }
-
-  //separar la cadena con la funcion declarada
-  const titulosColumnas = parseColumnTitles(Cli_Campos_Grid);
 
   //Obtengo la longitud de la URL
   let clienteLongitud = url_cuenta.length;
@@ -55,8 +34,6 @@ function CuentaCorriente() {
       // declaramos que se está cargando y limpiamos el error si hay alguno
       setIsLoading(true);
       setError(false);
-      const lala = `${urlDominio}Api_Clientes/Consulta?key=${key}&campo=ID&valor=${url_codCliente}`;
-      console.log("url del lalallalal", lala);
       console.log("url del clientes", url_codCliente);
       const responseCliente = await fetch(
         `${urlDominio}Api_Clientes/Consulta?key=${key}&campo=ID&valor=${url_codCliente}`
@@ -86,19 +63,18 @@ function CuentaCorriente() {
     "-11": "Datos no encontrados",
     //....
   };
+
   /* Obtener las fechas necesarias para inicializar */
   const date = new Date();
   let currentDay = String(date.getDate()).padStart(2, "0");
   let currentMonth = String(date.getMonth() + 1).padStart(2, "0");
   let currentYear = date.getFullYear();
   let currentDate = `${currentYear}-${currentMonth}-${currentDay}`;
-  console.log("currentdate", currentDate);
   let firstDayDate = `${currentYear}-${currentMonth}-01`;
 
   /* Inicializo la variables de estado par aguardar las fechas*/
   const [dateDesde, setdateDesde] = useState(firstDayDate);
   const [dateHasta, setdateHasta] = useState(currentDate);
-  console.log("datehasta", dateHasta);
   //const codCliente = clientesCC.Codigo;
   const [searchResult, setSearchResult] = useState([]);
   //estado para mostrar si está cargando
@@ -117,10 +93,11 @@ function CuentaCorriente() {
       const response = await fetch(
         `${urlDominio}Api_Clientes/ConsultaSaldoDet?key=${key}&cliente=cli${url_codCliente}vend&origen=*&rango_periodico=periodo&fecha_desde=${dateDesde}&fecha_hasta=${dateHasta}T23:59:59`
       );
+
       // importante llamar a `.json` para obtener la respuesta
 
-      //const json = await response.json();
-
+      const json = await response.json();
+      /*
       const json = [
         {
           Origen: "AAA",
@@ -290,7 +267,7 @@ function CuentaCorriente() {
           Campo3_Num: 0,
         },
       ];
-
+      */
       // guardamos lo que sea relevante de la request en el estado q declaramos para los resultados.
       // en este caso la respuesta tiene un `items` que tiene la lista de usuarios de github que dio como resultado
       setSearchResult(json);
@@ -317,6 +294,7 @@ function CuentaCorriente() {
   // Funcion del boton
   const handleSubmit = async (e) => {
     e.preventDefault();
+    consultaSesion();
     // probamos hacer algo.. si falla nos vamos al catch
     fetchCuentaCorriente();
   };
@@ -325,30 +303,92 @@ function CuentaCorriente() {
     // Registro de origins { "AAA":[result1, result2,] }
     const groups = {};
     const acum = {};
-
-    for (const result of searchResult) {
-      // calculo el sando acumulado
-      acum[result.Origen] = acum[result.Origen]
-        ? acum[result.Origen] + result.Importe
-        : result.Importe;
-      groups[result.Origen] = groups[result.Origen]
-        ? [...groups[result.Origen], result]
-        : [result];
+    if (!searchResult || searchResult.length === 0) {
+      return []; // devuelve un array vacío si no hay datos
+    } else {
+      console.log("valor del searchResult LPMLPMLPMLPMLPMLPM", searchResult);
+      for (const result of searchResult) {
+        // calculo el sando acumulado
+        acum[result.Origen] = acum[result.Origen]
+          ? acum[result.Origen] + result.Importe
+          : result.Importe;
+        groups[result.Origen] = groups[result.Origen]
+          ? [...groups[result.Origen], result]
+          : [result];
+      }
     }
     return { groups, acum };
   }, [searchResult]);
 
   useEffect(() => {
     // esto es asyncrono
+    consultaSesion();
     fetchCliente();
     fetchCuentaCorriente();
     //...
   }, []);
+
   useEffect(() => {
     Url?.map((url) => {
       setclientes(url);
     });
   }, [Url]);
+
+  ///////////////////////////////////////////////////////////////////////
+
+  let Cli_Campos_Grid;
+  let Cli_Campos_Det;
+  let Grid;
+  let Det;
+  if (usuario.Cli_Campos_Grid === null || usuario.Cli_Campos_Grid === "") {
+    Cli_Campos_Grid = "<Codigo><Razon_Social>";
+    Grid = "S";
+  } else {
+    Cli_Campos_Grid = usuario.Cli_Campos_Grid;
+  }
+
+  if (usuario.Cli_Campos_Det === null || usuario.Cli_Campos_Det === "") {
+    Cli_Campos_Det = Cli_Campos_Grid;
+    Det = "S";
+  } else {
+    Cli_Campos_Det = usuario.Cli_Campos_Det;
+  }
+
+  //separar la cadena con la funcion declarada
+  const titulosColumnas = parseColumnTitles(Cli_Campos_Grid);
+
+  console.log("Valor de URL", Url);
+  if (!Url) {
+    return (
+      <div className="Resultado-api d-flex text-center">
+        <h5 className="mx-5">Cargando</h5>
+        <div className="spinner-border text-warning" role="status">
+          <span className="visually-hidden">Cargando...</span>
+        </div>
+      </div>
+    );
+  } else {
+    const claves = Object.keys(Url[0]);
+    //console.log("RESULTADO EN DONDE TENGO QUE BUSCAR LAS CLAVES", claves);
+
+    titulosColumnas.forEach((titulo) => {
+      const valor = titulo[0];
+      if (!claves.includes(valor)) {
+        console.log(`El valor ${valor} no se encuentra en la lista de claves`);
+        Grid = "S";
+      } else {
+        console.log(`todos los valores se encontraron`);
+      }
+    });
+  }
+  console.log(`VALOR DE DET`, Det);
+
+  const titulosColumnasDefecto = [
+    ["Codigo", "Codigo"],
+    ["Razon_Social", "Razon Social"],
+  ];
+
+  ///////////////////////////////////////////////////////////////////////
 
   if (!clientes) {
     <></>;
@@ -379,14 +419,46 @@ function CuentaCorriente() {
               data-bs-parent="#accordionFlush"
             >
               <div className="accordion-body">
-                <p>
-                  <b>Codigo: </b> {clientes.Codigo} <b>CUIT: </b>
-                  {clientes.Cuit}
-                </p>
-                <p>
-                  <b>Email: </b> {clientes.Email} <b>Tel: </b>
-                  {clientes.Telefono}
-                </p>
+                <table className="table table-mobile-responsive table-mobile-sided mt-1">
+                  <thead>
+                    <tr>
+                      {titulosColumnas.map((item) => {
+                        return (
+                          <th scope="col" key={item[0]}>
+                            {item[1]}
+                          </th>
+                        );
+                      })}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {/* Recorremos el array con map*/}
+                    {Url?.map((Clientes) => {
+                      //console.log("dentro del map", Url);
+                      //->
+                      const clientesConKeysEnMinusculas = Object.fromEntries(
+                        Object.entries(Clientes).map(([k, v]) => {
+                          return [k.toLowerCase(), v];
+                        })
+                      );
+                      return (
+                        <tr key={clientesConKeysEnMinusculas.codigo}>
+                          {titulosColumnas.map((item) => {
+                            return (
+                              <td data-content={item[1]} key={item[0]}>
+                                {
+                                  clientesConKeysEnMinusculas[
+                                    item[0].toLowerCase()
+                                  ]
+                                }
+                              </td>
+                            );
+                          })}
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
@@ -425,7 +497,7 @@ function CuentaCorriente() {
 
         {isLoading ? (
           <div className="d-flex text-center">
-            <h5 className="mx-5">Cargando aa</h5>
+            <h5 className="mx-5">Cargando</h5>
             <div className="spinner-border text-warning" role="status">
               <span className="visually-hidden">Cargando...</span>
             </div>
@@ -458,8 +530,8 @@ function CuentaCorriente() {
               Error, no se han recuperado datos entre las fechas consultadas.
             </div>
           </div>
-        ) : (
-          /** object entries transforma el objeto en array polemicamente.*/
+        ) : /** object entries transforma el objeto en array polemicamente.*/
+        groupsByOrigen && groupsByOrigen.groups ? (
           Object.entries(groupsByOrigen.groups).map(
             ([origen, item], indexOrigen) => {
               return (
@@ -599,6 +671,13 @@ function CuentaCorriente() {
               );
             }
           )
+        ) : (
+          <div className="d-flex text-center">
+            <h5 className="mx-5">Cargando</h5>
+            <div className="spinner-border text-warning" role="status">
+              <span className="visually-hidden">Cargando...</span>
+            </div>
+          </div>
         )}
         <div className="text-end">
           {usuario?.Cli_Descarga_Sn === "N" ? null : (
