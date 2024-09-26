@@ -33,8 +33,6 @@ const Layout = () => {
     return arraysParams[1];
   }, [arraysParams]);
 
-  const [isStylesheetLoaded, setIsStylesheetLoaded] = useState(false);
-
   useEffect(() => {
     setDominio(dominio);
     setToken(token);
@@ -42,8 +40,6 @@ const Layout = () => {
 
   // LEO LOS DATOS DEL ARCHIVO CSV
   useLeerCSV(dominio);
-
-  //SETEO EL ESTILO DEPENDIENDO DEL DOMINIO
 
   //Obtengo los datos del tipo de usuario con el token
   useEffect(() => {

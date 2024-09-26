@@ -85,6 +85,8 @@
 
 .Resultado-api {
   padding-top: 200px !important;
+  background-color: #dfe0e1;
+  min-height: 250px;
 }
 .Resultado-api table {
   margin-top: 0 !important;
@@ -92,7 +94,7 @@
 
 .Resultado-api tbody tr:hover {
   transition: background-color 150ms ease-out 0.5s;
-  background-color: #dfe0e1;
+  background-color: #f8f9fa !important;
 }
 #container-loading {
   background-color: #f8f9fa !important;

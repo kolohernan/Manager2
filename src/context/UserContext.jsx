@@ -11,6 +11,8 @@ const UserProvider = ({ children }) => {
   const [key, setKey] = useState(null);
   const [Css, setCss] = useState(false);
   const [login, setLogin] = useState(null);
+  const [fav, setFav] = useState(null);
+  const [txtfooter, setTxtfooter] = useState(null);
 
   // if (usuario) // false si nul
 
@@ -33,6 +35,10 @@ const UserProvider = ({ children }) => {
         setCss,
         login,
         setLogin,
+        fav,
+        setFav,
+        txtfooter,
+        setTxtfooter,
       }}
     >
       {children}

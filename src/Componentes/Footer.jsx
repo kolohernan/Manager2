@@ -1,9 +1,13 @@
+import { useUserContext } from "../context/UserContext";
 function Footer() {
+  const { txtfooter } = useUserContext();
   return (
     <footer className="footer mt-auto py-2 bg-dark fixed-bottom footer-Manager">
-      <div className="container">
-        <span className="text-white">Manager Software de gestion 2023</span>
-      </div>
+      {/*muestro el texto del footer obtenido en la funcion useLeerCSV que se ejecuta en el layaout*/}
+      <div
+        className="container"
+        dangerouslySetInnerHTML={{ __html: txtfooter }}
+      />
     </footer>
   );
 }

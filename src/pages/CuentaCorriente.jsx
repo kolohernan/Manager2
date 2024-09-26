@@ -75,6 +75,8 @@ function CuentaCorriente() {
   /* Inicializo la variables de estado par aguardar las fechas*/
   const [dateDesde, setdateDesde] = useState(firstDayDate);
   const [dateHasta, setdateHasta] = useState(currentDate);
+  // estado que sirve para ver si ejecuto el cargando cuando corresponde que este buscando.
+  const [isSearching, setIsSearching] = useState(false);
   //const codCliente = clientesCC.Codigo;
   const [searchResult, setSearchResult] = useState([]);
   //estado para mostrar si está cargando
@@ -295,9 +297,13 @@ function CuentaCorriente() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     consultaSesion();
-    // probamos hacer algo.. si falla nos vamos al catch
+    setIsSearching(true);
     fetchCuentaCorriente();
   };
+  useEffect(() => {
+    setSearchResult([]);
+    setIsSearching(false);
+  }, [dateDesde, dateHasta]);
 
   const groupsByOrigen = useMemo(() => {
     // Registro de origins { "AAA":[result1, result2,] }
@@ -355,7 +361,7 @@ function CuentaCorriente() {
   }
 
   //separar la cadena con la funcion declarada
-  const titulosColumnas = parseColumnTitles(Cli_Campos_Grid);
+  const titulosColumnas = parseColumnTitles(Cli_Campos_Det);
 
   console.log("Valor de URL", Url);
   if (!Url) {
@@ -528,6 +534,13 @@ function CuentaCorriente() {
             </svg>
             <div>
               Error, no se han recuperado datos entre las fechas consultadas.
+            </div>
+          </div>
+        ) : isSearching && !groupsByOrigen.groups ? (
+          <div className="d-flex text-center">
+            <h5 className="mx-5">Cargando</h5>
+            <div className="spinner-border text-warning" role="status">
+              <span className="visually-hidden">Cargando...</span>
             </div>
           </div>
         ) : /** object entries transforma el objeto en array polemicamente.*/
