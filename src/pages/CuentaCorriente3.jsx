@@ -1,18 +1,15 @@
 import { useEffect, useState, Fragment, useMemo, useCallback } from "react";
-import { useParams, useLocation, useNavigate } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import BotonExcelPersonalizado from "../funciones/BotonExcelPersonalizado";
 import { useUserContext } from "../context/UserContext";
-import {
-  parseColumnTitles,
-  consultaSesion,
-  funcionLogout,
-} from "../funciones/Utilidades";
+import { parseColumnTitles, consultaSesion } from "../funciones/Utilidades";
+import { axiosInstance } from "../funciones/axios-instance";
+import { useMutation } from "@tanstack/react-query";
 
 function CuentaCorriente() {
   const params = useParams();
   //console.log("kolo", params);
 
-  const navigate = useNavigate();
   //traigo la cadena del Usercontext
   const { urlDominio, key, usuario } = useUserContext();
   const [Url, setUrl] = useState(null);
@@ -23,29 +20,8 @@ function CuentaCorriente() {
   //console.log("hostname", window.location.hostname);
   //console.log("pathname", window.location.pathname);
   //console.log("href", window.location.href);
+
   const [clientes, setclientes] = useState(null);
-
-  //estado para guardar el estado de sesion
-  const [estado, setEstado] = useState("");
-  const [CargaIncial, setCargaIncial] = useState("S");
-  const obtenerEstado = async () => {
-    const estadoSesion = await consultaSesion(urlDominio, key);
-    setEstado(estadoSesion);
-  };
-  useEffect(() => {
-    obtenerEstado();
-  }, []);
-
-  useEffect(() => {
-    if (estado === "N") {
-      navigate(`/${params.id}/`);
-      funcionLogout();
-    }
-  }, []);
-
-  useEffect(() => {
-    setCargaIncial("N");
-  }, []);
 
   //Obtengo la longitud de la URL
   let clienteLongitud = url_cuenta.length;
@@ -98,247 +74,58 @@ function CuentaCorriente() {
   let currentDate = `${currentYear}-${currentMonth}-${currentDay}`;
   let firstDayDate = `${currentYear}-${currentMonth}-01`;
 
+  const [cargaInicial, setCargaInicial] = useState(true);
+
   /* Inicializo la variables de estado par aguardar las fechas*/
   const [dateDesde, setdateDesde] = useState(firstDayDate);
   const [dateHasta, setdateHasta] = useState(currentDate);
-  // estado que sirve para ver si ejecuto el cargando cuando corresponde que este buscando.
-  const [isSearching, setIsSearching] = useState(false);
   //const codCliente = clientesCC.Codigo;
-  const [searchResult, setSearchResult] = useState([]);
+  //const [searchResult, setSearchResult] = useState([]);
   //estado para mostrar si está cargando
   const [isLoading, setIsLoading] = useState(false);
   //estado para mostrar si hay un error
   const [error, setError] = useState("");
   // ejemplo de cadena que viene por el usuario
 
-  const fetchCuentaCorriente = async (e) => {
-    // probamos hacer algo.. si falla nos vamos al catch
-    try {
-      // declaramos que se está cargando y limpiamos el error si hay alguno
-      setIsLoading(true);
-      setError("");
-      // hacemos el fetch
-      const response = await fetch(
+  const {
+    mutate: fetchCuentaCorriente,
+    isPending,
+    isError,
+    data: searchResult,
+  } = useMutation({
+    mutationFn: async () => {
+      return axiosInstance.get(
         `${urlDominio}Api_Clientes/ConsultaSaldoDet?key=${key}&cliente=cli${url_codCliente}vend&origen=*&rango_periodico=periodo&fecha_desde=${dateDesde}&fecha_hasta=${dateHasta}T23:59:59`
       );
-
-      // importante llamar a `.json` para obtener la respuesta
-
-      const json = await response.json();
-      /*
-      const json = [
-        {
-          Origen: "AAA",
-          Orden: "1",
-          Fecha: "2024-01-01T00:00:00",
-          Cliente: "6596",
-          Documento: "Saldo Anteriorss",
-          Transaccion: "",
-          Tipocomprobante: "",
-          Ptoventa: "",
-          Nro: "",
-          Tipodepago: "CC",
-          Estado: "P",
-          Importe: 327859.08,
-          Exportado_Pdf_Sn: "",
-          Url_Ubicacion: "",
-          Desc_Cpbte: "Saldo Anterior",
-          Campo1_String: "",
-          Campo2_String: "",
-          Campo3_String: "",
-          Campo1_Num: 0,
-          Campo2_Num: 0,
-          Campo3_Num: 0,
-        },
-        {
-          Origen: "AAA",
-          Orden: "2",
-          Fecha: "2024-01-05T09:19:07.65",
-          Cliente: "6596",
-          Documento: "Recibo",
-          Transaccion: "RC",
-          Tipocomprobante: "R",
-          Ptoventa: "0003",
-          Nro: "00005757",
-          Tipodepago: "CC",
-          Estado: "",
-          Importe: -11859.08,
-          Exportado_Pdf_Sn: "S",
-          Url_Ubicacion:
-            "chiarottotal.ddns.net:3381/cpbtes_a/240105_RCR000300005757_6596.pdf",
-          Desc_Cpbte: "RC R 0003-00005757",
-          Campo1_String: "05/01/2024",
-          Campo2_String: "",
-          Campo3_String: "",
-          Campo1_Num: 0,
-          Campo2_Num: 0,
-          Campo3_Num: 0,
-        },
-        {
-          Origen: "BBB",
-          Orden: "2",
-          Fecha: "2024-01-16T14:58:33.131",
-          Cliente: "6596",
-          Documento: "Factura",
-          Transaccion: "FC",
-          Tipocomprobante: "A",
-          Ptoventa: "0003",
-          Nro: "00006780",
-          Tipodepago: "CC",
-          Estado: "S",
-          Importe: 448347,
-          Exportado_Pdf_Sn: "S",
-          Url_Ubicacion:
-            "chiarottotal.ddns.net:3381/cpbtes_a/240116_FCA000300006780_6596.pdf",
-          Desc_Cpbte: "FC A 0003-00006780",
-          Campo1_String: "16/01/2024",
-          Campo2_String: "",
-          Campo3_String: "",
-          Campo1_Num: 0,
-          Campo2_Num: 0,
-          Campo3_Num: 0,
-        },
-        {
-          Origen: "AAA",
-          Orden: "2",
-          Fecha: "2024-01-18T14:33:06.545",
-          Cliente: "6596",
-          Documento: "Recibo",
-          Transaccion: "RC",
-          Tipocomprobante: "R",
-          Ptoventa: "0003",
-          Nro: "00005856",
-          Tipodepago: "CC",
-          Estado: "",
-          Importe: -316000,
-          Exportado_Pdf_Sn: "S",
-          Url_Ubicacion:
-            "chiarottotal.ddns.net:3381/cpbtes_a/240118_RCR000300005856_6596.pdf",
-          Desc_Cpbte: "RC R 0003-00005856",
-          Campo1_String: "18/01/2024",
-          Campo2_String: "",
-          Campo3_String: "",
-          Campo1_Num: 0,
-          Campo2_Num: 0,
-          Campo3_Num: 0,
-        },
-        {
-          Origen: "BBB",
-          Orden: "2",
-          Fecha: "2024-01-22T09:39:28.324",
-          Cliente: "6596",
-          Documento: "Nota de Crédito",
-          Transaccion: "NC",
-          Tipocomprobante: "A",
-          Ptoventa: "0003",
-          Nro: "00001042",
-          Tipodepago: "CC",
-          Estado: "S",
-          Importe: -448347,
-          Exportado_Pdf_Sn: "S",
-          Url_Ubicacion:
-            "chiarottotal.ddns.net:3381/cpbtes_a/240122_NCA000300001042_6596.pdf",
-          Desc_Cpbte: "NC A 0003-00001042",
-          Campo1_String: "22/01/2024",
-          Campo2_String: "",
-          Campo3_String: "",
-          Campo1_Num: 0,
-          Campo2_Num: 0,
-          Campo3_Num: 0,
-        },
-        {
-          Origen: "AAA",
-          Orden: "2",
-          Fecha: "2024-01-22T09:43:10.425",
-          Cliente: "6596",
-          Documento: "Factura",
-          Transaccion: "FC",
-          Tipocomprobante: "A",
-          Ptoventa: "0003",
-          Nro: "00006826",
-          Tipodepago: "CC",
-          Estado: "S",
-          Importe: 542500,
-          Exportado_Pdf_Sn: "S",
-          Url_Ubicacion:
-            "chiarottotal.ddns.net:3381/cpbtes_a/240122_FCA000300006826_6596.pdf",
-          Desc_Cpbte: "FC A 0003-00006826",
-          Campo1_String: "22/01/2024",
-          Campo2_String: "",
-          Campo3_String: "",
-          Campo1_Num: 0,
-          Campo2_Num: 0,
-          Campo3_Num: 0,
-        },
-        {
-          Origen: "AAA",
-          Orden: "2",
-          Fecha: "2024-02-22T08:39:21.213",
-          Cliente: "6596",
-          Documento: "Recibo",
-          Transaccion: "RC",
-          Tipocomprobante: "R",
-          Ptoventa: "0003",
-          Nro: "00006095",
-          Tipodepago: "CC",
-          Estado: "",
-          Importe: -542500,
-          Exportado_Pdf_Sn: "S",
-          Url_Ubicacion:
-            "chiarottotal.ddns.net:3381/cpbtes_a/240222_RCR000300006095_6596.pdf",
-          Desc_Cpbte: "RC R 0003-00006095",
-          Campo1_String: "22/02/2024",
-          Campo2_String: "",
-          Campo3_String: "",
-          Campo1_Num: 0,
-          Campo2_Num: 0,
-          Campo3_Num: 0,
-        },
-      ];
-      */
-      // guardamos lo que sea relevante de la request en el estado q declaramos para los resultados.
-      // en este caso la respuesta tiene un `items` que tiene la lista de usuarios de github que dio como resultado
-      setSearchResult(json);
-
-      if (response.ok) {
-        console.log("CARGA INICIAL - llego bien busqueda cuenta corriente");
-      } else {
-        console.log("CARGA INICIAL - NO llego bien busqueda cuenta corriente");
-        setError(true);
+    },
+    onError: (e) => {
+      // if (response.status >= 400) {
+      //   throw new Error("Server responds with error!");
+      // }
+      if (e === "Deslogueado") {
+        navigate(`/${params.id}/`);
+        return;
       }
-      // mirá la consola para ver qué forma tiene (esto desp borralo)
-    } catch (e) {
-      //si hubo un error esto viene acá... entonces agregamos un mensaje para notificar al usuario de que algo salió mal (esto lo vas a tener que renderizar abajo vos después)
-      if (e?.Error_Code) setError(mapaLabelError[e.Error_Code]);
+      /*if (e?.Error_Code) setError(mapaLabelError[e.Error_Code]);*/
+      setError(e.message);
       // siempre está bueno loggear el error para debuggear
-      console.error(e);
-      //finally es para hacer cosas sin importar si hubo error o no. Ocurre siempre
-    } finally {
-      // no importa lo que pase, el "cargando" debería desactivarse cuando termina todo esto
-      setIsLoading(false);
-    }
-  };
+      //console.error(e);
+      console.log(e.message);
+    },
+    onSuccess: () => {
+      consultaSesion();
+    },
+  });
 
   // Funcion del boton
   const handleSubmit = async (e) => {
-    obtenerEstado();
-    if (estado === "N") {
-      navigate(`/${params.id}/`);
-      funcionLogout();
-    }
     e.preventDefault();
     consultaSesion();
-    setIsSearching(true);
     fetchCuentaCorriente();
+    setCargaInicial(false);
   };
   useEffect(() => {
-    obtenerEstado();
-    if (estado === "N") {
-      navigate(`/${params.id}/`);
-      funcionLogout();
-    }
-    setSearchResult([]);
-    setIsSearching(false);
+    consultaSesion();
   }, [dateDesde, dateHasta]);
 
   const groupsByOrigen = useMemo(() => {
@@ -363,16 +150,10 @@ function CuentaCorriente() {
   }, [searchResult]);
 
   useEffect(() => {
-    obtenerEstado();
-    if (estado === "N") {
-      navigate(`/${params.id}/`);
-      funcionLogout();
-    }
     // esto es asyncrono
     consultaSesion();
     fetchCliente();
     fetchCuentaCorriente();
-
     //...
   }, []);
 
@@ -404,7 +185,7 @@ function CuentaCorriente() {
 
   //separar la cadena con la funcion declarada
   const titulosColumnas = parseColumnTitles(Cli_Campos_Det);
-
+  console.log("Valor de GRUPOOOOOOOOOOOOOOO", Url);
   console.log("Valor de URL", Url);
   if (!Url) {
     return (
@@ -437,7 +218,10 @@ function CuentaCorriente() {
   ];
 
   ///////////////////////////////////////////////////////////////////////
-
+  console.log(
+    "estado en el que se encuentra el groupsByOrigen",
+    groupsByOrigen.length
+  );
   if (!clientes) {
     <></>;
   } else {
@@ -576,13 +360,6 @@ function CuentaCorriente() {
             </svg>
             <div>
               Error, no se han recuperado datos entre las fechas consultadas.
-            </div>
-          </div>
-        ) : isSearching && !groupsByOrigen.groups ? (
-          <div className="d-flex text-center">
-            <h5 className="mx-5">Cargando</h5>
-            <div className="spinner-border text-warning" role="status">
-              <span className="visually-hidden">Cargando...</span>
             </div>
           </div>
         ) : /** object entries transforma el objeto en array polemicamente.*/
@@ -726,9 +503,16 @@ function CuentaCorriente() {
               );
             }
           )
+        ) : groupsByOrigen.length === 0 ? (
+          <div id="carga-inicial" className="d-flex text-center">
+            <h5 className="mx-5">Carganasdasdasdasd</h5>
+            <div className="spinner-border text-warning" role="status">
+              <span className="visually-hidden">Cargando...</span>
+            </div>
+          </div>
         ) : (
-          <div className="d-flex text-center">
-            <h5 className="mx-5">Cargando</h5>
+          <div id="carga-inicial" className="d-flex text-center">
+            <h5 className="mx-5">Cargando al cambio</h5>
             <div className="spinner-border text-warning" role="status">
               <span className="visually-hidden">Cargando...</span>
             </div>

@@ -75,6 +75,10 @@
   background-color: #fff;
   color: #444444;
 }
+.btn-sesion {
+  padding: 5px 8px;
+  width: 100%;
+}
 .btn-login:focus,
 .btn-login:hover,
 .btn-login:active {
@@ -123,6 +127,44 @@
 .bg-navbar-manager {
   background-color: #ffc107;
   padding: 0;
+}
+.bg-navbar-manager .dropdown-manager {
+  background-color: #ffc107;
+  right: 0;
+  left: auto;
+  margin: 0 !important;
+  padding: 0 !important;
+  --bs-dropdown-min-width: 13rem;
+  border-radius: 5px;
+}
+.bg-navbar-manager .dropdown-manager li {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+.bg-navbar-manager .dropdown-manager .lista-manager {
+  border-bottom: 1px solid rgb(203, 214, 226) !important;
+}
+.bg-navbar-manager .dropdown-manager .lista-manager.lista-manager-fuente {
+  font-size: 0.75rem;
+}
+.bg-navbar-manager
+  .dropdown-manager
+  .lista-manager.lista-manager-fuente
+  ::marker {
+  color: #fff;
+}
+.bg-navbar-manager .dropdown-manager .lista-manager.lista-manager-fuente p {
+  padding-left: 1px !important;
+}
+.bg-navbar-manager .dropdown-manager li a,
+.bg-navbar-manager .dropdown-manager li p,
+.bg-navbar-manager .dropdown-manager li h4 {
+  padding: 8px 16px !important;
+  margin: 0 !important;
+  color: #fff;
+}
+.bg-navbar-manager .dropdown-manager li h3 {
+  font-weight: 600 !important;
 }
 .nav-link {
   color: #fff;

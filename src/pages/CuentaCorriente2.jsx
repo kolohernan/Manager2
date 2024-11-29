@@ -1,18 +1,13 @@
 import { useEffect, useState, Fragment, useMemo, useCallback } from "react";
-import { useParams, useLocation, useNavigate } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import BotonExcelPersonalizado from "../funciones/BotonExcelPersonalizado";
 import { useUserContext } from "../context/UserContext";
-import {
-  parseColumnTitles,
-  consultaSesion,
-  funcionLogout,
-} from "../funciones/Utilidades";
+import { parseColumnTitles, consultaSesion } from "../funciones/Utilidades";
 
 function CuentaCorriente() {
   const params = useParams();
   //console.log("kolo", params);
 
-  const navigate = useNavigate();
   //traigo la cadena del Usercontext
   const { urlDominio, key, usuario } = useUserContext();
   const [Url, setUrl] = useState(null);
@@ -23,29 +18,8 @@ function CuentaCorriente() {
   //console.log("hostname", window.location.hostname);
   //console.log("pathname", window.location.pathname);
   //console.log("href", window.location.href);
+
   const [clientes, setclientes] = useState(null);
-
-  //estado para guardar el estado de sesion
-  const [estado, setEstado] = useState("");
-  const [CargaIncial, setCargaIncial] = useState("S");
-  const obtenerEstado = async () => {
-    const estadoSesion = await consultaSesion(urlDominio, key);
-    setEstado(estadoSesion);
-  };
-  useEffect(() => {
-    obtenerEstado();
-  }, []);
-
-  useEffect(() => {
-    if (estado === "N") {
-      navigate(`/${params.id}/`);
-      funcionLogout();
-    }
-  }, []);
-
-  useEffect(() => {
-    setCargaIncial("N");
-  }, []);
 
   //Obtengo la longitud de la URL
   let clienteLongitud = url_cuenta.length;
@@ -98,13 +72,13 @@ function CuentaCorriente() {
   let currentDate = `${currentYear}-${currentMonth}-${currentDay}`;
   let firstDayDate = `${currentYear}-${currentMonth}-01`;
 
+  const [cargaInicial, setCargaInicial] = useState(true);
+
   /* Inicializo la variables de estado par aguardar las fechas*/
   const [dateDesde, setdateDesde] = useState(firstDayDate);
   const [dateHasta, setdateHasta] = useState(currentDate);
-  // estado que sirve para ver si ejecuto el cargando cuando corresponde que este buscando.
-  const [isSearching, setIsSearching] = useState(false);
   //const codCliente = clientesCC.Codigo;
-  const [searchResult, setSearchResult] = useState([]);
+  const [searchResult, setSearchResult] = useState([1]);
   //estado para mostrar si está cargando
   const [isLoading, setIsLoading] = useState(false);
   //estado para mostrar si hay un error
@@ -124,8 +98,8 @@ function CuentaCorriente() {
 
       // importante llamar a `.json` para obtener la respuesta
 
-      const json = await response.json();
-      /*
+      //const json = await response.json();
+
       const json = [
         {
           Origen: "AAA",
@@ -295,7 +269,7 @@ function CuentaCorriente() {
           Campo3_Num: 0,
         },
       ];
-      */
+
       // guardamos lo que sea relevante de la request en el estado q declaramos para los resultados.
       // en este caso la respuesta tiene un `items` que tiene la lista de usuarios de github que dio como resultado
       setSearchResult(json);
@@ -321,25 +295,11 @@ function CuentaCorriente() {
 
   // Funcion del boton
   const handleSubmit = async (e) => {
-    obtenerEstado();
-    if (estado === "N") {
-      navigate(`/${params.id}/`);
-      funcionLogout();
-    }
     e.preventDefault();
     consultaSesion();
-    setIsSearching(true);
     fetchCuentaCorriente();
+    setCargaInicial(false);
   };
-  useEffect(() => {
-    obtenerEstado();
-    if (estado === "N") {
-      navigate(`/${params.id}/`);
-      funcionLogout();
-    }
-    setSearchResult([]);
-    setIsSearching(false);
-  }, [dateDesde, dateHasta]);
 
   const groupsByOrigen = useMemo(() => {
     // Registro de origins { "AAA":[result1, result2,] }
@@ -348,7 +308,6 @@ function CuentaCorriente() {
     if (!searchResult || searchResult.length === 0) {
       return []; // devuelve un array vacío si no hay datos
     } else {
-      console.log("valor del searchResult LPMLPMLPMLPMLPMLPM", searchResult);
       for (const result of searchResult) {
         // calculo el sando acumulado
         acum[result.Origen] = acum[result.Origen]
@@ -363,18 +322,18 @@ function CuentaCorriente() {
   }, [searchResult]);
 
   useEffect(() => {
-    obtenerEstado();
-    if (estado === "N") {
-      navigate(`/${params.id}/`);
-      funcionLogout();
-    }
     // esto es asyncrono
     consultaSesion();
     fetchCliente();
     fetchCuentaCorriente();
-
     //...
-  }, []);
+  }, [key]);
+
+  useEffect(() => {
+    console.log("entro acaaaaaaaaaaaaaaaaaaaa");
+    setSearchResult([]);
+    consultaSesion();
+  }, [dateDesde, dateHasta]);
 
   useEffect(() => {
     Url?.map((url) => {
@@ -404,8 +363,6 @@ function CuentaCorriente() {
 
   //separar la cadena con la funcion declarada
   const titulosColumnas = parseColumnTitles(Cli_Campos_Det);
-
-  console.log("Valor de URL", Url);
   if (!Url) {
     return (
       <div className="Resultado-api d-flex text-center">
@@ -437,12 +394,16 @@ function CuentaCorriente() {
   ];
 
   ///////////////////////////////////////////////////////////////////////
-
+  console.log(
+    "CAAAAAAAAAAAAAAAAAAAAAARRRRRRRRRRRRRRRRRRRRRRRRGGGGGGGGGGGGGGGGGGGGGGAAAAAAAAAAAAAAAAAA",
+    cargaInicial
+  );
   if (!clientes) {
     <></>;
   } else {
     //Seteo el titulo de la pagina
     document.title = clientes.Razon_Social + " - Cuenta corriente";
+
     return (
       <>
         <h1 className="mb-5">DETALLE DE CUENTA CORRIENTE</h1>
@@ -576,13 +537,6 @@ function CuentaCorriente() {
             </svg>
             <div>
               Error, no se han recuperado datos entre las fechas consultadas.
-            </div>
-          </div>
-        ) : isSearching && !groupsByOrigen.groups ? (
-          <div className="d-flex text-center">
-            <h5 className="mx-5">Cargando</h5>
-            <div className="spinner-border text-warning" role="status">
-              <span className="visually-hidden">Cargando...</span>
             </div>
           </div>
         ) : /** object entries transforma el objeto en array polemicamente.*/
@@ -726,9 +680,16 @@ function CuentaCorriente() {
               );
             }
           )
+        ) : !cargaInicial ? null : cargaInicial ? (
+          <div id="carga-inicial" className="d-flex text-center">
+            <h5 className="mx-5">Cargando al inicio</h5>
+            <div className="spinner-border text-warning" role="status">
+              <span className="visually-hidden">Cargando...</span>
+            </div>
+          </div>
         ) : (
-          <div className="d-flex text-center">
-            <h5 className="mx-5">Cargando</h5>
+          <div id="carga-inicial" className="d-flex text-center">
+            <h5 className="mx-5">Cargando al cambio</h5>
             <div className="spinner-border text-warning" role="status">
               <span className="visually-hidden">Cargando...</span>
             </div>

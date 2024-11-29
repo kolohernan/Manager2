@@ -3,6 +3,9 @@
 #container-dashboard .card {
   background-color: rgb(255, 83, 49);
 }
+.bg-navbar-manager .dropdown-manager {
+  background-color: rgb(255, 83, 49);
+}
 #imagen-login {
   content: url("/src/assets/ctt.png");
 }

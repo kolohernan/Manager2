@@ -1,4 +1,8 @@
-import { parseColumnTitles, consultaSesion } from "../funciones/Utilidades";
+import {
+  parseColumnTitles,
+  consultaSesion,
+  funcionLogout,
+} from "../funciones/Utilidades";
 import NavsideClientes from "../Componentes/NavSide_clientes";
 import { useState, useEffect } from "react";
 import { useLocation, useParams, useNavigate } from "react-router-dom";
@@ -26,32 +30,63 @@ function Clientes() {
   const [search, setSearch] = useState("");
   //estado para mostrar si hay un error
   const [error, setError] = useState("");
-
   const [ruta, setRuta] = useState("");
   // ejemplo de cadena que viene por el usuario
   //ACA MANEJO LO QUE HACE EL BOTON DE BUSQUEDA
 
+  //estado para guardar el estado de sesion
+  const [estado, setEstado] = useState("");
+  const obtenerEstado = async () => {
+    const estadoSesion = await consultaSesion(urlDominio, key);
+    setEstado(estadoSesion);
+  };
+  useEffect(() => {
+    obtenerEstado();
+  }, []);
+
+  useEffect(() => {
+    if (estado === "N") {
+      navigate(`/${params.id}/`);
+      funcionLogout();
+    }
+  }, [estado]);
+
+  ////////////////////////////////////////////////////////////////////////////////////////
+
+  //const claves = Object.keys(data[0]);
+  //console.log("RESULTADO DE las claves", claves);
+
+  //console.log("titulos parseados", titulosColumnas);
+
+  ////////////////////////////////////////////////////////////////////////////////////////
+
   const handleSubmit = (e) => {
     e.preventDefault();
     buscarCliente();
+    obtenerEstado();
+    if (estado === "N") {
+      navigate(`/${params.id}/`);
+      funcionLogout();
+    }
   };
 
   useEffect(() => {
+    // Reemplazar espacios en blanco por '%'
+    const formattedSearch = search.replace(/ /g, "%");
     if (usuario?.Entidad_Tipo === "CLI") {
       setRuta(
-        `${urlDominio}Api_Clientes/Consulta?key=${key}&campo=ID&valor=${usuario?.Entidad_Codigos}`
+        `${urlDominio}Api_Clientes/Consulta?key=${key}&campo=IDS&valor=${usuario?.Entidad_Codigos}&error_sin_registros=false`
       );
       console.log(ruta);
       buscarCliente();
-    } else if (usuario?.Entidad_Tipo === "VEN") {
+    } else if (usuario?.Entidad_Tipo === "VND") {
       setRuta(
-        `${urlDominio}Api_Clientes/Consulta?key=${key}&campo=ID&valor=${usuario?.Entidad_Codigos}`
+        `${urlDominio}Api_Clientes/Consulta?key=${key}&campo=OTRO&valor=%${formattedSearch}%&vendcampo=IDS&vendvalor=${usuario?.Entidad_Codigos}&error_sin_registros=false`
       );
       console.log(ruta);
-      buscarCliente();
     } else {
       setRuta(
-        `${urlDominio}Api_Clientes/Consulta?key=${key}&campo=OTRO&valor=%${search}%`
+        `${urlDominio}Api_Clientes/Consulta?key=${key}&campo=OTRO&valor=%${formattedSearch}%&error_sin_registros=false`
       );
     }
   }, [
@@ -73,6 +108,10 @@ function Clientes() {
     data: searchResult,
   } = useMutation({
     mutationFn: async () => {
+      // Verificar si 'search' es nulo o está vacío
+      if (!search || search.trim() === "") {
+        throw new Error("El campo de búsqueda no puede estar vacío.");
+      }
       return axiosInstance.get(ruta);
     },
     onError: (e) => {
@@ -84,14 +123,13 @@ function Clientes() {
         return;
       }
       /*if (e?.Error_Code) setError(mapaLabelError[e.Error_Code]);*/
-      if (e?.Error_Code) setError(e.message);
+      setError(e.message);
       // siempre está bueno loggear el error para debuggear
       //console.error(e);
       console.log(e.message);
     },
     onSuccess: () => {
       SetVisible(true);
-      consultaSesion();
     },
   });
 
@@ -115,35 +153,14 @@ function Clientes() {
 
   //separar la cadena con la funcion declarada
   const titulosColumnas = parseColumnTitles(Cli_Campos_Grid);
-  //tarda en cargar
   ////////////////////////////////////////////////////////////////////////////////////////
-  const [data, setData] = useState(null);
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const response = await fetch(
-          `${urlDominio}Api_Clientes/Consulta?key=${key}&campo=ID&valor=6596`
-        );
-        const data = await response.json();
-        setData(data);
-      } catch (error) {
-        console.error("Error:", error);
-      }
-    }
-    fetchData();
-  }, [key]);
-
-  if (!data) {
-    return (
-      <div className="Resultado-api d-flex text-center">
-        <h5 className="mx-5">Cargando</h5>
-        <div className="spinner-border text-warning" role="status">
-          <span className="visually-hidden">Cargando...</span>
-        </div>
-      </div>
-    );
-  } else {
-    const claves = Object.keys(data[0]);
+  if (
+    searchResult &&
+    typeof searchResult === "object" &&
+    searchResult.data.length !== 0
+  ) {
+    console.log("valor de searchresulto", searchResult);
+    const claves = Object.keys(searchResult?.data[0]);
     console.log("RESULTADO EN DONDE TENGO QUE BUSCAR LAS CLAVES", claves);
 
     titulosColumnas.forEach((titulo) => {
@@ -156,7 +173,6 @@ function Clientes() {
       }
     });
   }
-  console.log(`VALOR DE DET`, Det);
 
   const titulosColumnasDefecto = [
     ["Codigo", "Codigo"],
@@ -212,8 +228,14 @@ function Clientes() {
         </div>
       ) : isError ? (
         <div className="Resultado-api d-flex text-center">
-          <h5 className="mx-5"></h5>
+          <h5 className="mx-5">{error}</h5>
         </div>
+      ) : searchResult?.data?.length == 0 ? (
+        <>
+          <div className="Resultado-api d-flex text-center">
+            <h5 className="mx-5">No se encontro ningun resultado</h5>
+          </div>
+        </>
       ) : (
         <div className="Resultado-api">
           {visible ? (
@@ -273,6 +295,16 @@ function Clientes() {
                             aria-controls="offcanvasDarkNavbar"
                             onClick={() => {
                               SetDatosnav(Clientes);
+                              obtenerEstado();
+                              console.log(
+                                "aca estoy en el boton de vermas",
+                                estado
+                              );
+                              if (estado === "N") {
+                                navigate(`/${params.id}/`);
+
+                                funcionLogout();
+                              }
                             }}
                           >
                             Ver mas

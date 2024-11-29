@@ -27,9 +27,8 @@ const Home = () => {
 
   const [rolCliente, setrolCliente] = useState(null);
   const [okrol, setokrol] = useState(null);
+  const [okperfil, setokperfil] = useState(null);
   //const [datos, setDatos] = useState(false);
-
-  //const [search, setSearch] = useState("");
 
   // estado para guardar el resultado de la búsqueda
   const [searchResult, setSearchResult] = useState([]);
@@ -40,6 +39,13 @@ const Home = () => {
 
   const queryClient = useQueryClient();
   //aca se define lo que hace el boton
+
+  // FUNCION PARA QUE INICIE SESION CON EL BOTON ENTER
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      onSubmit();
+    }
+  };
 
   const onSubmit = async (values) => {
     // probamos hacer algo.. si falla nos vamos al catch
@@ -64,8 +70,9 @@ const Home = () => {
         if (json?.[0].Estado === "OK") {
           console.log(json?.[0].Estado);
           //Guardo los datos en la variable User
-          /*
+
           const User = {
+            Cod_Usuario: json?.[0].Cod_Usuario,
             Nombre_Usuario: json?.[0].Nombre_Usuario,
             Apellido_Usuario: json?.[0].Apellido_Usuario,
             Session_Id: json?.[0].Session_Id,
@@ -80,21 +87,19 @@ const Home = () => {
             Cli_Campos_Grid: json2?.[0].Cli_Campos_Grid,
             Cli_Campos_Det: json2?.[0].Cli_Campos_Det,
             Cli_Cta_Cte_Sn: json2?.[0].Cli_Cta_Cte_Sn, //Muestra o no botón de consulta de Cuenta Corriente
-            //Cli_Cta_Cte_Sn: "N",
             Cli_Descarga_Sn: json2?.[0].Cli_Descarga_Sn, //Permite o no descarga de datos
             Cli_Descarga_Cpbte_Sn: json2?.[0].Cli_Descarga_Cpbte_Sn, //Permite o no descarga de comprobantes
             Cod_Rol: json2?.[0].Cod_Rol,
-            //Cod_Rol: null,
           };
-            */
 
+          /*
           const User = {
             Nombre_Usuario: "Hernan",
             Apellido_Usuario: "Mohadile",
             Session_Id: json?.[0].Session_Id,
             Solo_Web_Sn: json2?.[0].Solo_Web_Sn,
-            Entidad_Tipo: "USR", //Puede ser VEN | CLI | USR
-            Entidad_Codigos: 6596,
+            Entidad_Tipo: "CLI", //Puede ser VEN | CLI | USR
+            Entidad_Codigos: "|14|15|",
             Prod_Sn: "S",
             Prod_Campos_Grid:
               "<Codigo:Articulos><Descripcion:Detalles><Desc_Rubro:Rubros><Stock:Cantidades>",
@@ -112,12 +117,15 @@ const Home = () => {
             Cli_Descarga_Cpbte_Sn: "N",
             Cod_Rol: 1,
           };
-
+          */
           /////////////////////////////////////////////////////////////////
           if (User.Cod_Rol === null) {
             setokrol("N");
+          } else if (User.Entidad_Tipo === null) {
+            setokperfil("N");
           } else {
             setokrol("S");
+            setokperfil("S");
             //Guardo los datos de User en la vatiable Usuario
             setUsuario(User);
             //Guardo los datos en el localstorage
@@ -250,7 +258,17 @@ const Home = () => {
                 </p>
               </div>
             ) : null}
-            {okuser && okrol === "S" ? (
+            {okperfil === "N" ? (
+              <div className="alert alert-warning fade show mt-2 d-block text-center">
+                <p>
+                  Perfil No definido.
+                  <strong>
+                    {console.log("datos en rolCliente", rolCliente)}
+                  </strong>
+                </p>
+              </div>
+            ) : null}
+            {okuser && okrol && okperfil === "S" ? (
               <div className="alert alert-success fade show mt-2 d-block text-center">
                 <p>
                   Bienvenido{" "}

@@ -68,11 +68,12 @@ export const consultaSesion = async (urlDominio, key) => {
       );
       const json = await response.json();
       if (response.ok) {
-        console.log("Respuesta del login llego bien");
+        console.log("Respuesta del estado de sesion llego bien");
         console.log(json?.[0].Estado);
         Estado = json?.[0].Estado;
+        console.log("valor de estado", Estado);
       } else {
-        console.log("Respuesta del login llego mal");
+        console.log("Respuesta del estado de sesion llego mal");
       }
     } catch (error) {
       console.log("catch", error);
@@ -111,4 +112,29 @@ export const funcionLogout = async (urlDominio, key) => {
     //SetLogin(json)
   }
   return funcionLogout;
+};
+
+export const consultaEntidad = async (urlDominio, key, entidad, ruta) => {
+  //console.log("aca deberia llegar el dominio", urlDominio);
+  //console.log("aca deberia llegar la key", key);
+  //console.log("aca deberia llegar la entidad", entidad);
+  //const { SetLogin } = useUserContext();
+  try {
+    const response = await fetch(ruta);
+    //console.log("aca la respuesta del response", response);
+    const json = await response.json();
+    if (response.ok) {
+      console.log("Respuesta de la entidad llego bien");
+    } else {
+      console.log("Respuesta  de la entidad llego mal");
+    }
+    console.log(json);
+  } catch (e) {
+    console.log("aca muestro el error", e);
+  } finally {
+    console.log("finally");
+    //SetLogin(json)
+  }
+  console.log("consultaEntidad", consultaEntidad);
+  return consultaEntidad;
 };

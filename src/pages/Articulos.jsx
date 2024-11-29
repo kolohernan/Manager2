@@ -1,4 +1,8 @@
-import { parseColumnTitles, consultaSesion } from "../funciones/Utilidades";
+import {
+  parseColumnTitles,
+  consultaSesion,
+  funcionLogout,
+} from "../funciones/Utilidades";
 import Navbarside from "../Componentes/Navbar side";
 import { useState, useEffect } from "react";
 import { useLocation, useParams, useNavigate } from "react-router-dom";
@@ -29,6 +33,23 @@ function Articulos() {
   const [error, setError] = useState("");
   // ejemplo de cadena que viene por el usuario
 
+  //estado para guardar el estado de sesion
+  const [estado, setEstado] = useState("");
+  const obtenerEstado = async () => {
+    const estadoSesion = await consultaSesion(urlDominio, key);
+    setEstado(estadoSesion);
+  };
+  useEffect(() => {
+    obtenerEstado();
+  }, []);
+
+  useEffect(() => {
+    if (estado === "N") {
+      navigate(`/${params.id}/`);
+      funcionLogout();
+    }
+  }, [estado]);
+
   ////////////////////////////////////////////////////////////////////////////////////////
 
   //const claves = Object.keys(data[0]);
@@ -40,6 +61,11 @@ function Articulos() {
   const handleSubmit = (e) => {
     e.preventDefault();
     buscarArticulo();
+    obtenerEstado();
+    if (estado === "N") {
+      navigate(`/${params.id}/`);
+      funcionLogout();
+    }
   };
 
   const {
@@ -49,8 +75,14 @@ function Articulos() {
     data: searchResult,
   } = useMutation({
     mutationFn: async () => {
+      // Verificar si 'search' es nulo o está vacío
+      if (!search || search.trim() === "") {
+        throw new Error("El campo de búsqueda no puede estar vacío.");
+      }
+      // Reemplazar espacios en blanco por '%'
+      const formattedSearch = search.replace(/ /g, "%");
       return axiosInstance.get(
-        `${urlDominio}Api_Articulos/Consulta?key=${key}&campo=OTRO&valor=%${search}%`
+        `${urlDominio}Api_Articulos/Consulta?key=${key}&campo=OTRO&valor=%${formattedSearch}%&error_sin_registros=false`
       );
     },
     onError: (e) => {
@@ -61,18 +93,21 @@ function Articulos() {
         navigate(`/${params.id}/`);
         return;
       }
-      /*if (e?.Error_Code) setError(mapaLabelError[e.Error_Code]);*/
-      if (e?.Error_Code) setError(e.message);
+      setError(e.message);
       // siempre está bueno loggear el error para debuggear
       //console.error(e);
       console.log(e.message);
     },
     onSuccess: () => {
+      console.log("aca veo el resultado del searchresulto", searchResult?.data);
+      /* if (searchResult === undefined) {
+        throw new Error("No se encontraron resultados");
+      }
+        */
       SetVisible(true);
       consultaSesion();
     },
   });
-
   /*
   if (!searchResult) {
     return (
@@ -121,10 +156,13 @@ function Articulos() {
   //separar la cadena con la funcion declarada
   const titulosColumnas = parseColumnTitles(Prod_Campos_Grid);
 
-  null;
-  if (searchResult && typeof searchResult === "object") {
-    console.log("valor de searchresulto", searchResult);
-    const claves = Object.keys(searchResult.data[0]);
+  if (
+    searchResult &&
+    typeof searchResult === "object" &&
+    searchResult.data.length !== 0
+  ) {
+    console.log("valor de searchresulto", searchResult.data);
+    const claves = Object.keys(searchResult?.data[0]);
     console.log("RESULTADO EN DONDE TENGO QUE BUSCAR LAS CLAVES", claves);
 
     titulosColumnas.forEach((titulo) => {
@@ -190,8 +228,14 @@ function Articulos() {
         </div>
       ) : isError ? (
         <div className="Resultado-api d-flex text-center">
-          <h5 className="mx-5">Error</h5>
+          <h5 className="mx-5">{error}</h5>
         </div>
+      ) : searchResult?.data?.length == 0 ? (
+        <>
+          <div className="Resultado-api d-flex text-center">
+            <h5 className="mx-5">No se encontro ningun resultado</h5>
+          </div>
+        </>
       ) : (
         <div className="Resultado-api">
           {visible ? (
@@ -201,6 +245,7 @@ function Articulos() {
                   Esta vista es por Defecto
                 </div>
               ) : null}
+
               <table className="table table-mobile-responsive table-mobile-sided mt-5">
                 <thead>
                   <tr>
@@ -272,6 +317,16 @@ function Articulos() {
                             aria-controls="offcanvasDarkNavbar"
                             onClick={() => {
                               SetDatosnav(Articulos);
+                              obtenerEstado();
+                              console.log(
+                                "aca estoy en el boton de vermas",
+                                estado
+                              );
+                              if (estado === "N") {
+                                navigate(`/${params.id}/`);
+
+                                funcionLogout();
+                              }
                             }}
                           >
                             Ver mas
