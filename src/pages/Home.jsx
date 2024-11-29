@@ -83,6 +83,9 @@ const Home = () => {
             Prod_Campos_Grid: json2?.[0].Prod_Campos_Grid,
             Prod_Campos_Det: json2?.[0].Prod_Campos_Det,
             Prod_Descarga_Sn: json2?.[0].Prod_Descarga_Sn, //Permite o no descarga de datos
+            Prod_Solo_Stock_Sn: json2?.[0].Prod_Solo_Stock_Sn,
+            Prod_Inactivos_Sn: json2?.[0].Prod_Inactivos_Sn,
+            Prod_Rubros: json2?.[0].Prod_Rubros,
             Cli_Sn: json2?.[0].Cli_Sn, //Permite o no Búsqueda de Clientes
             Cli_Campos_Grid: json2?.[0].Cli_Campos_Grid,
             Cli_Campos_Det: json2?.[0].Cli_Campos_Det,

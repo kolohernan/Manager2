@@ -109,7 +109,10 @@ function Clientes() {
   } = useMutation({
     mutationFn: async () => {
       // Verificar si 'search' es nulo o está vacío
-      if (!search || search.trim() === "") {
+      if (
+        (!search || search.trim() === "") &&
+        usuario?.Entidad_Tipo !== "CLI"
+      ) {
         throw new Error("El campo de búsqueda no puede estar vacío.");
       }
       return axiosInstance.get(ruta);
@@ -277,11 +280,11 @@ function Clientes() {
                         {titulosColumnas.map((item) => {
                           return (
                             <td data-content={item[1]} key={item[0]}>
-                              {
-                                clientesConKeysEnMinusculas[
-                                  item[0].toLowerCase()
-                                ]
-                              }
+                              {clientesConKeysEnMinusculas[
+                                item[0].toLowerCase()
+                              ].toLocaleString(undefined, {
+                                minimumFractionDigits: 2,
+                              })}
                             </td>
                           );
                         })}

@@ -31,7 +31,7 @@ function Articulos() {
   const [search, setSearch] = useState("");
   //estado para mostrar si hay un error
   const [error, setError] = useState("");
-  // ejemplo de cadena que viene por el usuario
+  const [articuloRubros, setarticuloRubros] = useState("");
 
   //estado para guardar el estado de sesion
   const [estado, setEstado] = useState("");
@@ -79,10 +79,16 @@ function Articulos() {
       if (!search || search.trim() === "") {
         throw new Error("El campo de búsqueda no puede estar vacío.");
       }
+      //seteo la virable con el valor que traigo del JSON
+      setarticuloRubros(usuario?.Prod_Rubros);
+      if (!usuario?.Prod_Rubros || usuario?.Prod_Rubros.trim() === null) {
+        //si es nullo, seteo la virable con *
+        setarticuloRubros("*");
+      }
       // Reemplazar espacios en blanco por '%'
       const formattedSearch = search.replace(/ /g, "%");
       return axiosInstance.get(
-        `${urlDominio}Api_Articulos/Consulta?key=${key}&campo=OTRO&valor=%${formattedSearch}%&error_sin_registros=false`
+        `${urlDominio}Api_Articulos/Consulta?key=${key}&campo=OTRO&valor=%${formattedSearch}%&rubcampo=IDS&rubvalor=${articuloRubros}&solo_stock=${usuario?.Prod_Solo_Stock_Sn}&inactivos=${usuario?.Prod_Inactivos_Sn}&error_sin_registros=false`
       );
     },
     onError: (e) => {
@@ -249,21 +255,25 @@ function Articulos() {
               <table className="table table-mobile-responsive table-mobile-sided mt-5">
                 <thead>
                   <tr>
-                    {Grid === "S"
-                      ? titulosColumnasDefecto.map((item) => {
-                          return (
-                            <th scope="col" key={item[0]}>
-                              {item[1]}
-                            </th>
-                          );
-                        })
-                      : titulosColumnas.map((item) => {
-                          return (
-                            <th scope="col" key={item[0]}>
-                              {item[1]}
-                            </th>
-                          );
-                        })}
+                    {
+                      //es vista por defecto
+                      Grid === "S"
+                        ? titulosColumnasDefecto.map((item) => {
+                            return (
+                              <th scope="col" key={item[0]}>
+                                {item[1]}
+                              </th>
+                            );
+                          })
+                        : //vista normal
+                          titulosColumnas.map((item) => {
+                            return (
+                              <th scope="col" key={item[0]}>
+                                {item[1]}
+                              </th>
+                            );
+                          })
+                    }
                     <th scope="col">Ver mas</th>
                   </tr>
                 </thead>
@@ -283,29 +293,33 @@ function Articulos() {
                     // Object.fromEntries (^^^) => { kolo:1,damian:2}
                     return (
                       <tr key={articulosConKeysEnMinusculas.codigo}>
-                        {Grid === "S"
-                          ? titulosColumnasDefecto.map((item) => {
-                              return (
-                                <td data-content={item[1]} key={item[0]}>
-                                  {
-                                    articulosConKeysEnMinusculas[
+                        {
+                          //es vista por defecto
+                          Grid === "S"
+                            ? titulosColumnasDefecto.map((item) => {
+                                return (
+                                  <td data-content={item[1]} key={item[0]}>
+                                    {articulosConKeysEnMinusculas[
                                       item[0].toLowerCase()
-                                    ]
-                                  }
-                                </td>
-                              );
-                            })
-                          : titulosColumnas.map((item) => {
-                              return (
-                                <td data-content={item[1]} key={item[0]}>
-                                  {
-                                    articulosConKeysEnMinusculas[
+                                    ].toLocaleString(undefined, {
+                                      minimumFractionDigits: 2,
+                                    })}
+                                  </td>
+                                );
+                              })
+                            : //vista normal
+                              titulosColumnas.map((item) => {
+                                return (
+                                  <td data-content={item[1]} key={item[0]}>
+                                    {articulosConKeysEnMinusculas[
                                       item[0].toLowerCase()
-                                    ]
-                                  }
-                                </td>
-                              );
-                            })}
+                                    ].toLocaleString(undefined, {
+                                      minimumFractionDigits: 2,
+                                    })}
+                                  </td>
+                                );
+                              })
+                        }
 
                         <td>
                           {/* A cada botón hay que darle un manejador de evento para que guarde en estado el elemento (Clientes en este caso del map ^^^^ ) */}

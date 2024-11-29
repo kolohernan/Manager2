@@ -48,7 +48,10 @@ function NavsideClientes({ datosnav, cadenaCliente2, Det }) {
                   className="list-group-item d-flex justify-content-between align-items-start"
                   key={item[0]}
                 >
-                  {item[1]} - {datosnav?.[item[0]]}
+                  {item[1]} -{" "}
+                  {datosnav?.[item[0]].toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                  })}
                 </li>
               );
             })}
