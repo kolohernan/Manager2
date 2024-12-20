@@ -45,13 +45,13 @@ const Layout = () => {
   useEffect(() => {
     if (!token || !urlDominio) {
       //Si no hay o token o da error
-      console.log("token incorrecto");
+      //console.log("token incorrecto");
       //shortcut -- salir del useEffect y no hacer nada
       return;
     }
     //Si hay token
     // hacer aca el request a la api enviando el token
-    console.log("token correcto");
+    //console.log("token correcto");
 
     const consultaToken = async (e) => {
       try {
@@ -63,13 +63,13 @@ const Layout = () => {
         //console.log("kolo", json);
         setDatosToken(json);
         if (response.ok) {
-          console.log("llego bien la consulta de token");
+          //console.log("llego bien la consulta de token");
         } else {
-          console.log("NO llego bien la consulta de token");
+          //console.log("NO llego bien la consulta de token");
         }
         //console.log(searchResult);
       } catch (e) {
-        console.log(e, "lala");
+        //console.log(e, "lala");
       } finally {
         ("lalal");
       }
@@ -80,7 +80,7 @@ const Layout = () => {
   //muestro los datos que obtuve de token
   useEffect(() => {
     const entidadUser = datosToken?.[0]?.Entidad_Tipo;
-    console.log(entidadUser);
+    //console.log(entidadUser);
     //if (!entidadUser)
   }, [datosToken]);
 

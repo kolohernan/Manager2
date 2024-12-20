@@ -9,6 +9,7 @@ import { useLocation, useParams, useNavigate } from "react-router-dom";
 import { useUserContext } from "../context/UserContext";
 import { axiosInstance } from "../funciones/axios-instance";
 import { useMutation } from "@tanstack/react-query";
+import { logEvent } from "../funciones/axios-post-log2";
 
 function Articulos() {
   //Seteo el titulo de la pagina
@@ -86,9 +87,9 @@ function Articulos() {
         setarticuloRubros("*");
       }
       // Reemplazar espacios en blanco por '%'
-      const formattedSearch = search.replace(/ /g, "%");
+      const formattedSearch = search.replace(/ /g, "%25");
       return axiosInstance.get(
-        `${urlDominio}Api_Articulos/Consulta?key=${key}&campo=OTRO&valor=%${formattedSearch}%&rubcampo=IDS&rubvalor=${articuloRubros}&solo_stock=${usuario?.Prod_Solo_Stock_Sn}&inactivos=${usuario?.Prod_Inactivos_Sn}&error_sin_registros=false`
+        `${urlDominio}Api_Articulos/Consulta?key=${key}&campo=OTRO&valor=%25${formattedSearch}%25&rubcampo=IDS&rubvalor=${articuloRubros}&solo_stock=${usuario?.Prod_Solo_Stock_Sn}&inactivos=${usuario?.Prod_Inactivos_Sn}&error_sin_registros=false`
       );
     },
     onError: (e) => {
@@ -105,41 +106,11 @@ function Articulos() {
       console.log(e.message);
     },
     onSuccess: () => {
-      console.log("aca veo el resultado del searchresulto", searchResult?.data);
-      /* if (searchResult === undefined) {
-        throw new Error("No se encontraron resultados");
-      }
-        */
+      //console.log("aca veo el resultado del searchresulto", searchResult);
       SetVisible(true);
       consultaSesion();
     },
   });
-  /*
-  if (!searchResult) {
-    return (
-      <div className="Resultado-api d-flex text-center">
-        <h5 className="mx-5">Cargando</h5>
-        <div className="spinner-border text-warning" role="status">
-          <span className="visually-hidden">Cargando...</span>
-        </div>
-      </div>
-    );
-  } else {
-    const claves = Object.keys(searchResult[0]);
-    console.log("RESULTADO EN DONDE TENGO QUE BUSCAR LAS CLAVES", claves);
-
-    titulosColumnas.forEach((titulo) => {
-      const valor = titulo[0];
-      if (!claves.includes(valor)) {
-        console.log(`El valor ${valor} no se encuentra en la lista de claves`);
-        Grid = "S";
-      } else {
-        console.log(`todos los valores se encontraron`);
-      }
-    });
-  }
-  console.log(`VALOR DE DET`, Det);
-*/
 
   let Prod_Campos_Grid;
   let Prod_Campos_Det;
@@ -162,26 +133,41 @@ function Articulos() {
   //separar la cadena con la funcion declarada
   const titulosColumnas = parseColumnTitles(Prod_Campos_Grid);
 
-  if (
-    searchResult &&
-    typeof searchResult === "object" &&
-    searchResult.data.length !== 0
-  ) {
-    console.log("valor de searchresulto", searchResult.data);
-    const claves = Object.keys(searchResult?.data[0]);
-    console.log("RESULTADO EN DONDE TENGO QUE BUSCAR LAS CLAVES", claves);
+  useEffect(() => {
+    if (
+      searchResult &&
+      typeof searchResult === "object" &&
+      searchResult.data.length !== 0
+    ) {
+      const logData = {
+        key: key,
+        urlDominio: urlDominio,
+        Session_Id: usuario?.Session_Id,
+        Cod_Usuario: usuario?.Cod_Usuario,
+        pagina: "busqueda artículos",
+        accion: "Búsqueda con resultados",
+        valor: search,
+        agent: "CLOUD",
+      };
+      logEvent(logData);
 
-    titulosColumnas.forEach((titulo) => {
-      const valor = titulo[0];
-      if (!claves.includes(valor)) {
-        console.log(`El valor ${valor} no se encuentra en la lista de claves`);
-        Grid = "S";
-      } else {
-        console.log(`todos los valores se encontraron`);
-      }
-    });
-  }
+      //console.log("valor de searchresulto", searchResult.data);
+      const claves = Object.keys(searchResult?.data[0]);
+      //console.log("RESULTADO EN DONDE TENGO QUE BUSCAR LAS CLAVES", claves);
 
+      titulosColumnas.forEach((titulo) => {
+        const valor = titulo[0];
+        if (!claves.includes(valor)) {
+          console.log(
+            `El valor ${valor} no se encuentra en la lista de claves`
+          );
+          Grid = "S";
+        } else {
+          //console.log(`todos los valores se encontraron`);
+        }
+      });
+    }
+  }, [searchResult]);
   const titulosColumnasDefecto = [
     ["Codigo", "Codigo"],
     ["Descripcion", "Descripcion"],
@@ -198,7 +184,6 @@ function Articulos() {
           Det={Det}
         />
       }
-
       <header id="header-busqueda" className="text-center fixed-top">
         <div className="container">
           <h2 className="py-5">Busqueda de Articulos</h2>
@@ -330,12 +315,19 @@ function Articulos() {
                             data-bs-target="#offcanvasDarkNavbar"
                             aria-controls="offcanvasDarkNavbar"
                             onClick={() => {
+                              const logData = {
+                                key: key,
+                                urlDominio: urlDominio,
+                                Session_Id: usuario?.Session_Id,
+                                Cod_Usuario: usuario?.Cod_Usuario,
+                                pagina: "busqueda artículos",
+                                accion: "Ver más",
+                                valor: `${Articulos.Descripcion}`,
+                                agent: "CLOUD",
+                              };
+                              logEvent(logData);
                               SetDatosnav(Articulos);
                               obtenerEstado();
-                              console.log(
-                                "aca estoy en el boton de vermas",
-                                estado
-                              );
                               if (estado === "N") {
                                 navigate(`/${params.id}/`);
 

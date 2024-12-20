@@ -9,6 +9,7 @@ import { useLocation, useParams, useNavigate } from "react-router-dom";
 import { useUserContext } from "../context/UserContext";
 import { axiosInstance } from "../funciones/axios-instance";
 import { useMutation } from "@tanstack/react-query";
+import { logEvent } from "../funciones/axios-post-log2";
 
 function Clientes() {
   //Seteo el titulo de la pagina
@@ -72,21 +73,21 @@ function Clientes() {
 
   useEffect(() => {
     // Reemplazar espacios en blanco por '%'
-    const formattedSearch = search.replace(/ /g, "%");
+    const formattedSearch = search.replace(/ /g, "%25");
     if (usuario?.Entidad_Tipo === "CLI") {
       setRuta(
         `${urlDominio}Api_Clientes/Consulta?key=${key}&campo=IDS&valor=${usuario?.Entidad_Codigos}&error_sin_registros=false`
       );
-      console.log(ruta);
+      //console.log(ruta);
       buscarCliente();
     } else if (usuario?.Entidad_Tipo === "VND") {
       setRuta(
-        `${urlDominio}Api_Clientes/Consulta?key=${key}&campo=OTRO&valor=%${formattedSearch}%&vendcampo=IDS&vendvalor=${usuario?.Entidad_Codigos}&error_sin_registros=false`
+        `${urlDominio}Api_Clientes/Consulta?key=${key}&campo=OTRO&valor=%25${formattedSearch}%25&vendcampo=IDS&vendvalor=${usuario?.Entidad_Codigos}&error_sin_registros=false`
       );
-      console.log(ruta);
+      //console.log(ruta);
     } else {
       setRuta(
-        `${urlDominio}Api_Clientes/Consulta?key=${key}&campo=OTRO&valor=%${formattedSearch}%&error_sin_registros=false`
+        `${urlDominio}Api_Clientes/Consulta?key=${key}&campo=OTRO&valor=%25${formattedSearch}%25&error_sin_registros=false`
       );
     }
   }, [
@@ -132,6 +133,7 @@ function Clientes() {
       console.log(e.message);
     },
     onSuccess: () => {
+      //console.log("aca veo el resultado del searchresulto", searchResult?.data);
       SetVisible(true);
     },
   });
@@ -157,25 +159,41 @@ function Clientes() {
   //separar la cadena con la funcion declarada
   const titulosColumnas = parseColumnTitles(Cli_Campos_Grid);
   ////////////////////////////////////////////////////////////////////////////////////////
-  if (
-    searchResult &&
-    typeof searchResult === "object" &&
-    searchResult.data.length !== 0
-  ) {
-    console.log("valor de searchresulto", searchResult);
-    const claves = Object.keys(searchResult?.data[0]);
-    console.log("RESULTADO EN DONDE TENGO QUE BUSCAR LAS CLAVES", claves);
+  useEffect(() => {
+    if (
+      searchResult &&
+      typeof searchResult === "object" &&
+      searchResult.data.length !== 0
+    ) {
+      const logData = {
+        key: key,
+        urlDominio: urlDominio,
+        Session_Id: usuario?.Session_Id,
+        Cod_Usuario: usuario?.Cod_Usuario,
+        pagina: "busqueda clientes",
+        accion: "Busqueda con resultados",
+        valor: search,
+        agent: "CLOUD",
+      };
+      logEvent(logData);
 
-    titulosColumnas.forEach((titulo) => {
-      const valor = titulo[0];
-      if (!claves.includes(valor)) {
-        console.log(`El valor ${valor} no se encuentra en la lista de claves`);
-        Grid = "S";
-      } else {
-        console.log(`todos los valores se encontraron`);
-      }
-    });
-  }
+      //console.log("valor de searchresulto", searchResult);
+      const claves = Object.keys(searchResult?.data[0]);
+      //console.log("RESULTADO EN DONDE TENGO QUE BUSCAR LAS CLAVES", claves);
+
+      titulosColumnas.forEach((titulo) => {
+        const valor = titulo[0];
+        if (!claves.includes(valor)) {
+          console.log(
+            `El valor ${valor} no se encuentra en la lista de claves`
+          );
+          Grid = "S";
+        } else {
+          //console.log(`todos los valores se encontraron`);
+        }
+      });
+    }
+  }, [searchResult]);
 
   const titulosColumnasDefecto = [
     ["Codigo", "Codigo"],
@@ -297,12 +315,19 @@ function Clientes() {
                             data-bs-target="#offcanvasDarkNavbar"
                             aria-controls="offcanvasDarkNavbar"
                             onClick={() => {
+                              const logData = {
+                                key: key,
+                                urlDominio: urlDominio,
+                                Session_Id: usuario?.Session_Id,
+                                Cod_Usuario: usuario?.Cod_Usuario,
+                                pagina: "busqueda clientes",
+                                accion: "Ver más",
+                                valor: `${Clientes.Razon_Social}`,
+                                agent: "CLOUD",
+                              };
+                              logEvent(logData);
                               SetDatosnav(Clientes);
                               obtenerEstado();
-                              console.log(
-                                "aca estoy en el boton de vermas",
-                                estado
-                              );
                               if (estado === "N") {
                                 navigate(`/${params.id}/`);
 

@@ -20,11 +20,11 @@ const Dashboard = () => {
     );
   return (
     <>
-      <div className="container">
-        <h4>
-          Hola {usuario.Nombre_Usuario} {usuario.Apellido_Usuario}
-        </h4>
-        <br />
+      <h4>
+        Hola {usuario.Nombre_Usuario} {usuario.Apellido_Usuario}
+      </h4>
+      <br />
+      {/*
         <p>
           <strong>Entidad_Tipo</strong> {usuario.Entidad_Tipo}
         </p>
@@ -63,41 +63,50 @@ const Dashboard = () => {
         <p>
           <strong>Cod_Rol</strong> {usuario.Cod_Rol}
         </p>
-
-        <div className="row align-items-center justify-content-center">
-          {!usuario || usuario?.Prod_Sn !== "S" ? null : (
-            <div className="col-6">
-              <NavLink
-                to={`Articulos`}
-                className="nav-link"
-                aria-current="page"
-                href="#"
-              >
-                <div className="card text-center text-white">
-                  <div className="card-body">
-                    <h1>Articulos</h1>
-                  </div>
+        */}
+      <div className="row align-items-center justify-content-center">
+        {!usuario || usuario?.Prod_Sn !== "S" ? null : (
+          <div className="col-6">
+            <NavLink
+              to={`Articulos`}
+              className="nav-link"
+              aria-current="page"
+              href="#"
+            >
+              <div className="card text-center text-white">
+                <div className="card-body">
+                  <img
+                    className="img-fluid"
+                    src="/src/assets/bot-articulos-completo.png"
+                    alt="Articulos"
+                    id="img-dash-articulos"
+                  />
                 </div>
-              </NavLink>
-            </div>
-          )}
-          {!usuario || usuario?.Cli_Sn !== "S" ? null : (
-            <div className="col-6">
-              <NavLink
-                to={`Clientes`}
-                className="nav-link"
-                aria-current="page"
-                href="#"
-              >
-                <div className="card text-center text-white">
-                  <div className="card-body">
-                    <h1>Clientes</h1>
-                  </div>
+              </div>
+            </NavLink>
+          </div>
+        )}
+        {!usuario || usuario?.Cli_Sn !== "S" ? null : (
+          <div className="col-6">
+            <NavLink
+              to={`Clientes`}
+              className="nav-link"
+              aria-current="page"
+              href="#"
+            >
+              <div className="card text-center text-white">
+                <div className="card-body">
+                  <img
+                    className="img-fluid"
+                    src="/src/assets/bot-clientes-completo.png"
+                    alt="Clientes"
+                    id="img-dash-clientes"
+                  />
                 </div>
-              </NavLink>
-            </div>
-          )}
-        </div>
+              </div>
+            </NavLink>
+          </div>
+        )}
       </div>
     </>
   );

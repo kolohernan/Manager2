@@ -19,14 +19,27 @@
 #container-dashboard .card {
   background-color: #ffac07;
   border: none;
-  padding: 80px 0;
   transition: 0.3s;
   filter: brightness(0.8);
 }
 #container-dashboard .card:hover {
   filter: brightness(1);
 }
-
+#container-dashboard .card-body {
+  padding: 0;
+  position: relative; /* Necesario para el posicionamiento absoluto */
+  width: 100%; /* O cualquier ancho que desees */
+  padding-top: 100%; /* Esto crea un cuadrado, ya que el padding-top es un porcentaje del ancho */
+  overflow: hidden; /* Para ocultar cualquier parte de la imagen que sobresalga */
+}
+#container-dashboard .card-body img {
+  position: absolute; /* Posiciona la imagen dentro del contenedor */
+  top: 50%; /* Mueve la imagen hacia abajo */
+  left: 50%; /* Mueve la imagen hacia la derecha */
+  width: 100%; /* Asegura que la imagen se escale al ancho del contenedor */
+  height: auto; /* Mantiene la relación de aspecto de la imagen */
+  transform: translate(-50%, -50%); /* Centra la imagen en el contenedor */
+}
 .btn-manager {
   padding: 13px 29px;
   line-height: 17px;
@@ -116,6 +129,16 @@
   }
   #container-dashboard .table {
     font-size: 10px;
+  }
+  #img-dash-clientes {
+    content: url("/src/assets/ico-clientes.png");
+    height: 100px !important;
+    width: auto !important;
+  }
+  #img-dash-articulos {
+    content: url("/src/assets/ico-articulos.png");
+    height: 100px !important;
+    width: auto !important;
   }
 }
 

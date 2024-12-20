@@ -3,6 +3,7 @@ import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { useUserContext } from "../context/UserContext";
 import Form from "../Componentes/Form";
 import { useQueryClient } from "@tanstack/react-query";
+import { logEvent } from "../funciones/axios-post-log2";
 
 const Home = () => {
   const params = useParams();
@@ -68,7 +69,7 @@ const Home = () => {
       if (response.ok) {
         //Si el estado es OK, hago lo siguiente
         if (json?.[0].Estado === "OK") {
-          console.log(json?.[0].Estado);
+          //console.log(json?.[0].Estado);
           //Guardo los datos en la variable User
 
           const User = {
@@ -95,38 +96,47 @@ const Home = () => {
             Cod_Rol: json2?.[0].Cod_Rol,
           };
 
-          /*
-          const User = {
-            Nombre_Usuario: "Hernan",
-            Apellido_Usuario: "Mohadile",
-            Session_Id: json?.[0].Session_Id,
-            Solo_Web_Sn: json2?.[0].Solo_Web_Sn,
-            Entidad_Tipo: "CLI", //Puede ser VEN | CLI | USR
-            Entidad_Codigos: "|14|15|",
-            Prod_Sn: "S",
-            Prod_Campos_Grid:
-              "<Codigo:Articulos><Descripcion:Detalles><Desc_Rubro:Rubros><Stock:Cantidades>",
-            //Prod_Campos_Grid: null,
-            //Prod_Campos_Grid: "<Codio:Articulosss><Descripcion:Detalles><Desc_Rubro:Rubros><Stock:Cantidades>",
-            Prod_Campos_Det: "<Desc_Rubro:Rubros><Stock:Cantidades>",
-            //Prod_Campos_Det: null,
-            Prod_Descarga_Sn: "S",
-            Cli_Sn: "S",
-            Cli_Campos_Grid:
-              "<Codigo:Codio><Razon_Social:Razon Social><Direccion:Direccion><Ciudad_Desc:Ciudad>",
-            Cli_Campos_Det: "<Direccion:One Direccion><Ciudad_Desc:Ciudad>",
-            Cli_Cta_Cte_Sn: "S",
-            Cli_Descarga_Sn: "S",
-            Cli_Descarga_Cpbte_Sn: "N",
-            Cod_Rol: 1,
-          };
-          */
-          /////////////////////////////////////////////////////////////////
           if (User.Cod_Rol === null) {
+            /* ACA SI EL ROL NO CORRESPONDE O ES NULO*/
+            const logData = {
+              key: key,
+              urlDominio: urlDominio,
+              Session_Id: json?.[0].Session_Id,
+              Cod_Usuario: json?.[0].Cod_Usuario,
+              pagina: "login",
+              accion: "Login Incorrecto",
+              valor: "ROL ERRONEO",
+              agent: "CLOUD",
+            };
+            logEvent(logData);
             setokrol("N");
           } else if (User.Entidad_Tipo === null) {
+            /* ACA SI NO ES WEB O ES NULO*/
+            const logData = {
+              key: key,
+              urlDominio: urlDominio,
+              Session_Id: json?.[0].Session_Id,
+              Cod_Usuario: json?.[0].Cod_Usuario,
+              pagina: "login",
+              accion: "Login Incorrecto",
+              valor: "EL USUARIO NO ES WEB",
+              agent: "CLOUD",
+            };
+            logEvent(logData);
             setokperfil("N");
           } else {
+            /* ACA SI EL LOGIN RESPONDE BIEN*/
+            const logData = {
+              key: key,
+              urlDominio: urlDominio,
+              Session_Id: json?.[0].Session_Id,
+              Cod_Usuario: json?.[0].Cod_Usuario,
+              pagina: "login",
+              accion: "Login correcto",
+              valor: null,
+              agent: "CLOUD",
+            };
+            logEvent(logData);
             setokrol("S");
             setokperfil("S");
             //Guardo los datos de User en la vatiable Usuario
@@ -147,7 +157,19 @@ const Home = () => {
           /////////////////////////////////////////////////////////////////
         }
       } else {
+        /* ACA SI HAY ERROR EN EL LOGIN*/
         setErroruser(true);
+        const logData = {
+          key: key,
+          urlDominio: urlDominio,
+          Session_Id: "ERROR",
+          Cod_Usuario: "ERROR",
+          pagina: "login",
+          accion: "Login Incorrecto",
+          valor: `usr: ${values.text} | pass: ${values.password}`,
+          agent: "CLOUD",
+        };
+        logEvent(logData);
         console.log("Respuesta del login llego mal");
         console.log(json);
       }

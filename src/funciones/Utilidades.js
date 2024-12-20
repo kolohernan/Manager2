@@ -58,30 +58,27 @@ export const consultaSesion = async (urlDominio, key) => {
     try {
       //hago el parse
       const UsuarioLocal = await JSON.parse(crede);
-      console.log(
-        "datos en las credenciales del localhost",
-        UsuarioLocal.Session_Id
-      );
+      //console.log("datos en las credenciales del localhost",UsuarioLocal.Session_Id);
       //Busco el session id en la API
       const response = await fetch(
         `${urlDominio}Api_Usuarios/ConsultaSessionId?key=${key}&id_session=${UsuarioLocal.Session_Id}`
       );
       const json = await response.json();
       if (response.ok) {
-        console.log("Respuesta del estado de sesion llego bien");
-        console.log(json?.[0].Estado);
+        //console.log("Respuesta del estado de sesion llego bien");
+        //console.log(json?.[0].Estado);
         Estado = json?.[0].Estado;
-        console.log("valor de estado", Estado);
+        //console.log("valor de estado", Estado);
       } else {
-        console.log("Respuesta del estado de sesion llego mal");
+        //console.log("Respuesta del estado de sesion llego mal");
       }
     } catch (error) {
-      console.log("catch", error);
+      //console.log("catch", error);
     } finally {
-      console.log("finally");
+      //console.log("finally");
     }
   } else {
-    console.log("aca entra si no encuntro las credenciales");
+    //console.log("aca entra si no encuntro las credenciales");
   }
 
   return Estado;
@@ -90,7 +87,7 @@ export const consultaSesion = async (urlDominio, key) => {
 export const funcionLogout = async (urlDominio, key) => {
   const crede = localStorage.getItem("credenciales");
   const UsuarioLocal = JSON.parse(crede);
-  console.log(UsuarioLocal.Session_Id);
+  //console.log(UsuarioLocal.Session_Id);
   //const { SetLogin } = useUserContext();
   try {
     const response = await fetch(
@@ -99,15 +96,15 @@ export const funcionLogout = async (urlDominio, key) => {
     //console.log("aca la respuesta del response", response);
     const json = await response.json();
     if (response.ok) {
-      console.log("Id_session borrado");
+      //console.log("Id_session borrado");
     } else {
-      console.log("Id_session no borrado");
+      //console.log("Id_session no borrado");
     }
-    console.log(json);
+    //console.log(json);
   } catch (e) {
-    console.log("aca muestro el error", e);
+    //console.log("aca muestro el error", e);
   } finally {
-    console.log("finally");
+    //console.log("finally");
     localStorage.removeItem("credenciales");
     //SetLogin(json)
   }

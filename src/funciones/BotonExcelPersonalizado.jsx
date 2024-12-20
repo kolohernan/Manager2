@@ -1,9 +1,18 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import * as XLSX from "xlsx";
+import { logEvent } from "../funciones/axios-post-log2";
+import { useUserContext } from "../context/UserContext";
 
-const BotonExcelPersonalizado = ({ cc_excel, clientes }) => {
+const BotonExcelPersonalizado = ({
+  cc_excel,
+  clientes,
+  dateDesde,
+  dateHasta,
+}) => {
   const [loading, setLoading] = useState(false);
 
+  //traigo la cadena del Usercontext
+  const { usuario, urlDominio, key } = useUserContext();
   let saldoAcumulado = 0;
 
   const titulo = [{ A: "Reporte de Cuenta Corriente" }, {}];
@@ -23,6 +32,20 @@ const BotonExcelPersonalizado = ({ cc_excel, clientes }) => {
   const longitudes = [15, 35, 20, 20];
 
   const handleDownload = () => {
+    console.log("aca estoy en el boton");
+    /* ----- aca mando al log ------*/
+    const logData = {
+      key: key,
+      urlDominio: urlDominio,
+      Session_Id: usuario?.Session_Id,
+      Cod_Usuario: usuario?.Cod_Usuario,
+      pagina: "Cuenta Corriente clientes ",
+      accion: "Descarga Detalle",
+      valor: `cliente: ${clientes.Razon_Social} - periodo: ${dateDesde} - ${dateHasta}`,
+      agent: "CLOUD",
+    };
+    logEvent(logData);
+    /*---------------------------*/
     setLoading(true);
 
     let tabla = [
@@ -103,6 +126,7 @@ const BotonExcelPersonalizado = ({ cc_excel, clientes }) => {
       XLSX.writeFile(libro, `Cuenta corriente ${clientes.Razon_Social}.xlsx`);
     };
   };
+
   return (
     <>
       {!loading ? (

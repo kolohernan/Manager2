@@ -7,6 +7,7 @@ import {
   consultaSesion,
   funcionLogout,
 } from "../funciones/Utilidades";
+import { logEvent } from "../funciones/axios-post-log2";
 
 function CuentaCorriente() {
   const params = useParams();
@@ -537,6 +538,19 @@ function CuentaCorriente() {
             className="btn btn-manager"
             type="submit"
             id="button-busqueda-clientes"
+            onClick={() => {
+              const logData = {
+                key: key,
+                urlDominio: urlDominio,
+                Session_Id: usuario?.Session_Id,
+                Cod_Usuario: usuario?.Cod_Usuario,
+                pagina: "Cuenta Corriente clientes",
+                accion: "Consulta",
+                valor: `cliente: ${clientes.Razon_Social} - periodo: ${dateDesde} - ${dateHasta}`,
+                agent: "CLOUD",
+              };
+              logEvent(logData);
+            }}
           >
             Buscar
           </button>
@@ -651,6 +665,26 @@ function CuentaCorriente() {
                                         rel="noreferrer"
                                         target="_blank"
                                         title=""
+                                        onClick={(event) => {
+                                          event.preventDefault(); // Evita la navegación inmediata
+                                          console.log("entre a este evento");
+                                          const logData = {
+                                            key: key,
+                                            urlDominio: urlDominio,
+                                            Session_Id: usuario?.Session_Id,
+                                            Cod_Usuario: usuario?.Cod_Usuario,
+                                            pagina: "Cuenta Corriente clientes",
+                                            accion: "Descarga Cpbte",
+                                            valor: `cliente: ${clientes.Razon_Social} - comprobante: ${comprobante}`,
+                                            agent: "CLOUD",
+                                          };
+                                          logEvent(logData);
+                                          // Abre la URL después de registrar el evento
+                                          window.open(
+                                            "http://" + url_comprobante,
+                                            "_blank"
+                                          );
+                                        }}
                                       >
                                         {comprobante}
                                       </a>
@@ -682,6 +716,26 @@ function CuentaCorriente() {
                                       rel="noreferrer"
                                       target="_blank"
                                       title=""
+                                      onClick={(event) => {
+                                        event.preventDefault(); // Evita la navegación inmediata
+                                        console.log("entre a este evento");
+                                        const logData = {
+                                          key: key,
+                                          urlDominio: urlDominio,
+                                          Session_Id: usuario?.Session_Id,
+                                          Cod_Usuario: usuario?.Cod_Usuario,
+                                          pagina: "Cuenta Corriente clientes",
+                                          accion: "Descarga Cpbte",
+                                          valor: `cliente: ${clientes.Razon_Social} - comprobante: ${comprobante}`,
+                                          agent: "CLOUD",
+                                        };
+                                        logEvent(logData);
+                                        // Abre la URL después de registrar el evento
+                                        window.open(
+                                          "http://" + url_comprobante,
+                                          "_blank"
+                                        );
+                                      }}
                                     >
                                       {comprobante}
                                     </a>
@@ -739,6 +793,8 @@ function CuentaCorriente() {
             <BotonExcelPersonalizado
               cc_excel={searchResult}
               clientes={clientes}
+              dateDesde={dateDesde}
+              dateHasta={dateHasta}
             />
           )}
         </div>

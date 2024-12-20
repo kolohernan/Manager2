@@ -4,13 +4,14 @@ import { funcionLogout } from "../funciones/Utilidades";
 import { useNavigate, useParams } from "react-router-dom";
 import Logo from "/src/assets/logo.png";
 import { useEffect, useState } from "react";
+import { logEvent } from "../funciones/axios-post-log2";
 
 function Navbar() {
   const { usuario, setUsuario, urlDominio, key, dominio } = useUserContext();
   //traigo la cadena del Usercontext
   const navigate = useNavigate();
   const params = useParams();
-  console.log("dominio", dominio);
+  //console.log("dominio", dominio);
   const [ruta, setRuta] = useState("");
   const [datosEntidad, setDatosEntidad] = useState(null);
 
@@ -32,15 +33,15 @@ function Navbar() {
       const json = await response.json();
       setDatosEntidad(json);
       if (response.ok) {
-        console.log("Respuesta de la entidad llego bien");
+        //console.log("Respuesta de la entidad llego bien");
       } else {
-        console.log("Respuesta  de la entidad llego mal");
+        //console.log("Respuesta  de la entidad llego mal");
       }
-      console.log(json);
+      //console.log(json);
     } catch (e) {
-      console.log("aca muestro el error", e);
+      //console.log("aca muestro el error", e);
     } finally {
-      console.log("finally");
+      //console.log("finally");
       //SetLogin(json)
     }
   };
@@ -48,15 +49,8 @@ function Navbar() {
     consultaEntidad();
   }, [ruta]);
 
-  console.log("VALOR DE DATOS ENTIDAD", datosEntidad);
-  /*
-  useEffect(() => {
-    const entidadDelCliente = async () => {
-      await consultaEntidad(urlDominio, key, usuario.Entidad_Tipo, ruta);
-    };
-    entidadDelCliente();
-  }, [urlDominio, key, usuario.Entidad_Tipo, ruta]);
-*/
+  //console.log("VALOR DE DATOS ENTIDAD", datosEntidad);
+
   /* PARA CONTROLAR LA APERTURA Y CIERRE DE LA NAV EN MOBILE*/
   const [isOpen, setIsOpen] = useState(false);
   const toggleNavbar = () => {
@@ -215,6 +209,17 @@ function Navbar() {
                 data-bs-dismiss="modal"
                 className="btn btn-login"
                 onClick={() => {
+                  const logData = {
+                    key: key,
+                    urlDominio: urlDominio,
+                    Session_Id: usuario?.Session_Id,
+                    Cod_Usuario: usuario?.Cod_Usuario,
+                    pagina: "login",
+                    accion: "Cierre sesion",
+                    valor: null,
+                    agent: "CLOUD",
+                  };
+                  logEvent(logData);
                   funcionLogout(urlDominio, key);
                   localStorage.removeItem("credenciales");
                   setUsuario(null);
